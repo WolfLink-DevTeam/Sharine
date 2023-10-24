@@ -10,7 +10,7 @@ import java.util.Calendar;
 @Table(name = "user")
 public class User {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     long id;
     @Column(nullable = false)
