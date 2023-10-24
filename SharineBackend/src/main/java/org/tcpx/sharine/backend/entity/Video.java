@@ -7,22 +7,24 @@ import java.util.Calendar;
 
 @Entity
 @Data
-@Table(name = "user")
-public class User {
+@Table(name = "video")
+public class Video {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     long id;
+    @Column(name = "user_id",nullable = false)
+    long userId;
     @Column(nullable = false)
-    String account;
-    @Column(nullable = false)
-    String password;
+    String title;
     @Column(nullable = false)
     String tags;
-    @Column(name = "display_name",nullable = false)
-    String displayName;
-    @Column(name = "create_time",nullable = false)
-    long createTime;
+    @Column(nullable = false)
+    String url;
+    @Column(name = "cover_url",nullable = false)
+    String coverUrl;
     @Column(name = "update_time",nullable = false)
     long updateTime;
+    @Column(name = "create_time",nullable = false)
+    long createTime;
 }
