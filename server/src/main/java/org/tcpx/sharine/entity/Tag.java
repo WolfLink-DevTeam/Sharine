@@ -11,7 +11,7 @@ import org.tcpx.sharine.constants.DatabaseConstants;
 import org.tcpx.sharine.dto.TagDTO;
 
 /**
- * 分类
+ * 标签
  */
 @Entity
 @Data

@@ -7,12 +7,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConstants;
 
 /**
- * 点赞
+ * 收藏
  */
 @Entity
 @Data
-@Table(name = DatabaseConstants.FAVOURITE)
-public class Favorite {
+@Table(name = DatabaseConstants.COLLECTIBLE)
+public class Collectible {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

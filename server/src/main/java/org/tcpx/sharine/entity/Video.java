@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.enums.VideoTypeEnum;
 
 /**
  * 视频
@@ -21,13 +22,22 @@ public class Video {
     Long userId;
 
     @Column(nullable = false)
+    Long categoryId;
+
+    @Column(nullable = false)
     String title;
+
+    @Column
+    String content;
 
     @Column(nullable = false)
     String url;
 
     @Column(nullable = false)
     String coverUrl;
+
+    @Column(nullable = false)
+    VideoTypeEnum type;
 
     @UpdateTimestamp
     Long updateTime;

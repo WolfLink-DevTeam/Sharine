@@ -26,13 +26,14 @@ public class User {
     @Column(nullable = false)
     String password;
 
-    /**
-     * 用户标签？ 以“ ”分割
-     */
-    String tags;
-
     @Column(nullable = false)
     String nickname;
+
+    @Column
+    String avatar;
+
+    @Column
+    String content;
 
     @CreationTimestamp
     Long createTime;

@@ -11,10 +11,10 @@ import org.tcpx.sharine.constants.DatabaseConstants;
 @Data
 @Builder
 @Enabled
-@Table(name = DatabaseConstants.VIDEO_TAG)
+@Table(name = DatabaseConstants.VIDEO_CATEGORY)
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoTag {
+public class VideoCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,5 +23,5 @@ public class VideoTag {
     private Long videoId;
 
     @Column(nullable = false)
-    private Long tagId;
+    private Long categoryId;
 }

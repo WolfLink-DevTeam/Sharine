@@ -7,10 +7,14 @@ import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.DatabaseConstants;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.TagDTO;
+import org.tcpx.sharine.entity.Category;
 import org.tcpx.sharine.entity.Tag;
+import org.tcpx.sharine.entity.VideoCategory;
 import org.tcpx.sharine.entity.VideoTag;
-import org.tcpx.sharine.repository.TagRepository;
+import org.tcpx.sharine.repository.CategoryRepository;
+import org.tcpx.sharine.repository.VideoCategoryRepository;
 import org.tcpx.sharine.repository.VideoTagRepository;
+import org.tcpx.sharine.vo.CategoryVO;
 import org.tcpx.sharine.vo.PageVO;
 import org.tcpx.sharine.vo.TagVO;
 import org.tcpx.sharine.vo.VideoVO;
@@ -19,51 +23,43 @@ import java.util.List;
 
 @Service
 @CacheConfig(cacheNames = DatabaseConstants.TAG)
-public class TagService {
+public class CategoryService {
 
-    final TagRepository categoryRepository;
+    final CategoryRepository categoryRepository;
 
-    final VideoTagRepository videoCategoryRepository;
+    final VideoCategoryRepository videoCategoryRepository;
     final VideoService videoService;
 
-    public TagService(TagRepository categoryRepository, VideoTagRepository videoCategoryRepository, VideoService videoService) {
+    public CategoryService(CategoryRepository categoryRepository, VideoCategoryRepository videoCategoryRepository, VideoService videoService) {
         this.categoryRepository = categoryRepository;
         this.videoCategoryRepository = videoCategoryRepository;
         this.videoService = videoService;
     }
 
-    public PageVO<TagVO> find(ConditionDTO conditionDTO) {
+    public PageVO<CategoryVO> find(ConditionDTO conditionDTO) {
         String title = conditionDTO.getKeywords();
 
         PageRequest pageRequest = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
-        List<Tag> categories = categoryRepository.findAllByTitleRegex(title, pageRequest);
-        List<TagVO> list = categories.stream().map(TagVO::of).toList();
+        List<Category> categories = categoryRepository.findAllByTitleRegex(title, pageRequest);
+        List<CategoryVO> list = categories.stream().map(CategoryVO::of).toList();
 
         Long count = categoryRepository.countByTitleRegex(title);
 
-        return PageVO.<TagVO>builder().total(count).list(list).build();
+        return PageVO.<CategoryVO>builder().total(count).list(list).build();
     }
 
 
     public PageVO<VideoVO> findVideos(ConditionDTO conditionDTO) {
-        Example<VideoTag> example = Example.of(VideoTag.builder().categoryId(conditionDTO.getId()).build());
+        Example<VideoCategory> example = Example.of(VideoCategory.builder().categoryId(conditionDTO.getId()).build());
         PageRequest pageRequest = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
-        List<VideoTag> videoTagList = videoCategoryRepository.findAll(example, pageRequest);
+        List<VideoCategory> videoTagList = videoCategoryRepository.findAll(example, pageRequest);
         long count = videoCategoryRepository.count(example);
 
-        List<Long> videoIds = videoTagList.stream().map(VideoTag::getVideoId).toList();
+        List<Long> videoIds = videoTagList.stream().map(VideoCategory::getVideoId).toList();
 
         List<VideoVO> videoVOS = videoService.findAll(videoIds);
 
         return PageVO.<VideoVO>builder().total(count).list(videoVOS).build();
-    }
-
-    public Long addAll(List<TagDTO> tagVOs) {
-        List<Tag> tags = tagVOs.stream().filter(tagDTO -> tagDTO.getId() != 0).map(Tag::of).toList();
-
-        categoryRepository.saveAll(tags);
-
-        return (long) tags.size();
     }
 }

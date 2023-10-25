@@ -4,14 +4,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.tcpx.sharine.dto.ConditionDTO;
-import org.tcpx.sharine.service.TagService;
+import org.tcpx.sharine.service.CategoryService;
 
 @RestController("category")
-public class TagController extends BaseController {
+public class CategoryController extends BaseController {
 
-    final TagService categoryService;
+    final CategoryService categoryService;
 
-    public TagController(TagService categoryService) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
