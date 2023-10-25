@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 public class BaseController {
     @ExceptionHandler(Exception.class)
     protected final Object exception(Exception ex) {
@@ -74,7 +74,7 @@ public class BaseController {
         binder.registerCustomEditor(Date.class, editor);
     }
 
-    @GetMapping("/hello")
+    @GetMapping("hello")
     public Object hello() {
         return ok("Hello!");
     }

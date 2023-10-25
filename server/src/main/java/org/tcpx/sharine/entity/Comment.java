@@ -4,32 +4,31 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.tcpx.sharine.constants.DatabaseConstants;
 
 /**
  * 评论
  */
 @Entity
 @Data
-@Table(name = "comment")
+@Table(name = DatabaseConstants.COMMENT)
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "reply_id", nullable = false)
+    @Column(nullable = false)
     Long replyId;
 
-    @Column(name = "video_id", nullable = false)
+    @Column(nullable = false)
     Long videoId;
 
     @Column(nullable = false)
     String content;
 
     @CreationTimestamp
-    @Column(name = "create_time")
     Long createTime;
 
     @UpdateTimestamp
-    @Column(name = "update_time")
     Long updateTime;
 }

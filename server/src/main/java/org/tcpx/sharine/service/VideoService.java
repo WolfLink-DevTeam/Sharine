@@ -1,39 +1,18 @@
 package org.tcpx.sharine.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.entity.Video;
-import org.tcpx.sharine.repository.VideoRepository;
+import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.vo.VideoVO;
 
-import java.util.Optional;
+import java.util.List;
 
-@CacheConfig(cacheNames = "videos")
 @Service
-public class VideoService extends BaseService<Video,Integer> {
-    @Autowired
-    public VideoService(VideoRepository repository) {
-        super.repository = repository;
-    }
+@CacheConfig(cacheNames = DatabaseConstants.VIDEO)
+public class VideoService {
 
-    @Override
-    @CachePut(key = "#entity.id")
-    public void insert(Video entity) {
-        super.insert(entity);
-    }
-
-    @Override
-    @Cacheable(key = "#id")
-    public Optional<Video> find(Integer id) {
-        return super.find(id);
-    }
-
-    @Override
-    @CacheEvict(key = "#id")
-    public void delete(Integer id) {
-        super.delete(id);
+    public List<VideoVO> findAll(List<Long> videoIds) {
+        // todo 继续完善
+        return null;
     }
 }
