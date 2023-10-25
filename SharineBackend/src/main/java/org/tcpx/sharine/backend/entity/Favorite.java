@@ -2,21 +2,31 @@ package org.tcpx.sharine.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+/**
+ * 收藏
+ */
 @Entity
 @Data
 @Table(name = "favorite")
 public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    long id;
+    Long id;
+
     @Column(name = "video_id",nullable = false)
-    String videoId;
+    Long videoId;
+
     @Column(name = "user_id",nullable = false)
-    long userId;
-    @Column(name = "create_time",nullable = false)
-    long createTime;
-    @Column(name = "update_time",nullable = false)
-    long updateTime;
+    Long userId;
+
+    @CreationTimestamp
+    @Column(name = "create_time")
+    Long createTime;
+
+    @UpdateTimestamp
+    @Column(name = "update_time")
+    Long updateTime;
 }

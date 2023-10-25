@@ -2,19 +2,28 @@ package org.tcpx.sharine.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+/**
+ * 分类
+ */
 @Entity
 @Data
 @Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    long id;
-    @Column(name = "category_name",nullable = false)
-    String categoryName;
-    @Column(name = "create_time",nullable = false)
-    long createTime;
-    @Column(name = "update_time",nullable = false)
-    long updateTime;
+    Long id;
+
+    @Column(name = "title", nullable = false)
+    String title;
+
+    @CreationTimestamp
+    @Column(name = "create_time")
+    Long createTime;
+
+    @UpdateTimestamp
+    @Column(name = "update_time")
+    Long updateTime;
 }

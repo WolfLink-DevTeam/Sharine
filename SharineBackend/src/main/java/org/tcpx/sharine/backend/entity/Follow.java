@@ -2,21 +2,31 @@ package org.tcpx.sharine.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+/**
+ * 用户关注关系
+ */
 @Entity
 @Data
 @Table(name = "follow")
 public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    long id;
-    @Column(name = "user_id_2",nullable = false)
-    long userId2;
-    @Column(name = "user_id_1",nullable = false)
-    long userId1;
-    @Column(name = "create_time",nullable = false)
-    long createTime;
-    @Column(name = "update_time",nullable = false)
-    long updateTime;
+    Long id;
+
+    // 两个用户id, 指示小的userId为userId1
+    @Column(name = "user_id_2", nullable = false)
+    Long userId2;
+    @Column(name = "user_id_1", nullable = false)
+    Long userId1;
+
+    @CreationTimestamp
+    @Column(name = "create_time")
+    Long createTime;
+
+    @UpdateTimestamp
+    @Column(name = "update_time")
+    Long updateTime;
 }
