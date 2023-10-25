@@ -23,9 +23,6 @@ public class Video {
     String title;
 
     @Column(nullable = false)
-    String tags;
-
-    @Column(nullable = false)
     String url;
 
     @Column(name = "cover_url", nullable = false)
@@ -33,9 +30,9 @@ public class Video {
 
     @UpdateTimestamp
     @Column(name = "update_time")
-    long updateTime;
+    Long updateTime;
 
     @CreationTimestamp
     @Column(name = "create_time")
-    long createTime;
+    Long createTime;
 }

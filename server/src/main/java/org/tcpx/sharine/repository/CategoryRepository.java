@@ -1,7 +1,0 @@
-package org.tcpx.sharine.repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.tcpx.sharine.entity.Category;
-
-public interface CategoryRepository extends JpaRepository<Category,Integer> {
-}
