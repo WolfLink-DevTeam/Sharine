@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.tcpx.sharine.constants.DatabaseConstants;
 
 /**
  * 用户信息
  */
 @Entity
 @Data
-@Table(name = "user")
+@Table(name = DatabaseConstants.USER)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,17 +29,14 @@ public class User {
     /**
      * 用户标签？ 以“ ”分割
      */
-    @Column(name = "tags")
     String tags;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(nullable = false)
     String nickname;
 
     @CreationTimestamp
-    @Column(name = "create_time")
     Long createTime;
 
     @UpdateTimestamp
-    @Column(name = "update_time")
     Long updateTime;
 }

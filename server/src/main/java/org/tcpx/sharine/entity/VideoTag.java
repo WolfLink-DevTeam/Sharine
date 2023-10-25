@@ -6,11 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.tcpx.sharine.constants.DatabaseConstants;
 
 @Data
 @Builder
 @Enabled
-@Table(name = "video_tag")
+@Table(name = DatabaseConstants.VIDEO_TAG)
 @NoArgsConstructor
 @AllArgsConstructor
 public class VideoTag {

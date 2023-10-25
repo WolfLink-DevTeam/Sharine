@@ -4,19 +4,20 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.tcpx.sharine.constants.DatabaseConstants;
 
 /**
  * 视频
  */
 @Entity
 @Data
-@Table(name = "video")
+@Table(name = DatabaseConstants.VIDEO)
 public class Video {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(nullable = false)
     Long userId;
 
     @Column(nullable = false)
@@ -25,14 +26,12 @@ public class Video {
     @Column(nullable = false)
     String url;
 
-    @Column(name = "cover_url", nullable = false)
+    @Column(nullable = false)
     String coverUrl;
 
     @UpdateTimestamp
-    @Column(name = "update_time")
     Long updateTime;
 
     @CreationTimestamp
-    @Column(name = "create_time")
     Long createTime;
 }

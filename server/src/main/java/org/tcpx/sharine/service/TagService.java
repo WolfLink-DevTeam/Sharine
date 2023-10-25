@@ -1,8 +1,10 @@
 package org.tcpx.sharine.service;
 
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.tcpx.sharine.constants.DatabaseConstants;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.TagDTO;
 import org.tcpx.sharine.entity.Tag;
@@ -16,6 +18,7 @@ import org.tcpx.sharine.vo.VideoVO;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = DatabaseConstants.TAG)
 public class TagService {
 
     final TagRepository categoryRepository;

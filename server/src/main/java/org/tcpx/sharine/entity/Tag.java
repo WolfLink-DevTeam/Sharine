@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.tcpx.sharine.constants.DatabaseConstants;
 import org.tcpx.sharine.dto.TagDTO;
 
 /**
@@ -17,21 +18,19 @@ import org.tcpx.sharine.dto.TagDTO;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "category")
+@Table(name = DatabaseConstants.TAG)
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     String title;
 
     @CreationTimestamp
-    @Column(name = "create_time")
     Long createTime;
 
     @UpdateTimestamp
-    @Column(name = "update_time")
     Long updateTime;
 
     public static Tag of(TagDTO tagDTO) {

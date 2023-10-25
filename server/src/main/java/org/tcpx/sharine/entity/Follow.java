@@ -4,29 +4,28 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.tcpx.sharine.constants.DatabaseConstants;
 
 /**
  * 用户关注关系
  */
 @Entity
 @Data
-@Table(name = "follow")
+@Table(name = DatabaseConstants.FOLLOW)
 public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     // 两个用户id, 指示小的userId为userId1
-    @Column(name = "user_id_2", nullable = false)
+    @Column(nullable = false)
     Long userId2;
-    @Column(name = "user_id_1", nullable = false)
+    @Column(nullable = false)
     Long userId1;
 
     @CreationTimestamp
-    @Column(name = "create_time")
     Long createTime;
 
     @UpdateTimestamp
-    @Column(name = "update_time")
     Long updateTime;
 }
