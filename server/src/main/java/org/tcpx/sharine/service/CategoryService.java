@@ -2,6 +2,7 @@ package org.tcpx.sharine.service;
 
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.DatabaseConstants;
@@ -53,7 +54,7 @@ public class CategoryService {
         Example<VideoCategory> example = Example.of(VideoCategory.builder().categoryId(conditionDTO.getId()).build());
         PageRequest pageRequest = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
-        List<VideoCategory> videoTagList = videoCategoryRepository.findAll(example, pageRequest);
+        Page<VideoCategory> videoTagList = videoCategoryRepository.findAll(example, pageRequest);
         long count = videoCategoryRepository.count(example);
 
         List<Long> videoIds = videoTagList.stream().map(VideoCategory::getVideoId).toList();
