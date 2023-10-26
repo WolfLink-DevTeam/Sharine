@@ -73,10 +73,10 @@ public class BaseController {
         CustomDateEditor editor = new CustomDateEditor(format, true);
         binder.registerCustomEditor(Date.class, editor);
     }
-
-    @GetMapping("hello")
-    public Object hello() {
-        return ok("Hello!");
-    }
+//    跟子类接口冲突，注释了
+//    @GetMapping("hello")
+//    public Object hello() {
+//        return ok("Hello!");
+//    }
 
 }
