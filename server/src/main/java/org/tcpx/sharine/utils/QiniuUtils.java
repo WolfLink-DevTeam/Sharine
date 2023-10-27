@@ -2,6 +2,7 @@ package org.tcpx.sharine.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.qiniu.http.Response;
 import com.qiniu.storage.*;
 import com.qiniu.storage.model.DefaultPutRet;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.tcpx.sharine.dto.QiniuBasePack;
+import org.tcpx.sharine.dto.QiniuCensorPack;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.enums.QiniuFileType;
 
@@ -141,4 +143,35 @@ public class QiniuUtils {
                 .build();
         return client.newCall(request);
     }
+
+    /**
+     * 图片审核
+     *
+     * @param imgUrl    图片URL
+     * @return          图片审核结果，通过返回true，不通过返回false
+     */
+    public boolean imageSensor(String imgUrl) {
+        QiniuCensorPack pack = new QiniuCensorPack();
+        pack.getData().addProperty("uri",imgUrl);
+        pack.getScenes().add("politician");
+        pack.getScenes().add("terror");
+        pack.getScenes().add("pulp");
+        Call call = qiniuCall("http://ai.qiniuapi.com/v3/image/censor",pack);
+        try {
+            JsonObject jo = JsonParser.parseString(call.execute().body().string()).getAsJsonObject();
+            if(jo.getAsJsonObject("result").get("suggestion").getAsString().equals("pass")) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 视频审核接口支持的视频大小不超过1G，需要分片处理，暂时不接
+     */
+    @Deprecated
+    public boolean videoSensor(){return false;}
+
 }
