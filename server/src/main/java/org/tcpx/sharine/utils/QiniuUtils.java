@@ -174,4 +174,26 @@ public class QiniuUtils {
     @Deprecated
     public boolean videoSensor(){return false;}
 
+    /**
+     * 文本审核
+     *
+     * @param text      文字内容
+     * @return          文本审核结果，通过返回true，不通过返回false
+     */
+    public boolean textSensor(String text) {
+        QiniuCensorPack pack = new QiniuCensorPack();
+        pack.getData().addProperty("text",text);
+        pack.getScenes().add("antispam");
+        Call call = qiniuCall("http://ai.qiniuapi.com/v3/text/censor",pack);
+        try {
+            JsonObject jo = JsonParser.parseString(call.execute().body().string()).getAsJsonObject();
+            if(jo.getAsJsonObject("result").get("suggestion").getAsString().equals("pass")) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
