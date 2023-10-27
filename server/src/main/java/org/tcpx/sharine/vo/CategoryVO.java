@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.tcpx.sharine.entity.Category;
 import org.tcpx.sharine.utils.BeanCopyUtils;
+import org.tcpx.sharine.utils.IOC;
 
 @Data
 @Builder
@@ -22,6 +23,6 @@ public class CategoryVO {
     Long updateTime;
 
     public static CategoryVO of(Category category) {
-        return BeanCopyUtils.copyObject(category, CategoryVO.class);
+        return IOC.getBean(BeanCopyUtils.class).copyObject(category, CategoryVO.class);
     }
 }
