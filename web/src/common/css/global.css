@@ -1,3 +1,8 @@
 :root {
-    background-color: #EFEFEF;
+    --background-color: #EFEFEF;
+    --component-background-color: #555D8B;
+    --component-foreground-color: #ECA4B8;
+    --primary-text-color: #FFFFFF;
+    --contrast-text-color: #3D3D3D;
+    background-color: var(--background-color);
 }
