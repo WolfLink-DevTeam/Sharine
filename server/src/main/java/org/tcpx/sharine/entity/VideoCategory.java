@@ -10,7 +10,6 @@ import org.tcpx.sharine.constants.DatabaseConstants;
 
 @Data
 @Builder
-@Enabled
 @Entity
 @Table(name = DatabaseConstants.VIDEO_CATEGORY)
 @NoArgsConstructor

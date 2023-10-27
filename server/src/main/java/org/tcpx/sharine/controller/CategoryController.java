@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.service.CategoryService;
 
-@RestController("category")
+@RestController("/category")
 public class CategoryController extends BaseController {
 
     final CategoryService categoryService;
@@ -15,12 +15,12 @@ public class CategoryController extends BaseController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("find")
+    @GetMapping("/find")
     public Object find(ConditionDTO conditionDTO) {
         return ok(categoryService.find(conditionDTO));
     }
 
-    @GetMapping("{categoryId}/videos")
+    @GetMapping("/{categoryId}/videos")
     public Object findVideos(@PathVariable Long categoryId, ConditionDTO conditionDTO) {
         conditionDTO.setId(categoryId);
 
