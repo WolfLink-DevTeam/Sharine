@@ -3,12 +3,14 @@
 import SearchBar from "@/components/SearchBar.vue";
 import LeftBar from "@/components/LeftBar.vue";
 import RightBar from "@/components/RightBar.vue";
+import Logo from "@/components/Logo.vue";
 </script>
 
 <template>
     <div class="left-bar">
         <LeftBar style="height: 35rem;width: 5rem;margin-bottom: 2rem;margin-left: 2rem;"/>
     </div>
+    <Logo style="height: 8rem;width: 20rem;right: 0;top: 0;position: fixed;z-index: 5"/>
     <div class="right-bar">
         <RightBar style="height: 27rem;width: 7rem;right: 0;"/>
     </div>
