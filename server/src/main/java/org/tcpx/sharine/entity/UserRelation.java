@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.enums.UserRelationEnum;
 
 /**
  * 用户关注关系
@@ -12,7 +13,7 @@ import org.tcpx.sharine.constants.DatabaseConstants;
 @Entity
 @Data
 @Table(name = DatabaseConstants.FOLLOW)
-public class Follow {
+public class UserRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -22,6 +23,9 @@ public class Follow {
     Long userId2;
     @Column(nullable = false)
     Long userId1;
+
+    @Column(nullable = false)
+    UserRelationEnum status;
 
     @CreationTimestamp
     Long createTime;

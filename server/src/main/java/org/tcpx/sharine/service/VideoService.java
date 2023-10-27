@@ -15,4 +15,8 @@ public class VideoService {
         // todo 继续完善
         return null;
     }
+
+    public List<Long> findAllUserVideoIds(Long userId) {
+        return null;
+    }
 }

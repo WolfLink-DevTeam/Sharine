@@ -1,23 +1,16 @@
 package org.tcpx.sharine.service;
 
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.DatabaseConstants;
 import org.tcpx.sharine.dto.ConditionDTO;
-import org.tcpx.sharine.dto.TagDTO;
 import org.tcpx.sharine.entity.Category;
-import org.tcpx.sharine.entity.Tag;
 import org.tcpx.sharine.entity.VideoCategory;
-import org.tcpx.sharine.entity.VideoTag;
 import org.tcpx.sharine.repository.CategoryRepository;
 import org.tcpx.sharine.repository.VideoCategoryRepository;
-import org.tcpx.sharine.repository.VideoTagRepository;
 import org.tcpx.sharine.vo.CategoryVO;
 import org.tcpx.sharine.vo.PageVO;
-import org.tcpx.sharine.vo.TagVO;
 import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
@@ -51,11 +44,11 @@ public class CategoryService {
 
 
     public PageVO<VideoVO> findVideos(ConditionDTO conditionDTO) {
-        Example<VideoCategory> example = Example.of(VideoCategory.builder().categoryId(conditionDTO.getId()).build());
+        Long categoryId = conditionDTO.getId();
         PageRequest pageRequest = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
-        Page<VideoCategory> videoTagList = videoCategoryRepository.findAll(example, pageRequest);
-        long count = videoCategoryRepository.count(example);
+        List<VideoCategory> videoTagList = videoCategoryRepository.findByCategoryId(categoryId, pageRequest);
+        long count = videoCategoryRepository.countByCategoryId(categoryId);
 
         List<Long> videoIds = videoTagList.stream().map(VideoCategory::getVideoId).toList();
 
