@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.tcpx.sharine.dto.QiniuBasePack;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.enums.QiniuFileType;
 
@@ -90,6 +91,10 @@ public class QiniuUtils {
 
     /**
      * 校验文件是否存在于数据库中，并且由正确的用户上传
+     *
+     * @param uploader  上传者(测试可传null)
+     * @param fileName  文件名(不包括后缀)
+     * @param fileType  文件类型
      * @return 校验结果
      */
     public boolean verifyFile(@Nullable User uploader, String fileName, QiniuFileType fileType) {
@@ -104,9 +109,26 @@ public class QiniuUtils {
         }
         return false;
     }
+
+    /**
+     * 签文算法
+     * @param url           请求的URL链接
+     * @param bodyJson      Json格式的字符串
+     * @return              加密签文
+     */
     public String encodeAuthorization(String url,String bodyJson) {
         return "Qiniu "+ Auth.create(accessKey, secretKey).signQiniuAuthorization(url, HttpMethod.POST.name(), bodyJson.getBytes(StandardCharsets.UTF_8), MediaType.APPLICATION_JSON_VALUE);
     }
+
+    public Call qiniuCall(String url, QiniuBasePack pack) {
+        return qiniuCall(url,pack.toJsonObject());
+    }
+    /**
+     * 七牛云Http请求
+     * @param url           请求URL
+     * @param body          请求体
+     * @return              Okhttp.Call
+     */
     public Call qiniuCall(String url, JsonObject body) {
         OkHttpClient client = new OkHttpClient();
         String bodyStr = body.toString();
