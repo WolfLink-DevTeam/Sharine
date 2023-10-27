@@ -1,11 +1,18 @@
 package org.tcpx.sharine.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.qiniu.http.Response;
 import com.qiniu.storage.*;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.tcpx.sharine.entity.User;
@@ -96,5 +103,20 @@ public class QiniuUtils {
         } catch (Exception ignore) {
         }
         return false;
+    }
+    public String encodeAuthorization(String url,String bodyJson) {
+        return "Qiniu "+ Auth.create(accessKey, secretKey).signQiniuAuthorization(url, HttpMethod.POST.name(), bodyJson.getBytes(StandardCharsets.UTF_8), MediaType.APPLICATION_JSON_VALUE);
+    }
+    public Call qiniuCall(String url, JsonObject body) {
+        OkHttpClient client = new OkHttpClient();
+        String bodyStr = body.toString();
+        RequestBody requestBody = RequestBody.create(bodyStr.getBytes(), okhttp3.MediaType.parse("application/json"));
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization",encodeAuthorization(url,bodyStr))
+                .header("Content-Type", "application/json")
+                .post(requestBody)
+                .build();
+        return client.newCall(request);
     }
 }
