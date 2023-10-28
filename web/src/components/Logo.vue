@@ -4,7 +4,7 @@
 
 <template>
 <div class="container">
-    <img src="@/assets/logo.png" alt="" style="width: 6rem;height: 6rem">
+    <img src="@/assets/logo.png" alt="" style="width: 5rem;height: 5rem">
     <div style="display: flex;flex-direction: column;width: 8rem;height: 5rem;justify-content: center;align-items: center">
         <span class="title">闪灵</span>
         <span class="subTitle">Sharine</span>
@@ -15,7 +15,7 @@
 <style scoped>
 .container {
     background: #281F48;
-    border-radius: 0 0 0 5rem;
+    border-radius: 0 0 0 3rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -24,7 +24,7 @@
 }
 .title {
     font-family: HGHB_CNKI;
-    font-size: 3.2rem;
+    font-size: 2.8rem;
     font-weight: normal;
     line-height: normal;
     position: relative;
@@ -39,7 +39,7 @@
 }
 .subTitle {
     font-family: Sylfaen;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: normal;
     line-height: normal;
     text-align: center;

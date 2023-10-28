@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
-import LeftBarItem from "@/components/LeftBarItem.vue";
+import LeftBarItem from "@/components/NavBarItem.vue";
 
 const selectPage = ref(1)
 

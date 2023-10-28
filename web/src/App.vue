@@ -1,8 +1,8 @@
 <script setup>
 
 import SearchBar from "@/components/SearchBar.vue";
-import LeftBar from "@/components/LeftBar.vue";
-import RightBar from "@/components/RightBar.vue";
+import LeftBar from "@/components/NavBar.vue";
+import RightBar from "@/components/CategoryBar.vue";
 import Logo from "@/components/Logo.vue";
 </script>
 
@@ -10,12 +10,12 @@ import Logo from "@/components/Logo.vue";
     <div class="left-bar">
         <LeftBar style="height: 35rem;width: 5rem;margin-bottom: 2rem;margin-left: 2rem;"/>
     </div>
-    <Logo style="height: 8rem;width: 20rem;right: 0;top: 0;position: fixed;z-index: 5"/>
+    <Logo style="height: 7rem;width: 16rem;right: 0;top: 0;position: fixed;z-index: 5"/>
     <div class="right-bar">
-        <RightBar style="height: 27rem;width: 7rem;right: 0;"/>
+        <RightBar style="height: 27rem;width: 5rem;right: 0;"/>
     </div>
     <div class="body">
-        <SearchBar style="height: 4rem;width: 60rem;"/>
+        <SearchBar style="height: 3.5rem;width: 55rem;margin-top: 2rem"/>
     </div>
 </template>
 
@@ -29,7 +29,6 @@ import Logo from "@/components/Logo.vue";
     margin-right: auto;
     height: 100%;
     width: 70%;
-    background: yellow;
 }
 .left-bar {
     display: flex;
@@ -38,7 +37,6 @@ import Logo from "@/components/Logo.vue";
     position: fixed;
     height: 100%;
     width: 8%;
-    background: #3f4c9b;
 }
 .right-bar {
     display: flex;
@@ -49,6 +47,5 @@ import Logo from "@/components/Logo.vue";
     right: 0;
     height: 100%;
     width: 8%;
-    background: #766C9B;
 }
 </style>
