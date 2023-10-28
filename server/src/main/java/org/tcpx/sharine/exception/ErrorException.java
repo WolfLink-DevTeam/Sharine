@@ -10,24 +10,20 @@ import org.tcpx.sharine.enums.StatusCodeEnum;
  */
 @Getter
 @AllArgsConstructor
-public class ErrorException extends RuntimeException {
+public class ErrorException extends RuntimeException implements IException {
 
     /**
      * 错误码
      */
     private Integer code = StatusCodeEnum.SYSTEM_ERROR.getCode();
 
-    /**
-     * 错误信息
-     */
-    private final String message;
 
     public ErrorException(String message) {
-        this.message = message;
+        super(message);
     }
 
     public ErrorException(StatusCodeEnum statusCodeEnum) {
+        super(statusCodeEnum.getDesc());
         this.code = statusCodeEnum.getCode();
-        this.message = statusCodeEnum.getDesc();
     }
 }
