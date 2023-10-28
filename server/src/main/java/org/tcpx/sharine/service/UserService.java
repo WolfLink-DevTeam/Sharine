@@ -2,10 +2,12 @@ package org.tcpx.sharine.service;
 
 import jakarta.mail.MessagingException;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.constants.RedisPrefixConst;
 import org.tcpx.sharine.constants.UserConst;
+import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UsernamePassword;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.enums.StatusCodeEnum;
@@ -14,8 +16,11 @@ import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.UserRepository;
 import org.tcpx.sharine.utils.EncryptionUtil;
 import org.tcpx.sharine.utils.StringUtils;
+import org.tcpx.sharine.vo.UserProfileVO;
 import org.tcpx.sharine.vo.UserVO;
+import org.tcpx.sharine.vo.VideoVO;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,15 +37,18 @@ public class UserService {
 
     final EmailService emailService;
 
-    public UserService(UserRepository userRepository, FavoriteService favoriteService, UserRelationService userRelationService, RedisService redisService, EmailService emailService) {
+    final VideoService videoService;
+
+    public UserService(UserRepository userRepository, FavoriteService favoriteService, UserRelationService userRelationService, RedisService redisService, EmailService emailService, VideoService videoService) {
         this.userRepository = userRepository;
         this.favoriteService = favoriteService;
         this.userRelationService = userRelationService;
         this.redisService = redisService;
         this.emailService = emailService;
+        this.videoService = videoService;
     }
 
-    public UserVO login(UsernamePassword usernamePassword) {
+    public UserProfileVO login(UsernamePassword usernamePassword) {
         Optional<User> byUsername = userRepository.findByUsername(usernamePassword.getUsername());
         if (byUsername.isEmpty()) {
             throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
@@ -51,10 +59,10 @@ public class UserService {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
 
-        return buildUserVO(user);
+        return buildUserProfileVO(user);
     }
 
-    public UserVO register(UsernamePassword usernamePassword) {
+    public UserProfileVO register(UsernamePassword usernamePassword) {
         String username = usernamePassword.getUsername();
         boolean checked = StringUtils.checkEmail(username);
         // 非邮箱
@@ -82,10 +90,10 @@ public class UserService {
                 .build();
 
         user = userRepository.save(user);
-        return buildUserVO(user);
+        return buildUserProfileVO(user);
     }
 
-    public UserVO forget(UsernamePassword usernamePassword) {
+    public UserProfileVO forget(UsernamePassword usernamePassword) {
         String username = usernamePassword.getUsername();
         boolean checked = StringUtils.checkEmail(username);
         // 非邮箱
@@ -110,7 +118,7 @@ public class UserService {
         user.setPassword(EncryptionUtil.encode(usernamePassword.getPassword()));
         user = userRepository.save(user);
 
-        return buildUserVO(user);
+        return buildUserProfileVO(user);
     }
 
     public void sendCode(UsernamePassword usernamePassword) {
@@ -136,11 +144,27 @@ public class UserService {
         }
     }
 
-    private UserVO buildUserVO(User user) {
+    private UserProfileVO buildUserProfileVO(User user) {
+        UserProfileVO userVO = UserProfileVO.of(user);
+        userVO.setFavouriteCount(favoriteService.countUserFavoured(user.getId()));
+        userVO.setFollowingCOunt(userRelationService.countUserFollowing(user.getId()));
+        userVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
+        return userVO;
+    }
+
+    public UserVO findUserInfo(Long userId) {
+        Optional<User> byId = userRepository.findById(userId);
+        if (byId.isEmpty()) {
+            throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
+        }
+
+        User user = byId.get();
+
         UserVO userVO = UserVO.of(user);
         userVO.setFavouriteCount(favoriteService.countUserFavoured(user.getId()));
         userVO.setFollowingCOunt(userRelationService.countUserFollowing(user.getId()));
         userVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
+
         return userVO;
     }
 }
