@@ -16,9 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
-@RequestMapping("")
-public class BaseController {
+public abstract class BaseController {
     @ExceptionHandler(Exception.class)
     protected final Object exception(Exception ex) {
         return error("程序内部错误: " + ex.getMessage());
@@ -73,10 +71,5 @@ public class BaseController {
         CustomDateEditor editor = new CustomDateEditor(format, true);
         binder.registerCustomEditor(Date.class, editor);
     }
-//    跟子类接口冲突，注释了
-//    @GetMapping("hello")
-//    public Object hello() {
-//        return ok("Hello!");
-//    }
 
 }

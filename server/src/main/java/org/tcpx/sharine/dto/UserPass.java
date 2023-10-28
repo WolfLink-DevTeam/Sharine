@@ -5,10 +5,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UsernamePassword {
-    private String username;
+public class UserPass {
+
+    private String account;
 
     private String password;
 
-    private String code;
+    private String verificationCode;
 }
