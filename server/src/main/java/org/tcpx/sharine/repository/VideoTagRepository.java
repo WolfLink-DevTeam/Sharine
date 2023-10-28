@@ -1,7 +1,9 @@
 package org.tcpx.sharine.repository;
 
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.entity.VideoTag;
-
+@CacheConfig(cacheNames = DatabaseConst.VIDEO_TAG)
 public interface VideoTagRepository extends JpaRepository<VideoTag, Long> {
 }

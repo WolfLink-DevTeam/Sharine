@@ -1,9 +1,7 @@
 package org.tcpx.sharine.service;
 
 import jakarta.mail.MessagingException;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.constants.RedisPrefixConst;
 import org.tcpx.sharine.constants.UserConst;
 import org.tcpx.sharine.dto.UserPass;
@@ -17,11 +15,9 @@ import org.tcpx.sharine.utils.StringUtils;
 import org.tcpx.sharine.vo.UserDetailVO;
 import org.tcpx.sharine.vo.UserProfileVO;
 
-import javax.validation.constraints.Email;
 import java.util.Optional;
 
 @Service
-@CacheConfig(cacheNames = DatabaseConst.USER)
 public class UserService {
 
     final UserRepository userRepository;

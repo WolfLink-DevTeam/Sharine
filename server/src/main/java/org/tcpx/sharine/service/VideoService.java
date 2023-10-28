@@ -3,10 +3,8 @@ package org.tcpx.sharine.service;
 import com.qiniu.storage.model.FileInfo;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.entity.User;
@@ -21,10 +19,8 @@ import org.tcpx.sharine.utils.QiniuUtils;
 import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-@CacheConfig(cacheNames = DatabaseConst.VIDEO)
 public class VideoService {
 
     @Resource

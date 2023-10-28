@@ -1,9 +1,11 @@
 package org.tcpx.sharine.repository;
 
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.entity.UserRelation;
-
+@CacheConfig(cacheNames = DatabaseConst.USER_RELATION)
 public interface UserRelationRepository extends JpaRepository<UserRelation, Long> {
 
     @Query("SELECT COUNT(f) FROM UserRelation f " +
