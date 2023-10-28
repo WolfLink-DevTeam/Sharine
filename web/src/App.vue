@@ -4,6 +4,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import LeftBar from "@/components/NavBar.vue";
 import RightBar from "@/components/CategoryBar.vue";
 import Logo from "@/components/Logo.vue";
+import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
 </script>
 
 <template>
@@ -16,6 +17,31 @@ import Logo from "@/components/Logo.vue";
     </div>
     <div class="body">
         <SearchBar style="height: 3.5rem;width: 55rem;margin-top: 2rem"/>
+        <a-space style="margin-top: 2rem">
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+        </a-space>
+        <a-space style="margin-top: 0.5rem">
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+        </a-space>
+        <a-space style="margin-top: 0.5rem">
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+        </a-space>
+
     </div>
 </template>
 
