@@ -1,6 +1,6 @@
 package org.tcpx.sharine.constants;
 
-public class DatabaseConstants {
+public class DatabaseConst {
     public static final String VIDEO = "video";
     public static final String COMMENT = "comment";
 

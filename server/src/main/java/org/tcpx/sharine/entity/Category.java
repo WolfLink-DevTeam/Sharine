@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
 
 /**
  * 分类
@@ -18,7 +18,7 @@ import org.tcpx.sharine.constants.DatabaseConstants;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = DatabaseConstants.CATEGORY)
+@Table(name = DatabaseConst.CATEGORY)
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

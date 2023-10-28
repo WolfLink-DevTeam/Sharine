@@ -7,14 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
 
 /**
  * 点赞
  */
 @Entity
 @Data
-@Table(name = DatabaseConstants.FAVOURITE)
+@Table(name = DatabaseConst.FAVOURITE)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

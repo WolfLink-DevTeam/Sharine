@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.dto.TagDTO;
 
 /**
@@ -18,7 +18,7 @@ import org.tcpx.sharine.dto.TagDTO;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = DatabaseConstants.TAG)
+@Table(name = DatabaseConst.TAG)
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

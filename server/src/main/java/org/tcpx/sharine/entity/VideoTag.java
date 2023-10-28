@@ -1,17 +1,16 @@
 package org.tcpx.sharine.entity;
 
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
 
 @Data
 @Builder
 @Entity
-@Table(name = DatabaseConstants.VIDEO_TAG)
+@Table(name = DatabaseConst.VIDEO_TAG)
 @NoArgsConstructor
 @AllArgsConstructor
 public class VideoTag {
