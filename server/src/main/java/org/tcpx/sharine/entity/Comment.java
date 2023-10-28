@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
 
 /**
  * 评论
  */
 @Entity
 @Data
-@Table(name = DatabaseConstants.COMMENT)
+@Table(name = DatabaseConst.COMMENT)
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
 
 /**
  * 收藏
  */
 @Entity
 @Data
-@Table(name = DatabaseConstants.COLLECTIBLE)
+@Table(name = DatabaseConst.COLLECTIBLE)
 public class Collectible {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

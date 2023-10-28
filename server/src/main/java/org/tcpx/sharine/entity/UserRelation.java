@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.enums.UserRelationEnum;
 
 /**
@@ -12,7 +12,7 @@ import org.tcpx.sharine.enums.UserRelationEnum;
  */
 @Entity
 @Data
-@Table(name = DatabaseConstants.FOLLOW)
+@Table(name = DatabaseConst.FOLLOW)
 public class UserRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

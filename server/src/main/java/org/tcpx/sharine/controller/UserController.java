@@ -18,4 +18,20 @@ public class UserController extends BaseController {
     public Object login(@RequestBody UsernamePassword usernamePassword) {
         return ok(userService.login(usernamePassword));
     }
+
+    @PostMapping("/register")
+    public Object register(@RequestBody UsernamePassword usernamePassword) {
+        return ok(userService.register(usernamePassword));
+    }
+
+    @PostMapping("/forget")
+    public Object forget(@RequestBody UsernamePassword usernamePassword) {
+        return ok(userService.forget(usernamePassword));
+    }
+
+    @PostMapping("/send")
+    public Object sendCode(@RequestBody UsernamePassword usernamePassword) {
+        userService.sendCode(usernamePassword);
+        return ok();
+    }
 }

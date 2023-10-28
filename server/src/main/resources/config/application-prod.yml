@@ -3,8 +3,8 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sharine?serverTimezone=Asia/Shanghai&allowMultiQueries=true
-    username: username
-    password: password
+    username: root
+    password: root
     hikari:
       minimum-idle: 5
       # 空闲连接存活最大时间，默认600000（10分钟）
@@ -29,10 +29,24 @@ spring:
     redis:
       host: localhost
       port: 6379
-      password: password
+      password: root
+  # 邮箱 配置
+  mail:
+    host: smtp.163.com
+    username: 用户名
+    password: 密码
+    default-encoding: UTF-8
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+
 
 qiniu:
   access-key: key
   secret-key: key
-  bucket: bucket
-  domain-of-bucket: bucket
+  bucket: sharine
+  domain-of-bucket: s336zn7wo.hn-bkt.clouddn.com
