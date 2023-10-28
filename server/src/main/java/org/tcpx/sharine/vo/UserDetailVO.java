@@ -10,13 +10,15 @@ import org.tcpx.sharine.utils.BeanCopyUtils;
 import java.util.List;
 
 /**
- * 完整用户信息
+ * 完整用户档案信息
+ * 不包括用户敏感数据
+ * 包括用户收藏视频列表，用户投稿视频列表等
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserVO {
+public class UserDetailVO {
     Long id;
 
     String nickname;
@@ -26,7 +28,7 @@ public class UserVO {
     String content;
 
     // 关注
-    Long followingCOunt;
+    Long followingCount;
 
     // 粉丝
     Long followedCount;
@@ -40,7 +42,7 @@ public class UserVO {
 
     Long updateTime;
 
-    public static UserVO of(User user) {
-        return BeanCopyUtils.copyObject(user, UserVO.class);
+    public static UserDetailVO of(User user) {
+        return BeanCopyUtils.copyObject(user, UserDetailVO.class);
     }
 }

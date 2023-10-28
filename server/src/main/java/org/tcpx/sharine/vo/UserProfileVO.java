@@ -8,7 +8,8 @@ import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.utils.BeanCopyUtils;
 
 /**
- * 用户简略信息
+ * 用户档案信息
+ * 不包含用户敏感数据和用户投稿视频，用户收藏视频等
  */
 @Data
 @Builder
@@ -24,7 +25,7 @@ public class UserProfileVO {
     String content;
 
     // 关注
-    Long followingCOunt;
+    Long followingCount;
 
     // 粉丝
     Long followedCount;

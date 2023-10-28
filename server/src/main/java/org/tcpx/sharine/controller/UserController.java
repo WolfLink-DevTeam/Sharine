@@ -58,13 +58,23 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 查询指定用户信息
+     * 查询指定用户详细信息
      *
      * @param userId 用户ID
-     * @return 用户信息
+     * @return 用户详细信息
      */
-    @GetMapping("{userId}")
-    public Object findUserInfo(@PathVariable Long userId) {
-        return ok(userService.findUserInfo(userId));
+    @GetMapping("/detail/{userId}")
+    public Object findUserDetailInfo(@PathVariable Long userId) {
+        return ok(userService.findUserDetailInfo(userId));
+    }
+    /**
+     * 查询用户档案信息
+     *
+     * @param userId 用户ID
+     * @return 用户档案信息
+     */
+    @GetMapping("/profile/{userId}")
+    public Object findUserProfileInfo(@PathVariable Long userId) {
+        return ok(userService.findUserProfileInfo(userId));
     }
 }
