@@ -7,16 +7,14 @@ import lombok.NoArgsConstructor;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.utils.BeanCopyUtils;
 
-import java.util.List;
-
 /**
- * 完整用户信息
+ * 用户简略信息
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserVO {
+public class UserProfileVO {
     Long id;
 
     String nickname;
@@ -34,13 +32,11 @@ public class UserVO {
     // 视频点赞
     Long favouriteCount;
 
-    List<VideoVO> videos;
-
     Long createTime;
 
     Long updateTime;
 
-    public static UserVO of(User user) {
-        return BeanCopyUtils.copyObject(user, UserVO.class);
+    public static UserProfileVO of(User user) {
+        return BeanCopyUtils.copyObject(user, UserProfileVO.class);
     }
 }

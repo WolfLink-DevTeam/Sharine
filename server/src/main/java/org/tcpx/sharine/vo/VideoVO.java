@@ -14,7 +14,7 @@ import java.util.List;
 public class VideoVO {
     Long id;
 
-    UserVO author;
+    UserProfileVO author;
 
     String title;
 

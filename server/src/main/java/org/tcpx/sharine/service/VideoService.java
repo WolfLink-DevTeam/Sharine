@@ -1,8 +1,10 @@
 package org.tcpx.sharine.service;
 
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.DatabaseConst;
+import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
@@ -17,6 +19,10 @@ public class VideoService {
     }
 
     public List<Long> findAllUserVideoIds(Long userId) {
+        return null;
+    }
+
+    public List<VideoVO> findUserVideos(ConditionDTO conditionDTO) {
         return null;
     }
 }

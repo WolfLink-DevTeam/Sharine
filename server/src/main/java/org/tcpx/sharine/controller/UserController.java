@@ -1,8 +1,7 @@
 package org.tcpx.sharine.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UsernamePassword;
 import org.tcpx.sharine.service.UserService;
 
@@ -33,5 +32,10 @@ public class UserController extends BaseController {
     public Object sendCode(@RequestBody UsernamePassword usernamePassword) {
         userService.sendCode(usernamePassword);
         return ok();
+    }
+
+    @GetMapping("{userId}")
+    public Object findUserInfo(@PathVariable Long userId) {
+        return ok(userService.findUserInfo(userId));
     }
 }
