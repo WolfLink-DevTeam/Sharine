@@ -20,7 +20,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/login")
     public Object login(@RequestBody UserPass userPass) {
-        return ok(userService.login(userPass));
+        return respond(()->userService.login(userPass));
     }
 
     /**
@@ -31,7 +31,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/register")
     public Object register(@RequestBody UserPass userPass) {
-        return ok(userService.register(userPass));
+        return respond(()->userService.register(userPass));
     }
 
     /**
@@ -42,7 +42,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/changePassword")
     public Object changePassword(@RequestBody UserPass userPass) {
-        return ok(userService.changePassword(userPass));
+        return respond(()->userService.changePassword(userPass));
     }
 
     /**
@@ -53,8 +53,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/requestForCode")
     public Object requestForCode(@RequestBody UserPass userPass) {
-        userService.requestForCode(userPass);
-        return ok();
+        return respond(()->userService.requestForCode(userPass));
     }
 
     /**
@@ -65,7 +64,7 @@ public class UserController extends BaseController {
      */
     @GetMapping("/detail/{userId}")
     public Object findUserDetailInfo(@PathVariable Long userId) {
-        return ok(userService.findUserDetailInfo(userId));
+        return respond(()->userService.findUserDetailInfo(userId));
     }
     /**
      * 查询用户档案信息
@@ -75,6 +74,6 @@ public class UserController extends BaseController {
      */
     @GetMapping("/profile/{userId}")
     public Object findUserProfileInfo(@PathVariable Long userId) {
-        return ok(userService.findUserProfileInfo(userId));
+        return respond(()->userService.findUserProfileInfo(userId));
     }
 }

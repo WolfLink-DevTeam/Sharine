@@ -6,12 +6,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.tcpx.sharine.enums.StatusCodeEnum;
+import org.tcpx.sharine.exception.IException;
 import org.tcpx.sharine.vo.PageVO;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public abstract class BaseController {
     @ExceptionHandler(Exception.class)
@@ -42,6 +45,38 @@ public abstract class BaseController {
         return createResult(StatusCodeEnum.SUCCESS.getCode(), null, map);
     }
 
+    /**
+     * 执行代码块，并捕获异常，自动封装并反馈到前端
+     * @param block     代码块
+     * @return          响应结果
+     */
+    protected final Object respond(Supplier<Object> block) {
+        Object result;
+        try {
+            result = ok(block.get());
+        } catch (Exception e) {
+            if(e instanceof IException iException) {
+                result = createResult(iException.getCode(),iException.getMessage(),null);
+            } else {
+                result = createResult(StatusCodeEnum.SYSTEM_ERROR.getCode(),StatusCodeEnum.SYSTEM_ERROR.getDesc(),null);
+            }
+        }
+        return result;
+    }
+    protected final Object respond(Runnable block) {
+        Object result;
+        try {
+            block.run();
+            result = ok();
+        } catch (Exception e) {
+            if(e instanceof IException iException) {
+                result = createResult(iException.getCode(),iException.getMessage(),null);
+            } else {
+                result = createResult(StatusCodeEnum.SYSTEM_ERROR.getCode(),StatusCodeEnum.SYSTEM_ERROR.getDesc(),null);
+            }
+        }
+        return result;
+    }
     protected final Object ok(PageVO<?> data) {
         return ok(data.getList(), data.getTotal());
     }
