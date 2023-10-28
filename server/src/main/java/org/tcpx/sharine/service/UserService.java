@@ -14,8 +14,8 @@ import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.UserRepository;
 import org.tcpx.sharine.utils.EncryptionUtil;
 import org.tcpx.sharine.utils.StringUtils;
+import org.tcpx.sharine.vo.UserDetailVO;
 import org.tcpx.sharine.vo.UserProfileVO;
-import org.tcpx.sharine.vo.UserVO;
 
 import java.util.Optional;
 
@@ -143,24 +143,38 @@ public class UserService {
     private UserProfileVO buildUserProfileVO(User user) {
         UserProfileVO userVO = UserProfileVO.of(user);
         userVO.setFavouriteCount(favoriteService.countUserFavoured(user.getId()));
-        userVO.setFollowingCOunt(userRelationService.countUserFollowing(user.getId()));
+        userVO.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
         userVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
         return userVO;
     }
 
-    public UserVO findUserInfo(Long userId) {
-        Optional<User> byId = userRepository.findById(userId);
-        if (byId.isEmpty()) {
-            throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
-        }
+    /**
+     * 查询用户粗略档案信息
+     *
+     * @param userId 用户ID
+     * @return 用户粗略档案信息
+     */
+    public UserProfileVO findUserProfileInfo(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        return buildUserProfileVO(user);
+    }
 
-        User user = byId.get();
+    /**
+     * 查询用户详细信息
+     *
+     * @param userId 用户ID
+     * @return 用户详细信息
+     */
+    public UserDetailVO findUserDetailInfo(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
 
-        UserVO userVO = UserVO.of(user);
-        userVO.setFavouriteCount(favoriteService.countUserFavoured(user.getId()));
-        userVO.setFollowingCOunt(userRelationService.countUserFollowing(user.getId()));
-        userVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
+        UserDetailVO userDetailVO = UserDetailVO.of(user);
+        userDetailVO.setFavouriteCount(favoriteService.countUserFavoured(user.getId()));
+        userDetailVO.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
+        userDetailVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
 
-        return userVO;
+        return userDetailVO;
     }
 }
