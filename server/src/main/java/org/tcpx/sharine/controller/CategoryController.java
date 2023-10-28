@@ -23,7 +23,7 @@ public class CategoryController extends BaseController {
      */
     @GetMapping("/find")
     public Object find(ConditionDTO conditionDTO) {
-        return respond(()->categoryService.find(conditionDTO));
+        return ok(categoryService.find(conditionDTO));
     }
 
     /**
@@ -37,6 +37,6 @@ public class CategoryController extends BaseController {
     public Object findVideos(@PathVariable Long categoryId, ConditionDTO conditionDTO) {
         conditionDTO.setId(categoryId);
 
-        return respond(()->categoryService.findVideos(conditionDTO));
+        return ok(categoryService.findVideos(conditionDTO));
     }
 }

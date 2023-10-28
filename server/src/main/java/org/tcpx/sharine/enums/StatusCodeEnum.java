@@ -24,7 +24,9 @@ public enum StatusCodeEnum {
     COMPILE_ERROR(15, "编辑错误"),
     RUNNING(16, "正在运行"),
     NOT_RUNNING(17, "不在运行时间"),
-    NOT_LOGIN(18, "未登录");
+    NOT_LOGIN(18, "未登录"),
+    VERIFY_FAILED(19,"验证失败")
+    ;
 
     /**
      * 状态码

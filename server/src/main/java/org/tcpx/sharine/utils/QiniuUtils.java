@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.qiniu.http.Response;
 import com.qiniu.storage.*;
 import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -104,13 +105,23 @@ public class QiniuUtils {
         try {
             long uniqueId = 0;
             if (uploader != null) uniqueId = uploader.getId();
-            String url = getDownloadUrl(uniqueId, fileName, fileType);
             BucketManager bucketManager = new BucketManager(Auth.create(accessKey, secretKey), (Configuration) null);
             bucketManager.stat(bucket, concatKey(uniqueId, fileName, fileType));
             return true;
         } catch (Exception ignore) {
         }
         return false;
+    }
+    public Optional<FileInfo> getFileInfo(@Nullable User uploader, String fileName, QiniuFileType fileType) {
+        try {
+            long uniqueId = 0;
+            if (uploader != null) uniqueId = uploader.getId();
+            BucketManager bucketManager = new BucketManager(Auth.create(accessKey, secretKey), (Configuration) null);
+            FileInfo fileInfo = bucketManager.stat(bucket, concatKey(uniqueId, fileName, fileType));
+            return Optional.of(fileInfo);
+        } catch (Exception ignore) {
+        }
+        return Optional.empty();
     }
 
     /**

@@ -17,6 +17,7 @@ import org.tcpx.sharine.utils.StringUtils;
 import org.tcpx.sharine.vo.UserDetailVO;
 import org.tcpx.sharine.vo.UserProfileVO;
 
+import javax.validation.constraints.Email;
 import java.util.Optional;
 
 @Service
@@ -45,7 +46,7 @@ public class UserService {
     }
 
     public UserProfileVO login(UserPass userPass) {
-        Optional<User> byUsername = userRepository.findByUsername(userPass.getAccount());
+        Optional<User> byUsername = userRepository.findByAccount(userPass.getAccount());
         if (byUsername.isEmpty()) {
             throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
         }
@@ -59,26 +60,16 @@ public class UserService {
     }
 
     public UserProfileVO register(UserPass userPass) {
-        String username = userPass.getAccount();
-        boolean checked = StringUtils.checkEmail(username);
-        // 非邮箱
-        if (!checked) {
-            throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
-        }
-
-        String code = (String) redisService.get(RedisPrefixConst.TOKEN + username);
-        // 验证码错误
-        if (code == null || !code.equals(userPass.getVerificationCode())) {
-            throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
-        }
+        String account = userPass.getAccount();
+        emailService.mailVerify(account,userPass.getVerificationCode());
 
         // 用户已存在
-        if (userRepository.existsByUsername(username).equals(true)) {
+        if (userRepository.existsByAccount(account).equals(true)) {
             throw new ErrorException(StatusCodeEnum.DATA_EXIST);
         }
 
         User user = User.builder()
-                .username(username)
+                .account(account)
                 .password(EncryptionUtil.encode(userPass.getPassword()))
                 .nickname(UserConst.DEFAULT_NICKNAME)
                 .avatar(UserConst.DEFAULT_AVATAR)
@@ -90,21 +81,21 @@ public class UserService {
     }
 
     public UserProfileVO changePassword(UserPass userPass) {
-        String username = userPass.getAccount();
-        boolean checked = StringUtils.checkEmail(username);
+        String account = userPass.getAccount();
+        boolean checked = StringUtils.checkEmail(account);
         // 非邮箱
         if (!checked) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
 
-        String code = (String) redisService.get(RedisPrefixConst.TOKEN + username);
+        String code = (String) redisService.get(RedisPrefixConst.TOKEN + account);
         // 验证码错误
         if (code == null || !code.equals(userPass.getVerificationCode())) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
 
         // 用户不存在
-        Optional<User> byUsername = userRepository.findByUsername(username);
+        Optional<User> byUsername = userRepository.findByAccount(account);
         if (byUsername.isEmpty()) {
             throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
         }

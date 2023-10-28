@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.tcpx.sharine.constants.RedisPrefixConst;
+import org.tcpx.sharine.enums.StatusCodeEnum;
+import org.tcpx.sharine.exception.ErrorException;
+import org.tcpx.sharine.utils.IOC;
+import org.tcpx.sharine.utils.StringUtils;
 
 @Service
 public class EmailService {
@@ -17,6 +22,8 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String email;
 
+    @Resource
+    private RedisService redisService;
     @Resource
     private JavaMailSender javaMailSender;
 
@@ -45,5 +52,16 @@ public class EmailService {
         messageHelper.setText(content, true); //true 代表发送html格式
         // 发送邮件
         javaMailSender.send(message);
+    }
+    public void mailVerify(String mail,String verificationCode) {
+        boolean checkResult = StringUtils.checkEmail(mail);
+        if (!checkResult) {
+            throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
+        }
+        String code = (String) redisService.get(RedisPrefixConst.TOKEN + mail);
+        // 验证码错误
+        if (code == null || !code.equals(verificationCode)) {
+            throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
+        }
     }
 }

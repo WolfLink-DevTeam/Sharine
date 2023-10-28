@@ -12,7 +12,7 @@ import org.tcpx.sharine.enums.StatusCodeEnum;
  */
 @Getter
 @AllArgsConstructor
-public class WarnException extends RuntimeException implements IException {
+public class WarnException extends RuntimeException {
 
     /**
      * 错误码
