@@ -6,7 +6,7 @@ import org.tcpx.sharine.enums.VideoTypeEnum;
 @Data
 public class UploadVideoDTO {
 
-    private String account;
+    private Long userId;
     private String fileName;
     private String md5;
     private Long categoryId;

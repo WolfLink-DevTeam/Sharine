@@ -50,7 +50,7 @@ public class VideoService {
     }
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
         // 用户数据查询
-        User user = IOC.getBean(UserRepository.class).findByAccount(uploadVideoDTO.getAccount())
+        User user = IOC.getBean(UserRepository.class).findById(uploadVideoDTO.getUserId())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         // 七牛云数据库查询
         FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileName(), QiniuFileType.MP4)
