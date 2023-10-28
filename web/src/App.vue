@@ -16,8 +16,16 @@ import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
         <RightBar style="height: 27rem;width: 5rem;right: 0;"/>
     </div>
     <div class="body">
-        <SearchBar style="height: 3.5rem;width: 55rem;margin-top: 2rem"/>
-        <a-space style="margin-top: 2rem">
+        <SearchBar style="height: 3.5rem;width: 55rem;margin-top: 2rem;position: fixed;top: 0;z-index: 5"/>
+        <a-space style="margin-top: 7rem">
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
+        </a-space>
+        <a-space style="margin-top: 0.5rem">
             <SimpleVideoCard style="height: 14rem;width: 10rem"/>
             <SimpleVideoCard style="height: 14rem;width: 10rem"/>
             <SimpleVideoCard style="height: 14rem;width: 10rem"/>
