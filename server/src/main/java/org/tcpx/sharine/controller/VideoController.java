@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.dto.UserPass;
 import org.tcpx.sharine.service.VideoService;
 
@@ -15,13 +16,13 @@ public class VideoController extends BaseController {
         this.videoService = videoService;
     }
 
-    @PostMapping("/verify/{fileName}/{md5}")
-    public Object verifyVideo(@RequestBody UserPass userPass, @PathVariable String fileName, @PathVariable String md5) {
+    @PostMapping("/verify/{token}")
+    public Object verifyVideo(@PathVariable String token,@RequestBody UploadVideoDTO uploadVideoDTO) {
         // TODO 验证用户 Token
 
 
 
-        videoService.verifyAndSaveVideo(userPass.getAccount(),fileName,md5);
+        videoService.verifyAndSaveVideo(uploadVideoDTO);
         return ok();
     }
 }

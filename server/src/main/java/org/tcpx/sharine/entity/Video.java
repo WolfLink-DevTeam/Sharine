@@ -1,10 +1,14 @@
 package org.tcpx.sharine.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConst;
+import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.enums.VideoTypeEnum;
 
 /**
@@ -12,8 +16,20 @@ import org.tcpx.sharine.enums.VideoTypeEnum;
  */
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = DatabaseConst.VIDEO)
 public class Video {
+
+    public Video(UploadVideoDTO uploadVideoDTO) {
+        userId = uploadVideoDTO.getUserId();
+        categoryId = uploadVideoDTO.getCategoryId();
+        title = uploadVideoDTO.getTitle();
+        content = uploadVideoDTO.getContent();
+        url = uploadVideoDTO.getUrl();
+        coverUrl = uploadVideoDTO.getCoverUrl();
+        type = uploadVideoDTO.getType();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
