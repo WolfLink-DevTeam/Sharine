@@ -1,7 +1,6 @@
 package org.tcpx.sharine.service;
 
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.dto.ConditionDTO;

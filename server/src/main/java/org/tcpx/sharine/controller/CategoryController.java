@@ -14,10 +14,12 @@ public class CategoryController extends BaseController {
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
+
     /**
      * 搜索分类信息
-     * @param conditionDTO  查询条件
-     * @return              分区数据
+     *
+     * @param conditionDTO 查询条件
+     * @return 分区数据
      */
     @GetMapping("/find")
     public Object find(ConditionDTO conditionDTO) {
@@ -26,9 +28,10 @@ public class CategoryController extends BaseController {
 
     /**
      * 查询视频信息
-     * @param categoryId    分区ID
-     * @param conditionDTO  查询条件
-     * @return              视频数据
+     *
+     * @param categoryId   分区ID
+     * @param conditionDTO 查询条件
+     * @return 视频数据
      */
     @GetMapping("/{categoryId}/videos")
     public Object findVideos(@PathVariable Long categoryId, ConditionDTO conditionDTO) {

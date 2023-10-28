@@ -74,8 +74,8 @@ public class JwtUtil {
     /**
      * 创建token
      *
-     * @param id 唯一id
-     * @param subject 主题， 加密内容
+     * @param id        唯一id
+     * @param subject   主题， 加密内容
      * @param ttlMillis 过期时间
      * @return jwt字符串
      */

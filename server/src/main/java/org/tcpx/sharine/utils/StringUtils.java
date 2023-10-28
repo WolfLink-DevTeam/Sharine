@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public class StringUtils {
     /**
      * 判断字符串是否为空
+     *
      * @param str
      * @return 是空字符串
      */
@@ -20,6 +21,7 @@ public class StringUtils {
 
     /**
      * 判断字符串是否为空
+     *
      * @param str
      * @return 不是空字符串
      */
@@ -61,9 +63,10 @@ public class StringUtils {
 
     /**
      * 检查字符串是否符合长度
+     *
      * @param str 字符串
-     * @param l 最小长度
-     * @param r 最大长度
+     * @param l   最小长度
+     * @param r   最大长度
      * @return 是否符合
      */
     public static boolean isSpecifiedLength(String str, int l, int r) {

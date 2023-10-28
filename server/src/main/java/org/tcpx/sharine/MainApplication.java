@@ -8,11 +8,12 @@ import org.tcpx.sharine.utils.IOC;
 
 @SpringBootApplication
 public class MainApplication {
-	@Getter
-	private static ApplicationContext applicationContext = null;
-	public static void main(String[] args) {
-		applicationContext = SpringApplication.run(MainApplication.class, args);
-		IOC.init(applicationContext);
-	}
+    @Getter
+    private static ApplicationContext applicationContext = null;
+
+    public static void main(String[] args) {
+        applicationContext = SpringApplication.run(MainApplication.class, args);
+        IOC.init(applicationContext);
+    }
 
 }
