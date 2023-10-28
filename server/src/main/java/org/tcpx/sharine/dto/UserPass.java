@@ -12,4 +12,6 @@ public class UserPass {
     private String password;
 
     private String verificationCode;
+
+    private String token;
 }
