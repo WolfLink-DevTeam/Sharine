@@ -1,7 +1,10 @@
 package org.tcpx.sharine.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConst;
@@ -10,7 +13,10 @@ import org.tcpx.sharine.constants.DatabaseConst;
  * 收藏
  */
 @Entity
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = DatabaseConst.BOOKMARK)
 public class Bookmark {
     @Id
