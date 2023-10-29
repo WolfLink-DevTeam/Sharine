@@ -1,4 +1,5 @@
 <script setup>
+import {getImageUrl} from "@/common/js/ResourceUtils.js";
 const props = defineProps({
     img: {
         type: String,
@@ -18,11 +19,6 @@ const props = defineProps({
     }
 })
 defineEmits(['click'])
-
-function getImageUrl(imgName) {
-    let url = imgName.replace("@","src")
-    return url
-}
 
 </script>
 

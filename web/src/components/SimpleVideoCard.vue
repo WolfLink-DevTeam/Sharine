@@ -5,11 +5,12 @@
 <div class="body">
     <img class="cover" src="../assets/test-video-cover.png">
     <div class="info">
-        <a-row style="height: 25%;margin-top: 1%;">
-            <a-col :span="10" class="container" style="margin-left: 5%;border-color: #9589BF;border-bottom-style: solid;border-width: 0.15rem;margin-top: 0.1rem">
+        <a-row style="height: 25%;">
+            <a-col :span="8" class="container" style="margin-left: 5%;border-color: #a786d7;border-bottom-style: solid;border-width: 0.15rem;margin-top: 0.1rem">
                 <img src="../assets/ui-icon/like_icon.png" style="width: 1.2rem;height: 1.2rem">
-                <span style="margin-left: 0.5rem;color: #e7d1ff;font-size: 0.8rem;font-family: SHS-Bold">20.61万</span>
+                <span style="margin-left: 0.5rem;color: #fdfdff;font-size: 0.8rem;font-family: SHS-Bold">20.6万</span>
             </a-col>
+            <a-col :span="3"/>
             <a-col :span="6" class="container text-box" style="margin-left: 20%;padding: 2%;margin-top: 2%">
                 12:01
             </a-col>

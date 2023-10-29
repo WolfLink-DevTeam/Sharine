@@ -1,40 +1,30 @@
 <script setup>
 
+import CategorysContainer from "@/components/CategorysContainer.vue";
 </script>
 
 <template>
-    <div class="home-category">
-        <div class="item-category">
-            <div class="category">
-
-            </div>
-            <div class="category">
-            </div>
-        </div>
-        <div class="all-category">
-        </div>
+    <div class="body">
+        <a-row class="chart-row" type="flex">
+            <a-col :flex="10" class="chart"/>
+            <a-col :flex="1"/>
+            <a-col :flex="10" class="chart"/>
+        </a-row>
+        <CategorysContainer class="all-category"/>
     </div>
 </template>
 
 <style lang="less" scoped>
-.home-category{
+.body {
     height: 100%;
     width: 93%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    .item-category{
-        width: 80%;
-        height: 45%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        .category{
-            height: 80%;
-            width: 40%;
-            margin: 0 40px;
+    .chart-row {
+        width: 70%;
+        height: 30%;
+        .chart{
             border-radius: 16px;
             background: #555D8B;
             box-shadow: -4px 4px 12px 0px rgba(0, 0, 0, 0.4);
@@ -42,11 +32,8 @@
     }
     .all-category{
         width: 70%;
-        height: 55%;
-        border-radius: 16px;
-        margin: 40px 0;
-        background: #555D8B;
-        box-shadow: -4px 4px 12px 0px rgba(0, 0, 0, 0.4);
+        height: 45%;
+        margin: 3rem 0;
     }
 }
 </style>
