@@ -11,7 +11,7 @@ import SearchBar from "@/components/SearchBar.vue";
             <div class="favorite-list">
                 <div class="favorite-item">
                     <div class="cover">
-                        <img class="img-cover" src="@/assets/test_video_cover.png">
+                        <img class="img-cover" src="../../assets/test-video-cover.png">
                     </div>
                     <div class="introduce"></div>
                 </div>

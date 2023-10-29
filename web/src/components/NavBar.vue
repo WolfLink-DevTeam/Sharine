@@ -33,10 +33,10 @@ const changeButton = (count) => {
 
 <template>
     <div class="container">
-        <LeftBarItem img="@/assets/home_icon.png" title="首页" sub-title="Home" :enabled="radioClasses[0]" @click="changeButton(1)"/>
-        <LeftBarItem img="@/assets/home_icon.png" title="关注" sub-title="Favorite" :enabled="radioClasses[1]" @click="changeButton(2)"/>
-        <LeftBarItem img="@/assets/home_icon.png" title="投稿" sub-title="Upload" :enabled="radioClasses[2]" @click="changeButton(3)"/>
-        <LeftBarItem img="@/assets/home_icon.png" title="个人" sub-title="Person" :enabled="radioClasses[3]" @click="changeButton(4)"/>
+        <LeftBarItem img="@/assets/ui-icon/home-navbar-icon.png" title="首页" sub-title="Home" :enabled="radioClasses[0]" @click="changeButton(1)"/>
+        <LeftBarItem img="@/assets/ui-icon/favorite-navbar-icon.png" title="关注" sub-title="Favorite" :enabled="radioClasses[1]" @click="changeButton(2)"/>
+        <LeftBarItem img="@/assets/ui-icon/upload-navbar-icon.png" title="投稿" sub-title="Upload" :enabled="radioClasses[2]" @click="changeButton(3)"/>
+        <LeftBarItem img="@/assets/ui-icon/person-navbar-icon.png" title="个人" sub-title="Person" :enabled="radioClasses[3]" @click="changeButton(4)"/>
     </div>
 </template>
 

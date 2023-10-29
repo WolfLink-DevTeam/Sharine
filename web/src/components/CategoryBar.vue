@@ -13,11 +13,11 @@ const changeSearchClick = () => {
         <span style="font-size: 1.5rem;color: var(--primary-text-color);font-weight: lighter">当前</span>
         <span style="font-size: 1.5rem;color: var(--primary-text-color);font-weight: lighter">分区</span>
         <span style="width: 3.5rem;height: 0.15rem;background: #9589BF;margin-bottom: 1rem;margin-top: 1rem"/>
-        <img src="@/assets/alltype_icon.png" style="width: 4rem;height: 4rem;margin-bottom: 1rem" alt="">
+        <img src="../assets/category-icon/alltype-category.png" style="width: 4rem;height: 4rem;margin-bottom: 1rem" alt="">
         <span style=" writing-mode: vertical-rl;text-orientation: upright;font-size: 2.4rem;font-weight: bold;letter-spacing: 0.8rem;color: var(--primary-text-color)">综合</span>
         <div style="margin-top: 1.5rem;background: white;border-radius: 2rem;width: 3rem;height: 3rem;display: flex;justify-content: center;align-items: center" @click="changeSearchClick()">
-            <img v-if="systemStore.homeContentToCategory" src="@/assets/left_icon.png" style="width: 2rem;height: 2rem;margin-right: 0.3rem" alt="">
-            <img v-if="!systemStore.homeContentToCategory" src="@/assets/right_icon.png" style="width: 2rem;height: 2rem;margin-right: 0.3rem" alt="">
+            <img v-if="systemStore.homeContentToCategory" src="../assets/ui-icon/left_icon.png" style="width: 2rem;height: 2rem;margin-right: 0.3rem" alt="">
+            <img v-if="!systemStore.homeContentToCategory" src="../assets/ui-icon/right_icon.png" style="width: 2rem;height: 2rem;margin-right: 0.3rem" alt="">
         </div>
 
     </div>
