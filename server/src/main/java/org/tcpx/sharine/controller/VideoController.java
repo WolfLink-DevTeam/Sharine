@@ -17,8 +17,15 @@ public class VideoController extends BaseController {
         videoService.verifyAndSaveVideo(uploadVideoDTO);
         return ok();
     }
+
     @GetMapping("/info/{videoId}")
     public Object getVideoInfo(@PathVariable Long videoId) {
         return ok(videoService.findVideoInfo(videoId));
+    }
+
+    @PostMapping("/played/{userId}/{videoId}")
+    public Object hasPlayedVideo(@PathVariable Long userId, @PathVariable Long videoId) {
+        // TODO 视频播放统计
+        return todo();
     }
 }

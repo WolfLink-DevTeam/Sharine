@@ -53,6 +53,7 @@ public abstract class BaseController {
         return createResult(StatusCodeEnum.SUCCESS.getCode(), null, null);
     }
 
+    protected final Object todo() { return createResult(StatusCodeEnum.TODO.getCode(),StatusCodeEnum.TODO.getDesc(),null); }
     private Object createResult(int code, String msg, Object data) {
         Map<String, Object> result = new HashMap<>(3);
         result.put("code", code);

@@ -13,4 +13,7 @@ import java.util.List;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     @Cacheable(unless = "#result==null")
     Long countByUserId(Long userId);
+
+    void deleteByUserIdAndVideoId(Long userId,Long videoId);
+    boolean existsByUserIdAndVideoId(Long userId,Long videoId);
 }
