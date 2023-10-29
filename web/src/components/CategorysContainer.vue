@@ -10,7 +10,7 @@ import CategoryCard from "@/components/CategoryCard.vue";
             <a-col class="subTitle" :flex="1">Categories</a-col>
             <a-col :flex="20"/>
         </a-row>
-<!--        改为循环组件放置-->
+<!--        临时样式，改为循环组件放置-->
         <a-row class="categoryRow" type="flex" justify="space-between">
             <a-col :span="5"><CategoryCard img="@/assets/category-icon/alltype-category.png" text="综合"/></a-col>
             <a-col :span="5"><CategoryCard img="@/assets/category-icon/alltype-category.png" text="综合"/></a-col>

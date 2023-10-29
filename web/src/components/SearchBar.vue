@@ -39,6 +39,7 @@ button:active {
     background: #3f4c9b;
 }
 .container {
+    height: 60%;
     width: 50%;
     display: flex;
     justify-content: center;

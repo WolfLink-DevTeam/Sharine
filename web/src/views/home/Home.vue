@@ -122,9 +122,13 @@ const num = ref([
     align-items: center;
     justify-content: flex-start;
     .search{
+        z-index: 5;
         height: 10%;
         min-height: 100px;
         width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
         display: flex;
         align-items: center;
         justify-content: center;
