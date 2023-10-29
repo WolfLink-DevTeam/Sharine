@@ -1,10 +1,11 @@
 package org.tcpx.sharine.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.service.VideoService;
 
-@RestController("/video")
+@RestController("/"+ DatabaseConst.VIDEO)
 public class VideoController extends BaseController {
     final VideoService videoService;
 

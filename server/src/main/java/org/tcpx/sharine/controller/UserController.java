@@ -1,10 +1,11 @@
 package org.tcpx.sharine.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.dto.UserPass;
 import org.tcpx.sharine.service.UserService;
 
-@RestController("/user")
+@RestController("/"+ DatabaseConst.USER)
 public class UserController extends BaseController {
     final UserService userService;
 
