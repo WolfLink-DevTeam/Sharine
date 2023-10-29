@@ -4,9 +4,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.entity.Category;
-import org.tcpx.sharine.entity.VideoCategory;
+import org.tcpx.sharine.entity.VideoCategoryRelation;
 import org.tcpx.sharine.repository.CategoryRepository;
 import org.tcpx.sharine.repository.VideoCategoryRepository;
+import org.tcpx.sharine.repository.VideoRepository;
 import org.tcpx.sharine.vo.CategoryVO;
 import org.tcpx.sharine.vo.PageVO;
 import org.tcpx.sharine.vo.VideoVO;
@@ -19,12 +20,12 @@ public class CategoryService {
     final CategoryRepository categoryRepository;
 
     final VideoCategoryRepository videoCategoryRepository;
-    final VideoService videoService;
+    final VideoRepository videoRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, VideoCategoryRepository videoCategoryRepository, VideoService videoService) {
+    public CategoryService(CategoryRepository categoryRepository, VideoCategoryRepository videoCategoryRepository,VideoRepository videoRepository) {
         this.categoryRepository = categoryRepository;
         this.videoCategoryRepository = videoCategoryRepository;
-        this.videoService = videoService;
+        this.videoRepository = videoRepository;
     }
 
     public PageVO<CategoryVO> find(ConditionDTO conditionDTO) {
@@ -44,12 +45,14 @@ public class CategoryService {
         Long categoryId = conditionDTO.getId();
         PageRequest pageRequest = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
-        List<VideoCategory> videoTagList = videoCategoryRepository.findByCategoryId(categoryId, pageRequest);
+        List<VideoCategoryRelation> videoCategoryRelationList = videoCategoryRepository.findByCategoryId(categoryId, pageRequest);
+        // 分区视频总数
         long count = videoCategoryRepository.countByCategoryId(categoryId);
 
-        List<Long> videoIds = videoTagList.stream().map(VideoCategory::getVideoId).toList();
-
-        List<VideoVO> videoVOS = videoService.findAll(videoIds);
+        List<Long> videoIds = videoCategoryRelationList.stream().map(VideoCategoryRelation::getVideoId).toList();
+        // 查询结果
+        List<VideoVO> videoVOS = videoRepository.findAllById(videoIds)
+                .stream().map(VideoVO::of).toList();
 
         return PageVO.<VideoVO>builder().total(count).list(videoVOS).build();
     }

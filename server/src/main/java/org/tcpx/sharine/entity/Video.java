@@ -33,9 +33,6 @@ public class Video {
     Long userId;
 
     @Column(nullable = false)
-    Long categoryId;
-
-    @Column(nullable = false)
     String title;
 
     @Column

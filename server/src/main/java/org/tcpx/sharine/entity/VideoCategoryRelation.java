@@ -10,10 +10,10 @@ import org.tcpx.sharine.constants.DatabaseConst;
 @Data
 @Builder
 @Entity
-@Table(name = DatabaseConst.VIDEO_CATEGORY)
+@Table(name = DatabaseConst.VIDEO_CATEGORY_RELATION)
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoCategory {
+public class VideoCategoryRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

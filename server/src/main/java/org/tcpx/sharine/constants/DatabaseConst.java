@@ -17,5 +17,5 @@ public class DatabaseConst {
     public static final String USER = "user";
     public static final String USER_RELATION = "user_relation";
     public static final String VIDEO_TAG = "video_tag";
-    public static final String VIDEO_CATEGORY = "video_category";
+    public static final String VIDEO_CATEGORY_RELATION = "video_category_relation";
 }

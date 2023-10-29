@@ -25,13 +25,8 @@ public class VideoService {
 
     @Resource
     private VideoRepository videoRepository;
-    private UserService userService;
     @Resource
     private QiniuUtils qiniuUtils;
-    @Autowired
-    public void setUserService(@Lazy UserService userService) {
-        this.userService = userService;
-    }
 
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
         if(!StpUtil.isLogin())throw new WarnException(StatusCodeEnum.NOT_LOGIN);
