@@ -3,8 +3,6 @@ package org.tcpx.sharine.service;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qiniu.storage.model.FileInfo;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.entity.User;
@@ -17,8 +15,6 @@ import org.tcpx.sharine.repository.VideoRepository;
 import org.tcpx.sharine.utils.IOC;
 import org.tcpx.sharine.utils.QiniuUtils;
 import org.tcpx.sharine.vo.VideoVO;
-
-import java.util.List;
 
 @Service
 public class VideoService {

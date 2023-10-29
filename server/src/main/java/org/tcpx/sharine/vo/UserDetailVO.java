@@ -36,6 +36,9 @@ public class UserDetailVO {
     // 视频点赞
     Long favouriteCount;
 
+    // 视频收藏数
+    Long bookmarkCount;
+
     List<VideoVO> videos;
 
     Long createTime;

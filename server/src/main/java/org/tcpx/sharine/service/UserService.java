@@ -10,6 +10,7 @@ import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.ErrorException;
 import org.tcpx.sharine.exception.WarnException;
+import org.tcpx.sharine.repository.BookmarkRepository;
 import org.tcpx.sharine.repository.UserRepository;
 import org.tcpx.sharine.utils.EncryptionUtil;
 import org.tcpx.sharine.utils.StringUtils;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class UserService {
 
     final UserRepository userRepository;
+    final BookmarkRepository bookmarkRepository;
 
     final FavoriteService favoriteService;
 
@@ -33,13 +35,20 @@ public class UserService {
 
     final VideoService videoService;
 
-    public UserService(UserRepository userRepository, FavoriteService favoriteService, UserRelationService userRelationService, RedisService redisService, EmailService emailService, VideoService videoService) {
+    public UserService(UserRepository userRepository,
+                       FavoriteService favoriteService,
+                       UserRelationService userRelationService,
+                       RedisService redisService,
+                       EmailService emailService,
+                       VideoService videoService,
+                       BookmarkRepository bookmarkRepository) {
         this.userRepository = userRepository;
         this.favoriteService = favoriteService;
         this.userRelationService = userRelationService;
         this.redisService = redisService;
         this.emailService = emailService;
         this.videoService = videoService;
+        this.bookmarkRepository = bookmarkRepository;
     }
 
     public UserProfileVO login(UserPass userPass) {
@@ -58,7 +67,7 @@ public class UserService {
 
     public UserProfileVO register(UserPass userPass) {
         String account = userPass.getAccount();
-        emailService.mailVerify(account,userPass.getVerificationCode());
+        emailService.mailVerify(account, userPass.getVerificationCode());
 
         // 用户已存在
         if (userRepository.existsByAccount(account).equals(true)) {
@@ -133,6 +142,7 @@ public class UserService {
         userVO.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
         userVO.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
         userVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
+        userVO.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()));
         return userVO;
     }
 
@@ -159,9 +169,10 @@ public class UserService {
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
 
         UserDetailVO userDetailVO = UserDetailVO.of(user);
-        userDetailVO.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
-        userDetailVO.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
-        userDetailVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
+        userDetailVO.setFavouriteCount(favoriteService.countUserFavorite(userId));
+        userDetailVO.setFollowingCount(userRelationService.countUserFollowing(userId));
+        userDetailVO.setFollowedCount(userRelationService.countUserFollowed(userId));
+        userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId));
 
         return userDetailVO;
     }
