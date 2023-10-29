@@ -2,11 +2,9 @@ package org.tcpx.sharine.service;
 
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.entity.Favorite;
+import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.FavoriteRepository;
-import org.tcpx.sharine.repository.VideoRepository;
-
-import java.util.List;
 
 @Service
 public class FavoriteService {
@@ -27,23 +25,31 @@ public class FavoriteService {
     }
 
     /**
-     * 切换用户点赞视频状态
+     * 用户点赞视频
      * @param userId    用户ID
      * @param videoId   视频ID
-     * @return          点赞状态，true为点赞成功，false为取消点赞
      */
-    public boolean toggleVideoFavorite(Long userId,Long videoId) {
-        // 已经点赞了，再次点击取消点赞
+    public void favoriteVideo(Long userId,Long videoId) {
+        // 已经点赞了
         if(favoriteRepository.existsByUserIdAndVideoId(userId,videoId)) {
-            favoriteRepository.deleteByUserIdAndVideoId(userId,videoId);
-            return false;
+            throw new WarnException(StatusCodeEnum.DATA_EXIST);
         }
-        // 没有点赞过
         Favorite favorite = Favorite.builder()
                 .videoId(videoId)
                 .userId(userId)
                 .build();
         favoriteRepository.save(favorite);
-        return true;
+    }
+    /**
+     * 用户撤销点赞视频
+     * @param userId    用户ID
+     * @param videoId   视频ID
+     */
+    public void undoFavoriteVideo(Long userId,Long videoId) {
+        // 数据不存在
+        if(!favoriteRepository.existsByUserIdAndVideoId(userId,videoId)) {
+            throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
+        }
+        favoriteRepository.deleteByUserIdAndVideoId(userId,videoId);
     }
 }

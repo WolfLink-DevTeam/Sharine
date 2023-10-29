@@ -1,8 +1,6 @@
 package org.tcpx.sharine.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.service.BookmarkService;
 
@@ -14,9 +12,15 @@ public class BookmarkController extends BaseController {
         this.bookmarkService = bookmarkService;
     }
 
-    @PostMapping("/toggle/{userId}/{videoId}")
-    public Object toggleVideoBookmark(@PathVariable Long userId, @PathVariable Long videoId) {
-        return ok(bookmarkService.toggleBookmark(userId, videoId));
+    @PostMapping("/do-bookmark")
+    public Object doFavorite(@RequestParam Long userId, @RequestParam Long videoId) {
+        bookmarkService.bookmarkVideo(userId, videoId);
+        return ok();
+    }
+    @DeleteMapping("/undo-bookmark")
+    public Object undoFavorite(@RequestParam Long userId, @RequestParam Long videoId) {
+        bookmarkService.undoBookmarkVideo(userId, videoId);
+        return ok();
     }
 
 }

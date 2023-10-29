@@ -24,8 +24,8 @@ public class VideoController extends BaseController {
         return ok(videoService.findVideoInfo(videoId));
     }
 
-    @PostMapping("/played/{userId}/{videoId}")
-    public Object hasPlayedVideo(@PathVariable Long userId, @PathVariable Long videoId) {
+    @PostMapping("/played")
+    public Object hasPlayedVideo(@RequestParam Long userId, @RequestParam Long videoId) {
         // TODO 视频播放统计
         return todo();
     }

@@ -1,8 +1,6 @@
 package org.tcpx.sharine.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.service.FavoriteService;
 
@@ -15,8 +13,14 @@ public class FavoriteController extends BaseController {
         this.favoriteService = favoriteService;
     }
 
-    @PostMapping("/toggle/{userId}/{videoId}")
-    public Object toggleFavorite(@PathVariable Long userId, @PathVariable Long videoId) {
-        return ok(favoriteService.toggleVideoFavorite(userId, videoId));
+    @PostMapping("/do-favorite")
+    public Object doFavorite(@RequestParam Long userId, @RequestParam Long videoId) {
+        favoriteService.favoriteVideo(userId, videoId);
+        return ok();
+    }
+    @DeleteMapping("/undo-favorite")
+    public Object undoFavorite(@RequestParam Long userId, @RequestParam Long videoId) {
+        favoriteService.undoFavoriteVideo(userId, videoId);
+        return ok();
     }
 }
