@@ -10,7 +10,7 @@ public class DatabaseConst {
 
     public static final String CATEGORY = "category";
 
-    public static final String COLLECTIBLE = "collectible";
+    public static final String BOOKMARK = "bookmark";
 
     public static final String TAG = "tag";
 

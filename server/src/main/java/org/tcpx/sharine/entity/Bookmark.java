@@ -11,8 +11,8 @@ import org.tcpx.sharine.constants.DatabaseConst;
  */
 @Entity
 @Data
-@Table(name = DatabaseConst.COLLECTIBLE)
-public class Collectible {
+@Table(name = DatabaseConst.BOOKMARK)
+public class Bookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
