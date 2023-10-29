@@ -6,7 +6,6 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.entity.Video;
@@ -33,18 +32,7 @@ public class VideoService {
     public void setUserService(@Lazy UserService userService) {
         this.userService = userService;
     }
-    public List<VideoVO> findAll(List<Long> videoIds) {
-        // todo 继续完善
-        return null;
-    }
 
-    public List<Long> findAllUserVideoIds(Long userId) {
-        return null;
-    }
-
-    public List<VideoVO> findUserVideos(ConditionDTO conditionDTO) {
-        return null;
-    }
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
         if(!StpUtil.isLogin())throw new WarnException(StatusCodeEnum.NOT_LOGIN);
         // 用户数据查询
@@ -55,8 +43,13 @@ public class VideoService {
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         // MD5 比对
         if(!fileInfo.md5.equals(uploadVideoDTO.getMd5())) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);
-        Video video = new Video(uploadVideoDTO);
+        Video video = Video.of(uploadVideoDTO);
         videoRepository.save(video);
+    }
+    public VideoVO findVideoInfo(Long videoId) {
+        Video video = videoRepository.findById(videoId)
+                .orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        return VideoVO.of(video);
     }
 
 }

@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.enums.VideoTypeEnum;
+import org.tcpx.sharine.utils.BeanCopyUtils;
 
 /**
  * 视频
@@ -20,14 +21,8 @@ import org.tcpx.sharine.enums.VideoTypeEnum;
 @Table(name = DatabaseConst.VIDEO)
 public class Video {
 
-    public Video(UploadVideoDTO uploadVideoDTO) {
-        userId = uploadVideoDTO.getUserId();
-        categoryId = uploadVideoDTO.getCategoryId();
-        title = uploadVideoDTO.getTitle();
-        content = uploadVideoDTO.getContent();
-        url = uploadVideoDTO.getUrl();
-        coverUrl = uploadVideoDTO.getCoverUrl();
-        type = uploadVideoDTO.getType();
+    public static Video of(UploadVideoDTO uploadVideoDTO) {
+        return BeanCopyUtils.copyObject(uploadVideoDTO, Video.class);
     }
 
     @Id

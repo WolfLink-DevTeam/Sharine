@@ -16,9 +16,13 @@ public class VideoController extends BaseController {
         this.videoService = videoService;
     }
 
-    @PostMapping("/verify/{token}")
-    public Object verifyVideo(@PathVariable String token,@RequestBody UploadVideoDTO uploadVideoDTO) {
+    @PostMapping("/verify")
+    public Object verifyVideo(@RequestBody UploadVideoDTO uploadVideoDTO) {
         videoService.verifyAndSaveVideo(uploadVideoDTO);
         return ok();
+    }
+    @PostMapping("/info/{videoId}")
+    public Object getVideoInfo(@PathVariable Long videoId) {
+        return ok(videoService.findVideoInfo(videoId));
     }
 }
