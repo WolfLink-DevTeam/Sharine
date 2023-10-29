@@ -1,10 +1,11 @@
 <script setup>
 import SearchBar from "@/components/SearchBar.vue";
-import RightBar from "@/components/CategoryBar.vue";
+import "@/components/CategoryBar.vue";
 import HomeContent from '@/views/home/cpns/HomeContent.vue'
 import HomeCategory from '@/views/home/cpns/HomeCategory.vue'
 import { ref } from "vue";
 import { useSystemStore } from "@/store/modules/system.js"
+import CategoryBar from "@/components/CategoryBar.vue";
 
 // home页面内容和分类得切换
 const systemStore = useSystemStore()
@@ -106,7 +107,7 @@ const num = ref([
             <HomeContent v-show="systemStore.homeContentToCategory"></HomeContent>
             <HomeCategory v-show="!systemStore.homeContentToCategory"></HomeCategory>
             <div class="category-bar">
-                <RightBar style="height: 27rem;width: 5rem;right: 0;"/>
+                <CategoryBar style="height: 27rem;width: 5rem;right: 0;"/>
             </div>
         </div>
     </div>
@@ -138,7 +139,11 @@ const num = ref([
             flex: 1;
             height: 100%;
             display: flex;
-            justify-content: center;
+
+            margin-top: 10%;
+            margin-bottom: 30%;
+            //justify-content: center; 这个在按钮切换的时候位置会偏
+
             flex-direction: column;
             align-items: flex-end;
         }

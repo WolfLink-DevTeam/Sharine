@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import '@/common/css/global.css'
+import "@/common/css/global-var.less"
 import App from './App.vue'
 import Antd from 'ant-design-vue'
 import { pinia } from './store/index.js'

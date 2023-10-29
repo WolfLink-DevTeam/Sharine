@@ -7,3 +7,6 @@
     --contrast-text-color: #3D3D3D;
     background-color: var(--background-color);
 }
+* {
+    font-family: SHS-Normal, serif;
+}

@@ -21,7 +21,7 @@ import LoginButtion from '@/components/LoginButton.vue'
 <style lang="less" scoped>
 .layout-overview{
     height: 100vh;
-    width: 100wh;
+    width: 100vw;
     display: flex;
     overflow-y: hidden;
     position: relative;
