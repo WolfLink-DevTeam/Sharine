@@ -19,8 +19,9 @@ const props = defineProps({
 })
 defineEmits(['click'])
 
-function getImageUrl(name) {
-    return new URL(`../../lib/Carousel/assets/${name}`, import.meta.url).href
+function getImageUrl(imgName) {
+    let url = imgName.replace("@","src")
+    return url
 }
 
 </script>

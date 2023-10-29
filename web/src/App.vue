@@ -5,17 +5,13 @@ import LeftBar from "@/components/NavBar.vue";
 import RightBar from "@/components/CategoryBar.vue";
 import Logo from "@/components/Logo.vue";
 import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 </script>
 
 <template>
-    <div class="left-bar">
-        <LeftBar style="height: 35rem;width: 5rem;margin-bottom: 2rem;margin-left: 2rem;"/>
-    </div>
-    <Logo style="height: 7rem;width: 16rem;right: 0;top: 0;position: fixed;z-index: 5"/>
-    <div class="right-bar">
-        <RightBar style="height: 27rem;width: 5rem;right: 0;"/>
-    </div>
-    <div class="body">
+    <!-- <div class="body">
         <SearchBar style="height: 3.5rem;width: 55rem;margin-top: 2rem;position: fixed;top: 0;z-index: 5"/>
         <a-space style="margin-top: 7rem">
             <SimpleVideoCard style="height: 14rem;width: 10rem"/>
@@ -49,11 +45,11 @@ import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
             <SimpleVideoCard style="height: 14rem;width: 10rem"/>
             <SimpleVideoCard style="height: 14rem;width: 10rem"/>
         </a-space>
-
-    </div>
+    </div> -->
+    <router-view></router-view>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 .body {
     display: flex;
     flex-direction: column;
@@ -62,7 +58,7 @@ import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
     margin-left: auto;
     margin-right: auto;
     height: 100%;
-    width: 70%;
+    width: 100%;
 }
 .left-bar {
     display: flex;

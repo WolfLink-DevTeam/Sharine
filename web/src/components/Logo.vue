@@ -34,7 +34,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
     text-shadow: 0 0 0.3rem rgba(255, 255, 255, 0.55);
 }
 .subTitle {

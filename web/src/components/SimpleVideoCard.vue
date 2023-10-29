@@ -31,8 +31,11 @@
 
 <style scoped>
 .body {
+    height: 22rem;
+    width: 14rem;
     border-radius: 0.7rem;
     box-shadow: 0 0 0.4rem rgba(0, 0, 0, 1);
+    margin: 10px 15px;
 }
 .cover {
     width: 100%;
