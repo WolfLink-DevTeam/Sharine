@@ -130,7 +130,7 @@ public class UserService {
 
     private UserProfileVO buildUserProfileVO(User user) {
         UserProfileVO userVO = UserProfileVO.of(user);
-        userVO.setFavouriteCount(favoriteService.countUserFavoured(user.getId()));
+        userVO.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
         userVO.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
         userVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
         return userVO;
@@ -159,7 +159,7 @@ public class UserService {
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
 
         UserDetailVO userDetailVO = UserDetailVO.of(user);
-        userDetailVO.setFavouriteCount(favoriteService.countUserFavoured(user.getId()));
+        userDetailVO.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
         userDetailVO.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
         userDetailVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
 
