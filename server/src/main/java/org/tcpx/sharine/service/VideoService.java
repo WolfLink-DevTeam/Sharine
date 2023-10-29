@@ -1,5 +1,6 @@
 package org.tcpx.sharine.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.qiniu.storage.model.FileInfo;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class VideoService {
         return null;
     }
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
+        if(!StpUtil.isLogin())throw new WarnException(StatusCodeEnum.NOT_LOGIN);
         // 用户数据查询
         User user = IOC.getBean(UserRepository.class).findById(uploadVideoDTO.getUserId())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));

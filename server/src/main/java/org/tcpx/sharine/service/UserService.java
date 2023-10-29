@@ -1,5 +1,6 @@
 package org.tcpx.sharine.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.RedisPrefixConst;
@@ -51,7 +52,7 @@ public class UserService {
         if (!EncryptionUtil.match(userPass.getPassword(), user.getPassword())) {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
-
+        StpUtil.login(user.getId());
         return buildUserProfileVO(user);
     }
 

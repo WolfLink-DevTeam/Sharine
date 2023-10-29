@@ -18,10 +18,6 @@ public class VideoController extends BaseController {
 
     @PostMapping("/verify/{token}")
     public Object verifyVideo(@PathVariable String token,@RequestBody UploadVideoDTO uploadVideoDTO) {
-        // TODO 验证用户 Token
-
-
-
         videoService.verifyAndSaveVideo(uploadVideoDTO);
         return ok();
     }
