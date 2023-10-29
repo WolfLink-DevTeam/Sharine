@@ -1,11 +1,7 @@
 package org.tcpx.sharine.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tcpx.sharine.dto.UploadVideoDTO;
-import org.tcpx.sharine.dto.UserPass;
 import org.tcpx.sharine.service.VideoService;
 
 @RestController("/video")
@@ -21,7 +17,7 @@ public class VideoController extends BaseController {
         videoService.verifyAndSaveVideo(uploadVideoDTO);
         return ok();
     }
-    @PostMapping("/info/{videoId}")
+    @GetMapping("/info/{videoId}")
     public Object getVideoInfo(@PathVariable Long videoId) {
         return ok(videoService.findVideoInfo(videoId));
     }
