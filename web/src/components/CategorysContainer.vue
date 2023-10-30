@@ -4,7 +4,7 @@ import CategoryCard from "@/components/CategoryCard.vue";
 </script>
 
 <template>
-    <div class="body">
+    <div class="category-container">
         <a-row class="titleRow" type="flex">
             <a-col class="title" :flex="1">全部分区</a-col>
             <a-col class="subTitle" :flex="1">Categories</a-col>
@@ -22,12 +22,16 @@ import CategoryCard from "@/components/CategoryCard.vue";
 
 <style scoped lang="less">
 @import "@/common/css/global-var.less";
-.body {
+.category-container {
     width: 100%;
     height: 100%;
     border-radius: 1rem;
     background: #555D8B;
     box-shadow: -4px 4px 12px 0 rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
 }
 .titleRow {
     width: 90%;

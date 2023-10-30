@@ -15,15 +15,36 @@ const changeSearchClick = () => {
         <span style="width: 3.5rem;height: 0.15rem;background: #9589BF;margin-bottom: 1rem;margin-top: 1rem"/>
         <img src="../assets/category-icon/alltype-category.png" style="width: 4rem;height: 4rem;margin-bottom: 1rem" alt="">
         <span style=" writing-mode: vertical-rl;text-orientation: upright;font-size: 2.4rem;font-weight: bold;letter-spacing: 0.8rem;color: var(--primary-text-color)">综合</span>
-        <div style="margin-top: 1.5rem;background: white;border-radius: 2rem;width: 3rem;height: 3rem;display: flex;justify-content: center;align-items: center" @click="changeSearchClick()">
-            <img v-if="systemStore.homeContentToCategory" src="../assets/ui-icon/left_icon.png" style="width: 2rem;height: 2rem;margin-right: 0.3rem" alt="">
-            <img v-if="!systemStore.homeContentToCategory" src="../assets/ui-icon/right_icon.png" style="width: 2rem;height: 2rem;margin-right: 0.3rem" alt="">
+        <div class="toggle-btn" @click="changeSearchClick()">
+            <img class="img" style="margin-right: 0.3rem;" v-if="systemStore.homeContentToCategory" src="../assets/ui-icon/left_icon.png" alt="">
+            <img class="img" style="margin-left: 0.3rem;" v-if="!systemStore.homeContentToCategory" src="../assets/ui-icon/right_icon.png" alt="">
         </div>
-
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="less">
+@import "@/common/css/global-var.less";
+.toggle-btn {
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.7);
+    margin-top: 1.5rem;
+    background: @component-background-color;
+    border-radius: 2rem;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .img {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+.toggle-btn:hover {
+    background: white;
+}
+.toggle-btn:active {
+    background: #3f4c9b;
+}
 .container {
     height: 27rem;
     width: 5rem;

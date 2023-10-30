@@ -104,17 +104,21 @@ const num = ref([
             <SearchBar></SearchBar>
         </div>
         <div class="home-body">
-            <HomeContent v-show="systemStore.homeContentToCategory"></HomeContent>
-            <HomeCategory v-show="!systemStore.homeContentToCategory"></HomeCategory>
-            <div class="category-bar">
+            <HomeContent/>
+<!--            <HomeCategory v-show="!systemStore.homeContentToCategory"></HomeCategory>-->
+            <div class="category-bar" style="z-index: 10">
                 <CategoryBar style="height: 27rem;width: 5rem;right: 0;"/>
             </div>
         </div>
     </div>
+    <a-drawer :open="!systemStore.homeContentToCategory" :closable="false" width="65rem" @close="systemStore.homeContentToCategoryChange()">
+        <HomeCategory/>
+    </a-drawer>
 </template>
 
 <style lang="less" scoped>
 .home{
+    min-width: 80rem;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -143,11 +147,7 @@ const num = ref([
             flex: 1;
             height: 100%;
             display: flex;
-
-            margin-top: 10%;
-            margin-bottom: 30%;
-            //justify-content: center; 这个在按钮切换的时候位置会偏
-
+            justify-content: center;
             flex-direction: column;
             align-items: flex-end;
         }
