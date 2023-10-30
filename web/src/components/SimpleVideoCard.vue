@@ -7,7 +7,7 @@
     <div class="info">
         <a-row style="height: 25%;">
             <a-col :span="8" class="container" style="margin-left: 5%;border-color: #a786d7;border-bottom-style: solid;border-width: 0.15rem;margin-top: 0.1rem">
-                <img src="../assets/ui-icon/like_icon.png" style="width: 1.2rem;height: 1.2rem">
+                <img src="../assets/ui-icon/like-icon.png" style="width: 1.2rem;height: 1.2rem">
                 <span style="margin-left: 0.5rem;color: #fdfdff;font-size: 0.8rem;font-family: SHS-Bold">20.6万</span>
             </a-col>
             <a-col :span="3"/>

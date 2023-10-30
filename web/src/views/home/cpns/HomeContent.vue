@@ -91,7 +91,7 @@ const num = ref([
 <template>
     <div class="home-content">
         <div class="content-body">
-            <div style="height: 8rem;width: 100%"></div>
+            <div style="height: 8rem;width: 100%"/>
             <template v-for="item in num" :key="item">
                 <SimpleVideoCard/>
             </template>

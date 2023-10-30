@@ -8,7 +8,7 @@ const searchText = ref("")
     <div class="container">
         <input placeholder="搜你想搜..." v-model="searchText">
         <button class="circle">
-            <img src="../assets/ui-icon/search_icon.png" style="width: 2.5rem;height: 2.5rem">
+            <img src="../assets/ui-icon/search-icon.png" style="width: 2.5rem;height: 2.5rem">
         </button>
     </div>
 </template>
