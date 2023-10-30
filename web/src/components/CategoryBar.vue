@@ -19,6 +19,7 @@ const changeSearchClick = () => {
             <img class="img" style="margin-right: 0.3rem;" v-if="systemStore.homeContentToCategory" src="../assets/ui-icon/left-icon.png" alt="">
             <img class="img" style="margin-left: 0.3rem;" v-if="!systemStore.homeContentToCategory" src="../assets/ui-icon/right-icon.png" alt="">
         </div>
+
     </div>
 </template>
 
