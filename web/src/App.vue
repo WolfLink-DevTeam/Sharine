@@ -1,52 +1,44 @@
 <script setup>
-
-import SearchBar from "@/components/SearchBar.vue";
-import LeftBar from "@/components/NavBar.vue";
-import RightBar from "@/components/CategoryBar.vue";
-import Logo from "@/components/Logo.vue";
-import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
 import { useRouter } from 'vue-router'
+import {h, ref} from "vue";
+import { LoadingOutlined } from '@ant-design/icons-vue';
 
 const router = useRouter()
+let lastLoading = 0
+const loading = ref(false);
+const indicator = h(LoadingOutlined, {
+    style: {
+        fontSize: '24px',
+    },
+    spin: true,
+});
+router.beforeEach((to, from, next) => {
+    loading.value = true; // Show loading animation
+    lastLoading = Date.now()
+    console.log("before:"+lastLoading)
+    next();
+});
+
+router.afterEach((to, from) => {
+    let now = Date.now()
+    console.log("now:"+now)
+    if(now - lastLoading < 400) {
+        setTimeout(()=>{
+            lastLoading = now
+            loading.value = false;
+        },400)
+    } else {
+        lastLoading = now
+        loading.value = false;
+    }
+});
+
 </script>
 
 <template>
-    <!-- <div class="body">
-        <SearchBar style="height: 3.5rem;width: 55rem;margin-top: 2rem;position: fixed;top: 0;z-index: 5"/>
-        <a-space style="margin-top: 7rem">
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-        </a-space>
-        <a-space style="margin-top: 0.5rem">
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-        </a-space>
-        <a-space style="margin-top: 0.5rem">
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-        </a-space>
-        <a-space style="margin-top: 0.5rem">
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-            <SimpleVideoCard style="height: 14rem;width: 10rem"/>
-        </a-space>
-    </div> -->
-    <router-view></router-view>
+    <a-spin :spinning="loading" :indicator="indicator">
+        <router-view/>
+    </a-spin>
 </template>
 
 <style lang="less" scoped>

@@ -51,12 +51,11 @@ const fivePairs2 = [
 
 <template>
     <div class="category-body">
-        <span style="width: 100%;height: 10%"/>
         <a-row class="chart-row" type="flex">
             <a-col :flex="10">
                 <TopChart date="2023.10" :five-pairs="fivePairs1" title-img="" title="热门分区"/>
             </a-col>
-            <a-col :flex="1"/>
+            <a-col :flex="2"/>
             <a-col :flex="10">
                 <TopChart date="2023.10" :five-pairs="fivePairs2" title-img="" title="最常浏览"/>
             </a-col>
@@ -76,18 +75,13 @@ const fivePairs2 = [
 
     .chart-row {
         width: 90%;
-        height: 30%;
+        height: 35%;
     }
 
     .all-category {
         width: 90%;
         height: 45%;
-        margin: 1rem 0;
-    }
-
-    TopChart {
-        width: 40%;
-        height: 30%;
+        margin: 2rem 0;
     }
 }
 </style>

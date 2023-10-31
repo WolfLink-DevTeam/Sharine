@@ -49,19 +49,19 @@ import "@/common/css/global.css";
 <style lang="less" scoped>
 .upload{
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     .upload-page{
         width: 100%;
-        height: 80%;
+        height: 90%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        overflow-y: scroll;
+        //overflow-y: scroll;
         .progress-bar {
             width: 50%;
             height: 15%;
