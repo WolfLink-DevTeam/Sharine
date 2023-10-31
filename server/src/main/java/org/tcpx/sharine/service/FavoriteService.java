@@ -4,7 +4,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.dto.ConditionDTO;
-import org.tcpx.sharine.entity.Bookmark;
 import org.tcpx.sharine.entity.Favorite;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
@@ -28,8 +27,9 @@ public class FavoriteService {
 
     /**
      * 计算用户关注数
-     * @param userId    用户ID
-     * @return          关注数
+     *
+     * @param userId 用户ID
+     * @return 关注数
      */
     public Long countUserFavorite(Long userId) {
         return favoriteRepository.countByUserId(userId);
@@ -37,38 +37,35 @@ public class FavoriteService {
 
     /**
      * 用户点赞视频
-     * @param userId    用户ID
-     * @param videoId   视频ID
+     *
+     * @param userId  用户ID
+     * @param videoId 视频ID
      */
-    public void favoriteVideo(Long userId,Long videoId) {
+    public void favoriteVideo(Long userId, Long videoId) {
         // 已经点赞了
-        if(favoriteRepository.existsByUserIdAndVideoId(userId,videoId)) {
+        if (favoriteRepository.existsByUserIdAndVideoId(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_EXIST);
         }
-        Favorite favorite = Favorite.builder()
-                .videoId(videoId)
-                .userId(userId)
-                .build();
+        Favorite favorite = Favorite.builder().videoId(videoId).userId(userId).build();
         favoriteRepository.save(favorite);
     }
+
     /**
      * 用户撤销点赞视频
-     * @param userId    用户ID
-     * @param videoId   视频ID
+     *
+     * @param userId  用户ID
+     * @param videoId 视频ID
      */
-    public void undoFavoriteVideo(Long userId,Long videoId) {
+    public void undoFavoriteVideo(Long userId, Long videoId) {
         // 数据不存在
-        if(!favoriteRepository.existsByUserIdAndVideoId(userId,videoId)) {
+        if (!favoriteRepository.existsByUserIdAndVideoId(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
         }
-        favoriteRepository.deleteByUserIdAndVideoId(userId,videoId);
+        favoriteRepository.deleteByUserIdAndVideoId(userId, videoId);
     }
 
     public List<VideoVO> findUserFavourites(Long userId, ConditionDTO conditionDTO) {
-        Pageable pageable = PageRequest.of(
-                conditionDTO.getCurrent(),
-                conditionDTO.getSize()
-        );
+        Pageable pageable = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
         List<Favorite> byUserId = favoriteRepository.findByUserId(userId, pageable);
 

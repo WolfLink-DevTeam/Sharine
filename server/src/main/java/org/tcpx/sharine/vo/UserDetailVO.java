@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.utils.BeanCopyUtils;
 
-import java.util.List;
-
 /**
  * 完整用户档案信息
  * 不包括用户敏感数据

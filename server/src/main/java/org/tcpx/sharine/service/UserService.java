@@ -159,7 +159,7 @@ public class UserService {
     /**
      * 查询用户粗略档案信息
      *
-     * @param userId 用户ID
+     * @param userIds 用户ID
      * @return 用户粗略档案信息
      */
     public Map<Long, UserProfileVO> findUserProfileInfo(List<Long> userIds) {

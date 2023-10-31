@@ -4,14 +4,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.entity.Category;
-import org.tcpx.sharine.entity.VideoCategoryRelation;
 import org.tcpx.sharine.exception.ErrorException;
 import org.tcpx.sharine.repository.CategoryRepository;
-import org.tcpx.sharine.repository.VideoCategoryRepository;
-import org.tcpx.sharine.repository.VideoRepository;
 import org.tcpx.sharine.vo.CategoryVO;
 import org.tcpx.sharine.vo.PageVO;
-import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +32,7 @@ public class CategoryService {
 
         return PageVO.<CategoryVO>builder().total(count).list(list).build();
     }
+
     public CategoryVO find(Long id) {
         Optional<Category> byId = categoryRepository.findById(id);
         if (byId.isEmpty()) {
