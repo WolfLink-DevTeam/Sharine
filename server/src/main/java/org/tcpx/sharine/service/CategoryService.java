@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.entity.Category;
 import org.tcpx.sharine.entity.VideoCategoryRelation;
+import org.tcpx.sharine.exception.ErrorException;
 import org.tcpx.sharine.repository.CategoryRepository;
 import org.tcpx.sharine.repository.VideoCategoryRepository;
 import org.tcpx.sharine.repository.VideoRepository;
@@ -13,19 +14,15 @@ import org.tcpx.sharine.vo.PageVO;
 import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
 
     final CategoryRepository categoryRepository;
 
-    final VideoCategoryRepository videoCategoryRepository;
-    final VideoRepository videoRepository;
-
-    public CategoryService(CategoryRepository categoryRepository, VideoCategoryRepository videoCategoryRepository,VideoRepository videoRepository) {
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.videoCategoryRepository = videoCategoryRepository;
-        this.videoRepository = videoRepository;
     }
 
     public PageVO<CategoryVO> find(ConditionDTO conditionDTO) {
@@ -39,21 +36,12 @@ public class CategoryService {
 
         return PageVO.<CategoryVO>builder().total(count).list(list).build();
     }
+    public CategoryVO find(Long id) {
+        Optional<Category> byId = categoryRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw new ErrorException("数据错误");
+        }
 
-
-    public PageVO<VideoVO> findVideos(ConditionDTO conditionDTO) {
-        Long categoryId = conditionDTO.getId();
-        PageRequest pageRequest = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
-
-        List<VideoCategoryRelation> videoCategoryRelationList = videoCategoryRepository.findByCategoryId(categoryId, pageRequest);
-        // 分区视频总数
-        long count = videoCategoryRepository.countByCategoryId(categoryId);
-
-        List<Long> videoIds = videoCategoryRelationList.stream().map(VideoCategoryRelation::getVideoId).toList();
-        // 查询结果
-        List<VideoVO> videoVOS = videoRepository.findAllById(videoIds)
-                .stream().map(VideoVO::of).toList();
-
-        return PageVO.<VideoVO>builder().total(count).list(videoVOS).build();
+        return CategoryVO.of(byId.get());
     }
 }

@@ -7,7 +7,7 @@ import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.service.CategoryService;
 
-@RestController("/"+ DatabaseConst.CATEGORY)
+@RestController("/categories")
 public class CategoryController extends BaseController {
 
     final CategoryService categoryService;
@@ -22,22 +22,8 @@ public class CategoryController extends BaseController {
      * @param conditionDTO 查询条件
      * @return 分区数据
      */
-    @GetMapping("/find")
+    @GetMapping("")
     public Object find(ConditionDTO conditionDTO) {
         return ok(categoryService.find(conditionDTO));
-    }
-
-    /**
-     * 查询视频信息
-     *
-     * @param categoryId   分区ID
-     * @param conditionDTO 查询条件
-     * @return 视频数据
-     */
-    @GetMapping("/{categoryId}/videos")
-    public Object findVideos(@PathVariable Long categoryId, ConditionDTO conditionDTO) {
-        conditionDTO.setId(categoryId);
-
-        return ok(categoryService.findVideos(conditionDTO));
     }
 }

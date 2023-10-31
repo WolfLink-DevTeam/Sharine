@@ -1,16 +1,24 @@
 package org.tcpx.sharine.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.tcpx.sharine.constants.DatabaseConst;
+import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UserPass;
+import org.tcpx.sharine.service.BookmarkService;
+import org.tcpx.sharine.service.FavoriteService;
 import org.tcpx.sharine.service.UserService;
 
-@RestController("/"+ DatabaseConst.USER)
+@RestController("/users")
 public class UserController extends BaseController {
     final UserService userService;
 
-    public UserController(UserService userService) {
+    final FavoriteService favoriteService;
+
+    final BookmarkService bookmarkService;
+
+    public UserController(UserService userService, FavoriteService favoriteService, BookmarkService bookmarkService) {
         this.userService = userService;
+        this.favoriteService = favoriteService;
+        this.bookmarkService = bookmarkService;
     }
 
     /**
@@ -52,7 +60,7 @@ public class UserController extends BaseController {
      * @param userPass 登录通行证信息
      * @return 请求结果
      */
-    @PostMapping("/requestForCode")
+    @PostMapping("/sendCode")
     public Object requestForCode(@RequestBody UserPass userPass) {
         userService.requestForCode(userPass);
         return ok();
@@ -64,18 +72,40 @@ public class UserController extends BaseController {
      * @param userId 用户ID
      * @return 用户详细信息
      */
-    @GetMapping("/detail/{userId}")
+    @GetMapping("/{userId}")
     public Object findUserDetailInfo(@PathVariable Long userId) {
         return ok(userService.findUserDetailInfo(userId));
     }
-    /**
-     * 查询用户档案信息
-     *
-     * @param userId 用户ID
-     * @return 用户档案信息
-     */
-    @GetMapping("/profile/{userId}")
-    public Object findUserProfileInfo(@PathVariable Long userId) {
-        return ok(userService.findUserProfileInfo(userId));
+
+    @GetMapping("/{userId}/favourites")
+    public Object findUserFavourites(@PathVariable Long userId, ConditionDTO conditionDTO) {
+        return ok(favoriteService.findUserFavourites(userId, conditionDTO));
+    }
+    @PostMapping("/{userId}/favourite/{videoId}")
+    public Object favourite(@PathVariable Long userId, @PathVariable Long videoId) {
+        favoriteService.favoriteVideo(userId, videoId);
+        return ok();
+    }
+
+    @DeleteMapping("/{userId}/favourite/{videoId}")
+    public Object unfavoured(@PathVariable Long userId, @PathVariable Long videoId) {
+        favoriteService.undoFavoriteVideo(userId, videoId);
+        return ok();
+    }
+
+    @GetMapping("/{userId}/bookmarks")
+    public Object findUserBookmarks(@PathVariable Long userId, ConditionDTO conditionDTO) {
+        return ok(bookmarkService.findUserBookmarks(userId, conditionDTO));
+    }
+    @PostMapping("/{userId}/bookmark/{videoId}")
+    public Object bookmark(@PathVariable Long userId, @PathVariable Long videoId) {
+        bookmarkService.bookmarkVideo(userId, videoId);
+        return ok();
+    }
+
+    @DeleteMapping("/{userId}/bookmark/{videoId}")
+    public Object unbookmark(@PathVariable Long userId, @PathVariable Long videoId) {
+        bookmarkService.undoBookmarkVideo(userId, videoId);
+        return ok();
     }
 }

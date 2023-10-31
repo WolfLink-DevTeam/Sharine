@@ -27,8 +27,6 @@ public class VideoVO {
 
     CategoryVO category;
 
-    List<TagVO> tags;
-
     Long updateTime;
 
     Long createTime;

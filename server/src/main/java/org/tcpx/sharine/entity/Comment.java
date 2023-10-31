@@ -5,6 +5,8 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConst;
+import org.tcpx.sharine.dto.CommentDTO;
+import org.tcpx.sharine.utils.BeanCopyUtils;
 
 /**
  * 评论
@@ -31,4 +33,8 @@ public class Comment {
 
     @UpdateTimestamp
     Long updateTime;
+
+    public static Comment of(CommentDTO commentDTO) {
+        return BeanCopyUtils.copyObject(commentDTO, Comment.class);
+    }
 }

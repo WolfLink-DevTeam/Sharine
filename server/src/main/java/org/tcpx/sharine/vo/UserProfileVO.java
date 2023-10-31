@@ -24,18 +24,6 @@ public class UserProfileVO {
 
     String content;
 
-    // 关注
-    Long followingCount;
-
-    // 粉丝
-    Long followedCount;
-
-    // 视频点赞
-    Long favouriteCount;
-
-    // 视频收藏数
-    Long bookmarkCount;
-
     Long createTime;
 
     Long updateTime;

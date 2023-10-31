@@ -1,18 +1,29 @@
 package org.tcpx.sharine.service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.tcpx.sharine.dto.ConditionDTO;
+import org.tcpx.sharine.entity.Bookmark;
 import org.tcpx.sharine.entity.Favorite;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.FavoriteRepository;
+import org.tcpx.sharine.vo.VideoVO;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
 
     final FavoriteRepository favoriteRepository;
 
-    public FavoriteService(FavoriteRepository favoriteRepository) {
+    final VideoService videoService;
+
+    public FavoriteService(FavoriteRepository favoriteRepository, VideoService videoService) {
         this.favoriteRepository = favoriteRepository;
+        this.videoService = videoService;
     }
 
     /**
@@ -51,5 +62,16 @@ public class FavoriteService {
             throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
         }
         favoriteRepository.deleteByUserIdAndVideoId(userId,videoId);
+    }
+
+    public List<VideoVO> findUserFavourites(Long userId, ConditionDTO conditionDTO) {
+        Pageable pageable = PageRequest.of(
+                conditionDTO.getCurrent(),
+                conditionDTO.getSize()
+        );
+
+        List<Favorite> byUserId = favoriteRepository.findByUserId(userId, pageable);
+
+        return videoService.findVideos(byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList()));
     }
 }

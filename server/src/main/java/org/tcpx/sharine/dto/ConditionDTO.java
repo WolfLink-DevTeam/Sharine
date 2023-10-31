@@ -37,4 +37,6 @@ public class ConditionDTO {
 
     @Builder.Default
     private Long id = 0L;
+
+    private Long categoryId;
 }

@@ -17,7 +17,10 @@ import org.tcpx.sharine.utils.StringUtils;
 import org.tcpx.sharine.vo.UserDetailVO;
 import org.tcpx.sharine.vo.UserProfileVO;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -137,13 +140,8 @@ public class UserService {
         }
     }
 
-    private UserProfileVO buildUserProfileVO(User user) {
-        UserProfileVO userVO = UserProfileVO.of(user);
-        userVO.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
-        userVO.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
-        userVO.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
-        userVO.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()));
-        return userVO;
+    private static UserProfileVO buildUserProfileVO(User user) {
+        return UserProfileVO.of(user);
     }
 
     /**
@@ -156,6 +154,23 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         return buildUserProfileVO(user);
+    }
+
+    /**
+     * 查询用户粗略档案信息
+     *
+     * @param userId 用户ID
+     * @return 用户粗略档案信息
+     */
+    public Map<Long, UserProfileVO> findUserProfileInfo(List<Long> userIds) {
+        userIds = userIds.stream().distinct().collect(Collectors.toList());
+
+        List<User> allByIdIn = userRepository.findAllById(userIds);
+
+        return allByIdIn.stream().map(UserService::buildUserProfileVO)
+                .collect(
+                Collectors.toMap(UserProfileVO::getId, person -> person)
+        );
     }
 
     /**

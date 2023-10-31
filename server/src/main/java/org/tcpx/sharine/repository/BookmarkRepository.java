@@ -5,9 +5,12 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.entity.Bookmark;
+
+import java.util.List;
 
 @CacheConfig(cacheNames = DatabaseConst.BOOKMARK)
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
@@ -31,4 +34,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     @Cacheable(unless = "#result==null")
     Long countByVideoId(Long videoId);
 
+
+    List<Bookmark> findByUserId(Long userId, Pageable pageable);
 }

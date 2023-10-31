@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @CacheConfig(cacheNames = DatabaseConst.USER)
