@@ -36,21 +36,17 @@ public class UserService {
 
     final EmailService emailService;
 
-    final VideoService videoService;
-
     public UserService(UserRepository userRepository,
                        FavoriteService favoriteService,
                        UserRelationService userRelationService,
                        RedisService redisService,
                        EmailService emailService,
-                       VideoService videoService,
                        BookmarkRepository bookmarkRepository) {
         this.userRepository = userRepository;
         this.favoriteService = favoriteService;
         this.userRelationService = userRelationService;
         this.redisService = redisService;
         this.emailService = emailService;
-        this.videoService = videoService;
         this.bookmarkRepository = bookmarkRepository;
     }
 

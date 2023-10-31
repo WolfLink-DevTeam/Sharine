@@ -7,7 +7,8 @@ import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.service.CommentService;
 import org.tcpx.sharine.service.VideoService;
 
-@RestController("/videos")
+@RestController
+@RequestMapping("/videos")
 public class VideoController extends BaseController {
     final VideoService videoService;
 
@@ -42,7 +43,7 @@ public class VideoController extends BaseController {
         return ok();
     }
 
-    @GetMapping("")
+    @GetMapping
     public Object findVideos(ConditionDTO conditionDTO) {
         return ok(videoService.findVideos(conditionDTO));
     }

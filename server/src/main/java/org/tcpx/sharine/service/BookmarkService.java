@@ -18,11 +18,8 @@ public class BookmarkService {
 
     final BookmarkRepository bookmarkRepository;
 
-    final VideoService videoService;
-
-    public BookmarkService(BookmarkRepository bookmarkRepository, VideoService videoService) {
+    public BookmarkService(BookmarkRepository bookmarkRepository) {
         this.bookmarkRepository = bookmarkRepository;
-        this.videoService = videoService;
     }
 
     /**
@@ -54,7 +51,7 @@ public class BookmarkService {
         bookmarkRepository.deleteByUserIdAndVideoId(userId, videoId);
     }
 
-    public List<VideoVO> findUserBookmarks(Long userId, ConditionDTO conditionDTO) {
+    public List<Long> findUserBookmarks(Long userId, ConditionDTO conditionDTO) {
         Pageable pageable = PageRequest.of(
                 conditionDTO.getCurrent(),
                 conditionDTO.getSize()
@@ -62,6 +59,6 @@ public class BookmarkService {
 
         List<Bookmark> byUserId = bookmarkRepository.findByUserId(userId, pageable);
 
-        return videoService.findVideos(byUserId.stream().map(Bookmark::getVideoId).collect(Collectors.toList()));
+        return byUserId.stream().map(Bookmark::getVideoId).collect(Collectors.toList());
     }
 }

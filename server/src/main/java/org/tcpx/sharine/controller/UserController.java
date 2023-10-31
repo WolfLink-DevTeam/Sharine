@@ -7,7 +7,8 @@ import org.tcpx.sharine.service.BookmarkService;
 import org.tcpx.sharine.service.FavoriteService;
 import org.tcpx.sharine.service.UserService;
 
-@RestController("/users")
+@RestController
+@RequestMapping("/users")
 public class UserController extends BaseController {
     final UserService userService;
 

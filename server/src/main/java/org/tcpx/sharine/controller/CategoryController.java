@@ -1,11 +1,13 @@
 package org.tcpx.sharine.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.service.CategoryService;
 
-@RestController("/categories")
+@RestController
+@RequestMapping("/categories")
 public class CategoryController extends BaseController {
 
     final CategoryService categoryService;
@@ -20,7 +22,7 @@ public class CategoryController extends BaseController {
      * @param conditionDTO 查询条件
      * @return 分区数据
      */
-    @GetMapping("")
+    @GetMapping
     public Object find(ConditionDTO conditionDTO) {
         return ok(categoryService.find(conditionDTO));
     }

@@ -18,11 +18,8 @@ public class FavoriteService {
 
     final FavoriteRepository favoriteRepository;
 
-    final VideoService videoService;
-
-    public FavoriteService(FavoriteRepository favoriteRepository, VideoService videoService) {
+    public FavoriteService(FavoriteRepository favoriteRepository) {
         this.favoriteRepository = favoriteRepository;
-        this.videoService = videoService;
     }
 
     /**
@@ -64,11 +61,11 @@ public class FavoriteService {
         favoriteRepository.deleteByUserIdAndVideoId(userId, videoId);
     }
 
-    public List<VideoVO> findUserFavourites(Long userId, ConditionDTO conditionDTO) {
+    public List<Long> findUserFavourites(Long userId, ConditionDTO conditionDTO) {
         Pageable pageable = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
         List<Favorite> byUserId = favoriteRepository.findByUserId(userId, pageable);
 
-        return videoService.findVideos(byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList()));
+        return byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList());
     }
 }

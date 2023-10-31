@@ -3,6 +3,7 @@ package org.tcpx.sharine.service;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qiniu.storage.model.FileInfo;
 import jakarta.annotation.Resource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
