@@ -8,7 +8,6 @@ import org.tcpx.sharine.entity.Favorite;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.FavoriteRepository;
-import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,7 +60,16 @@ public class FavoriteService {
         favoriteRepository.deleteByUserIdAndVideoId(userId, videoId);
     }
 
-    public List<Long> findUserFavourites(Long userId, ConditionDTO conditionDTO) {
+    /**
+     * 查询用户关注的视频ID列表
+     * @param userId    用户ID
+     * @return          用户关注视频ID列表
+     */
+    public List<Long> findUserFavoriteVideoIds(Long userId) {
+        List<Favorite> byUserId = favoriteRepository.findByUserId(userId);
+        return byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList());
+    }
+    public List<Long> findUserFavoriteVideoIds(Long userId, ConditionDTO conditionDTO) {
         Pageable pageable = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
         List<Favorite> byUserId = favoriteRepository.findByUserId(userId, pageable);

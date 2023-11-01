@@ -9,9 +9,9 @@ import org.tcpx.sharine.entity.Comment;
 import org.tcpx.sharine.entity.Video;
 
 import java.util.Collection;
+import java.util.List;
 
 @CacheConfig(cacheNames = DatabaseConst.VIDEO)
 public interface VideoRepository extends JpaRepository<Video, Long> {
-    @CacheEvict
-    void delete(@NotNull Video entity);
+    List<Video> findAllByUserId(Long userId);
 }

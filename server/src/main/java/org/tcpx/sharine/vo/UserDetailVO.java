@@ -9,8 +9,7 @@ import org.tcpx.sharine.utils.BeanCopyUtils;
 
 /**
  * 完整用户档案信息
- * 不包括用户敏感数据
- * 包括用户收藏视频列表，用户投稿视频列表等
+ * 包括用户关注数，粉丝数，点赞数等详细数据
  */
 @Data
 @Builder
@@ -25,16 +24,16 @@ public class UserDetailVO {
 
     String content;
 
-    // 关注
+    // 关注 不存在字段 通过 UserRelationService 获取
     Long followingCount;
 
-    // 粉丝
+    // 粉丝 不存在字段 通过 UserRelationService 获取
     Long followedCount;
 
-    // 视频点赞
+    // 视频点赞 不存在字段 通过 FavoriteService 获取
     Long favouriteCount;
 
-    // 视频收藏数
+    // 视频收藏数 不存在字段 通过 BookmarkService 获取
     Long bookmarkCount;
 
     Long createTime;

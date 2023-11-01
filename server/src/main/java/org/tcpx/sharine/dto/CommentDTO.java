@@ -6,6 +6,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CommentDTO {
+
+    Long userId;
+
     Long replyId;
 
     Long videoId;

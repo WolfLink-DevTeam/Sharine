@@ -11,7 +11,6 @@ import java.util.List;
  * @author bin
  * @date 2021/08/10
  */
-@Component
 public class BeanCopyUtils {
 
     /**

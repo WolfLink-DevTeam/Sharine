@@ -23,6 +23,6 @@ public class CategoryVO {
     Long updateTime;
 
     public static CategoryVO of(Category category) {
-        return IOC.getBean(BeanCopyUtils.class).copyObject(category, CategoryVO.class);
+        return BeanCopyUtils.copyObject(category, CategoryVO.class);
     }
 }

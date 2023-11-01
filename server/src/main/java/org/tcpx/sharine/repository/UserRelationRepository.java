@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.entity.UserRelation;
+import org.tcpx.sharine.enums.UserRelationEnum;
+
+import java.util.List;
+
 @CacheConfig(cacheNames = DatabaseConst.USER_RELATION)
 public interface UserRelationRepository extends JpaRepository<UserRelation, Long> {
 
@@ -20,4 +24,9 @@ public interface UserRelationRepository extends JpaRepository<UserRelation, Long
             "OR (f.userId2 = :userId AND f.status = 1)")
     @Cacheable(unless = "#result==null")
     Long countUserFollowed(Long userId);
+
+    @Query("SELECT f FROM UserRelation f " +
+            "WHERE (f.userId1 = :userId AND f.status = 2) " +
+            "OR (f.userId2 = :userId AND f.status = 1)")
+    List<UserRelation> findAllUserFollowed(Long userId);
 }

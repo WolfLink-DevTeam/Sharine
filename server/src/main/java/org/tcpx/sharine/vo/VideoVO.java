@@ -13,15 +13,15 @@ import org.tcpx.sharine.utils.BeanCopyUtils;
 @AllArgsConstructor
 public class VideoVO {
     Long id;
-
-    UserProfileVO author;
+    // 不一致字段 userId -> author
+    UserDetailVO author;
 
     String title;
 
     String url;
 
     String coverUrl;
-
+    // 不存在字段 通过 VideoCategoryService 获取
     CategoryVO category;
 
     Long updateTime;

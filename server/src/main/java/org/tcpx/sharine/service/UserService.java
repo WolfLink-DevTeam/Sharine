@@ -15,7 +15,7 @@ import org.tcpx.sharine.repository.UserRepository;
 import org.tcpx.sharine.utils.EncryptionUtil;
 import org.tcpx.sharine.utils.StringUtils;
 import org.tcpx.sharine.vo.UserDetailVO;
-import org.tcpx.sharine.vo.UserProfileVO;
+import org.tcpx.sharine.vo.UserSimpleVO;
 
 import java.util.List;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class UserService {
         this.bookmarkRepository = bookmarkRepository;
     }
 
-    public UserProfileVO login(UserPass userPass) {
+    public UserSimpleVO login(UserPass userPass) {
         Optional<User> byUsername = userRepository.findByAccount(userPass.getAccount());
         if (byUsername.isEmpty()) {
             throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
@@ -61,10 +61,10 @@ public class UserService {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
         StpUtil.login(user.getId());
-        return buildUserProfileVO(user);
+        return buildUserSimpleVO(user);
     }
 
-    public UserProfileVO register(UserPass userPass) {
+    public UserSimpleVO register(UserPass userPass) {
         String account = userPass.getAccount();
         emailService.mailVerify(account, userPass.getVerificationCode());
 
@@ -82,10 +82,10 @@ public class UserService {
                 .build();
 
         user = userRepository.save(user);
-        return buildUserProfileVO(user);
+        return buildUserSimpleVO(user);
     }
 
-    public UserProfileVO changePassword(UserPass userPass) {
+    public UserSimpleVO changePassword(UserPass userPass) {
         String account = userPass.getAccount();
         boolean checked = StringUtils.checkEmail(account);
         // 非邮箱
@@ -110,7 +110,7 @@ public class UserService {
         user.setPassword(EncryptionUtil.encode(userPass.getPassword()));
         user = userRepository.save(user);
 
-        return buildUserProfileVO(user);
+        return buildUserSimpleVO(user);
     }
 
     public void requestForCode(UserPass userPass) {
@@ -136,8 +136,12 @@ public class UserService {
         }
     }
 
-    private static UserProfileVO buildUserProfileVO(User user) {
-        return UserProfileVO.of(user);
+    private static UserSimpleVO buildUserSimpleVO(User user) {
+        return UserSimpleVO.of(user);
+    }
+
+    private static UserDetailVO buildUserDetailVO(User user) {
+        return UserDetailVO.of(user);
     }
 
     /**
@@ -146,27 +150,32 @@ public class UserService {
      * @param userId 用户ID
      * @return 用户粗略档案信息
      */
-    public UserProfileVO findUserProfileInfo(Long userId) {
+    public UserSimpleVO findUserSimpleInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
-        return buildUserProfileVO(user);
+        return buildUserSimpleVO(user);
+    }
+    public UserSimpleVO findUserSimpleInfo(String account) {
+        User user = userRepository.findByAccount(account)
+                .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        return buildUserSimpleVO(user);
     }
 
     /**
-     * 查询用户粗略档案信息
+     * 批量查询用户粗略信息
      *
      * @param userIds 用户ID
-     * @return 用户粗略档案信息
+     * @return 用户粗略信息
      */
-    public Map<Long, UserProfileVO> findUserProfileInfo(List<Long> userIds) {
+    public Map<Long, UserSimpleVO> findUserSimpleInfo(List<Long> userIds) {
         userIds = userIds.stream().distinct().collect(Collectors.toList());
 
         List<User> allByIdIn = userRepository.findAllById(userIds);
 
-        return allByIdIn.stream().map(UserService::buildUserProfileVO)
+        return allByIdIn.stream().map(UserService::buildUserSimpleVO)
                 .collect(
-                Collectors.toMap(UserProfileVO::getId, person -> person)
-        );
+                        Collectors.toMap(UserSimpleVO::getId, person -> person)
+                );
     }
 
     /**
@@ -186,5 +195,29 @@ public class UserService {
         userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId));
 
         return userDetailVO;
+    }
+
+    /**
+     * 批量查询用户详细信息
+     *
+     * @param userIds 用户ID
+     * @return 用户详细信息
+     */
+    public Map<Long, UserDetailVO> findUserDetailInfo(List<Long> userIds) {
+        userIds = userIds.stream().distinct().collect(Collectors.toList());
+
+        List<User> users = userRepository.findAllById(userIds);
+
+        return users.stream().map(user -> {
+                    UserDetailVO result = buildUserDetailVO(user);
+                    result.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()));
+                    result.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
+                    result.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
+                    result.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
+                    return result;
+                })
+                .collect(
+                        Collectors.toMap(UserDetailVO::getId, person -> person)
+                );
     }
 }

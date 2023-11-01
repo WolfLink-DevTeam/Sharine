@@ -8,7 +8,6 @@ import org.tcpx.sharine.entity.Bookmark;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.BookmarkRepository;
-import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +50,11 @@ public class BookmarkService {
         bookmarkRepository.deleteByUserIdAndVideoId(userId, videoId);
     }
 
-    public List<Long> findUserBookmarks(Long userId, ConditionDTO conditionDTO) {
+    public List<Long> findUserBookmarkVideoIds(Long userId) {
+        List<Bookmark> byUserId = bookmarkRepository.findByUserId(userId);
+        return byUserId.stream().map(Bookmark::getVideoId).collect(Collectors.toList());
+    }
+    public List<Long> findUserBookmarkVideoIds(Long userId, ConditionDTO conditionDTO) {
         Pageable pageable = PageRequest.of(
                 conditionDTO.getCurrent(),
                 conditionDTO.getSize()

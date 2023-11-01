@@ -10,6 +10,7 @@ import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -171,6 +172,7 @@ public class RedisService {
         return redisTemplate.opsForSet().remove(key, values);
     }
 
+    @Nullable
     public List<Object> lRange(String key, long start, long end) {
         return redisTemplate.opsForList().range(key, start, end);
     }
@@ -202,7 +204,12 @@ public class RedisService {
         expire(key, time);
         return count;
     }
-
+    public Object lRightPop(String key) {
+        return redisTemplate.opsForList().rightPop(key);
+    }
+    public Long lLeftPush(String key, Object value) {
+        return redisTemplate.opsForList().leftPush(key,value);
+    }
     public Long lRemove(String key, long count, Object value) {
         return redisTemplate.opsForList().remove(key, count, value);
     }

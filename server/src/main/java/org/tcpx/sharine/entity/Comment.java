@@ -20,6 +20,9 @@ public class Comment {
     Long id;
 
     @Column(nullable = false)
+    Long userId;
+
+    @Column(nullable = false)
     Long replyId;
 
     @Column(nullable = false)

@@ -36,4 +36,5 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
 
     List<Bookmark> findByUserId(Long userId, Pageable pageable);
+    List<Bookmark> findByUserId(Long userId);
 }

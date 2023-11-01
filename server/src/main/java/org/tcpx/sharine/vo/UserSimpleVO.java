@@ -9,13 +9,13 @@ import org.tcpx.sharine.utils.BeanCopyUtils;
 
 /**
  * 用户档案信息
- * 不包含用户敏感数据和用户投稿视频，用户收藏视频等
+ * 不包含用户关注数，粉丝数，点赞数等详细数据
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileVO {
+public class UserSimpleVO {
     Long id;
 
     String nickname;
@@ -28,7 +28,7 @@ public class UserProfileVO {
 
     Long updateTime;
 
-    public static UserProfileVO of(User user) {
-        return BeanCopyUtils.copyObject(user, UserProfileVO.class);
+    public static UserSimpleVO of(User user) {
+        return BeanCopyUtils.copyObject(user, UserSimpleVO.class);
     }
 }
