@@ -92,9 +92,12 @@ const num = ref([
     <div class="home-content">
         <div class="content-body">
             <div style="height: 8rem;width: 100%"/>
-            <template v-for="item in num" :key="item">
-                <SimpleVideoCard/>
-            </template>
+            <a-row :gutter="[24,12]">
+                <a-col v-for="item in num" :key="item" :span="4">
+                    <SimpleVideoCard/>
+                </a-col>
+            </a-row>
+
         </div>
     </div>
 </template>

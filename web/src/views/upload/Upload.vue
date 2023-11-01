@@ -11,34 +11,34 @@ import "@/common/css/global.css";
         <div class="upload-page">
             <ProgressBar class="progress-bar" progress="32" speed="1.2MB/s" time-left="预计剩余15秒"/>
             <a-row class="row-1">
-                <a-col :span="7" class="cover"><img style="border-radius: 1rem;height: 100%;width: 100%" src="@/assets/test-video-cover.png" alt="" class="box-shadow"></a-col>
+                <a-col :span="7" class="cover"><img style="border-radius: 1rem;height: 100%;width: 100%" src="@/assets/test-video-cover.png" alt="" class="box-shadow-blur"></a-col>
                 <a-col :span="17" style="justify-content: center;align-items: center;display: flex;flex-direction: column;padding: 1rem">
                     <a-row style="width: 100%;height: 100%;align-items: center">
-                        <span style="font-size: 1.4rem;font-family: SHS-Bold,serif;" class="text-shadow">视频抽帧</span>
-                        <span style=";font-size: 0.9rem;font-family: SHS-Light,serif;color: #7C7C7C;margin-left: 0.7rem" class="text-shadow">下列封面来自视频内容抽帧，可选择其作为视频封面。</span>
+                        <span style="font-size: 1.4rem;font-family: SHS-Bold,serif;" class="text-shadow-focus">视频抽帧</span>
+                        <span style=";font-size: 0.9rem;font-family: SHS-Light,serif;color: #7C7C7C;margin-left: 0.7rem" class="text-shadow-focus">下列封面来自视频内容抽帧，可选择其作为视频封面。</span>
                     </a-row>
                     <a-row justify="space-between" style="width: 100%;height: 100%">
-                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow" src="@/assets/test-video-cover.png" alt=""></a-col>
-                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow" src="@/assets/test-video-cover.png" alt=""></a-col>
-                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow" src="@/assets/test-video-cover.png" alt=""></a-col>
+                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" src="@/assets/test-video-cover.png" alt=""></a-col>
+                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" src="@/assets/test-video-cover.png" alt=""></a-col>
+                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" src="@/assets/test-video-cover.png" alt=""></a-col>
                     </a-row>
                 </a-col>
             </a-row>
-            <a-row class="row-2"><a-input class="box-shadow" show-count:maxlength="28"
+            <a-row class="row-2"><a-input class="box-shadow-blur" show-count:maxlength="28"
                                           placeholder="请输入视频标题"
             /></a-row>
-            <a-row class="row-3"><a-textarea class="box-shadow" show-count:maxlength="28" :rows="6"
+            <a-row class="row-3"><a-textarea class="box-shadow-blur" show-count:maxlength="28" :rows="6"
                                              placeholder="请输入视频简介"
                                              :auto-size="{ minRows: 6, maxRows: 6 }"
             /></a-row>
-            <a-row class="row-4"><ToggleButton class="box-shadow" style="height: 3.2rem;width: 12rem"/></a-row>
-            <a-row class="row-5"><CategoryDropdownButton class="box-shadow" style="height: 3.2rem;width: 12rem"/></a-row>
+            <a-row class="row-4"><ToggleButton class="box-shadow-blur" style="height: 3.2rem;width: 12rem"/></a-row>
+            <a-row class="row-5"><CategoryDropdownButton class="box-shadow-blur" style="height: 3.2rem;width: 12rem"/></a-row>
             <a-row class="row-6">
-                <BasicButton class="box-shadow" width="10rem" height="3.2rem" style="font-family: SHS-Normal,serif">
+                <BasicButton class="box-shadow-blur" width="10rem" height="3.2rem" style="font-family: SHS-Normal,serif">
                     保存草稿
                 </BasicButton>
                 <div style="width: 4rem"/>
-                <BasicButton class="box-shadow" width="10rem" height="3.2rem" style="font-family: SHS-Bold,serif">
+                <BasicButton class="box-shadow-blur" width="10rem" height="3.2rem" style="font-family: SHS-Bold,serif">
                     立即投稿
                 </BasicButton>
             </a-row>
@@ -48,6 +48,7 @@ import "@/common/css/global.css";
 
 <style lang="less" scoped>
 .upload{
+    overflow-y: scroll;
     width: 100%;
     height: 100%;
     display: flex;
@@ -67,9 +68,9 @@ import "@/common/css/global.css";
             height: 15%;
         }
     }
-    .upload-page::-webkit-scrollbar {
-        width: 0;
-    }
+}
+.upload::-webkit-scrollbar {
+    width: 0;
 }
 .cover {
     padding: 1rem;

@@ -10,9 +10,15 @@
 * {
     font-family: SHS-Normal, serif;
 }
-.text-shadow {
-    text-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
+.text-shadow-focus {
+    text-shadow: -0.15rem 0.15rem 0.15rem rgba(0, 0, 0, 0.3);
 }
-.box-shadow {
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
+.text-shadow-blur {
+    text-shadow: -0.15rem 0.15rem 0.15rem rgba(0, 0, 0, 0.3);
+}
+.box-shadow-focus {
+    box-shadow: -0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.6);
+}
+.box-shadow-blur {
+    box-shadow: -0.15rem 0.15rem 0.5rem rgba(0, 0, 0, 0.4);
 }

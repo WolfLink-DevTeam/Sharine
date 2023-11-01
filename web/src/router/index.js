@@ -37,6 +37,12 @@ export const router = createRouter({
                     path: '/app/person',
                     component: () => import('@/views/person/Person.vue')
                 },
+                // TODO 临时
+                {
+                    name: 'video',
+                    path: '/app/video',
+                    component: () => import('@/views/video/Video.vue')
+                }
             ]
         },
     ]

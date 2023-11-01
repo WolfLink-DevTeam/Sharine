@@ -35,6 +35,13 @@ const props = defineProps({
     }
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
 }
+.card-body:hover {
+    cursor: pointer;
+    background: #F1D3DA;
+}
+.card-body:active {
+    background: #f6a8bb;
+}
 a-row {
     display: flex;
     justify-content: center;

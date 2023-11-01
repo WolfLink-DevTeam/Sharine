@@ -7,5 +7,6 @@ import { pinia } from './store/index.js'
 import 'ant-design-vue/dist/reset.css'
 // router的导入
 import { router } from './router/index.js'
-
-createApp(App).use(Antd).use(router).use(pinia).mount('#app')
+import VueVideoPlayer from '@videojs-player/vue';
+import 'video.js/dist/video-js.css'
+createApp(App).use(Antd).use(router).use(pinia).use(VueVideoPlayer).mount('#app')

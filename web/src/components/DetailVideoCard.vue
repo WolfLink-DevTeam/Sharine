@@ -6,10 +6,18 @@ const props = defineProps({
         default: "right"
     }
 })
+
+import {useRouter} from "vue-router";
+
+const router = useRouter()
+
+function gotoVideoPage() {
+    router.push('video')
+}
 </script>
 
 <template>
-    <a-row class="card-body">
+    <a-row class="card-body" @click="gotoVideoPage">
         <a-row v-if="direction === 'right'" class="card-info" style="border-radius: 1rem 0 0 1rem">
             <a-col style="width: 22%;height: 80%">
                 <a-row style="align-items: center;justify-content: center"><img src="@/assets/logo.png" class="info-avatar"></a-row>
@@ -93,10 +101,18 @@ const props = defineProps({
 
 <style scoped>
 .card-body {
+    min-width: 60rem;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 26rem;
+}
+.card-body:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+.card-body:active {
+    opacity: 1;
 }
 .cover {
     background-image: url("@/assets/test-video-cover.png");

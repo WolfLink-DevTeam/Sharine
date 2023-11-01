@@ -30,7 +30,7 @@ watchEffect(() => {
 </script>
 
 <template>
-    <div style="justify-content: center;align-items: center;display: flex">
+    <div style="min-width: 35rem;justify-content: center;align-items: center;display: flex">
         <button
             style="margin-left: 2rem;margin-right: 2rem"
             v-for="(btn, index) in buttons"

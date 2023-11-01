@@ -1,6 +1,6 @@
 <script setup>
 
-import CategoryCard from "@/components/CategoryCard.vue";
+import CategoryCard from "@/components/CategoryItem.vue";
 </script>
 
 <template>

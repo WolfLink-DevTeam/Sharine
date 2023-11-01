@@ -19,11 +19,11 @@ const props = defineProps({
 <template>
     <div>
         <a-row style="align-items: center">
-            <a-col class="text-shadow" style="font-family: SHS-Bold,serif;font-size: 3rem">{{progress}}%</a-col>
+            <a-col class="text-shadow-focus" style="font-family: SHS-Bold,serif;font-size: 3rem">{{progress}}%</a-col>
             <a-col class="special-dot"/>
-            <a-col class="text-shadow" style="color: #474747;font-size: 1.2rem">{{speed}}</a-col>
+            <a-col class="text-shadow-focus" style="color: #474747;font-size: 1.2rem">{{speed}}</a-col>
             <a-col class="special-dot"/>
-            <a-col class="text-shadow" style="color: #474747;font-size: 1.2rem">{{timeLeft}}</a-col>
+            <a-col class="text-shadow-focus" style="color: #474747;font-size: 1.2rem">{{timeLeft}}</a-col>
         </a-row>
         <a-space style="width: 100%" direction="vertical">
             <a-progress :size="12" style="margin-top: 0.5rem" :percent="progress" :show-info="false" :stroke-color="{

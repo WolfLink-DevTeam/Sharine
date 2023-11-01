@@ -6,36 +6,38 @@ import SearchBar from "@/components/SearchBar.vue";
 </script>
 
 <template>
-    <div class="Person">
+    <div class="person">
         <div class="search">
             <SearchBar/>
         </div>
-        <PersonVideoBar class="video-bar" btn1-value="12" btn2-value="1" btn3-value="lock"/>
-        <div class="video-list">
-            <div class="video-row">
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-            </div>
-            <div class="video-row">
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-            </div>
-            <div class="video-row">
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-                <SimpleVideoCard/>
-            </div>
+        <div style="width: 70%;">
+            <PersonVideoBar class="video-bar" btn1-value="12" btn2-value="1" btn3-value="lock"/>
+            <a-col class="video-list">
+                <a-row :gutter="[24,12]">
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                    <a-col :span="6"><SimpleVideoCard/></a-col>
+                </a-row>
+            </a-col>
         </div>
-        <PersonCard class="person-card"/>
+        <div style="width: 30%;justify-content: center;align-items: center;display: flex">
+            <PersonCard class="person-card"/>
+        </div>
     </div>
 </template>
 
 <style lang="less" scoped>
+.person {
+    display: flex;
+}
 .search{
     z-index: 5;
     height: 10%;
@@ -56,7 +58,6 @@ import SearchBar from "@/components/SearchBar.vue";
 .video-list {
     display: flex;
     flex-direction: column;
-    width: 75%;
     height: 80vh; // adjust this value as needed
     margin-top: 1rem;
     margin-left: 4rem;
@@ -65,14 +66,10 @@ import SearchBar from "@/components/SearchBar.vue";
 .video-list::-webkit-scrollbar {
     width: 0;
 }
-.video-row {
-    display: flex;
-}
 .person-card {
-    position: absolute;
-    right: 2rem;
-    bottom: 12rem;
-    height: 20rem;
-    width: 18rem;
+    height: 40%;
+    width: 60%;
+    min-height: 20rem;
+    min-width: 20rem;
 }
 </style>

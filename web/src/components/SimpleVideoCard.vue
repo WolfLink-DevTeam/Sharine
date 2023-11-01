@@ -1,21 +1,30 @@
 <script setup>
+
+import {useRouter} from "vue-router";
+
+const router = useRouter()
+
+function gotoVideoPage() {
+    router.push('video')
+}
+
 </script>
 
 <template>
-<div class="body">
+<div class="body" @click="gotoVideoPage">
     <img class="cover" src="../assets/test-video-cover.png">
     <div class="info">
-        <a-row style="height: 25%;">
+        <a-row style="height: 27%">
             <a-col :span="8" class="container" style="margin-left: 5%;border-color: #a786d7;border-bottom-style: solid;border-width: 0.15rem;margin-top: 0.1rem">
                 <img src="../assets/ui-icon/like-icon.png" style="width: 1.2rem;height: 1.2rem">
-                <span style="margin-left: 0.5rem;color: #fdfdff;font-size: 0.8rem;font-family: SHS-Bold">20.6万</span>
+                <span style="margin-left: 0.5rem;color: #fdfdff;font-size: 0.9rem;font-family: SHS-Bold">20.6万</span>
             </a-col>
             <a-col :span="3"/>
-            <a-col :span="6" class="container text-box" style="margin-left: 20%;padding: 2%;margin-top: 2%">
+            <a-col :span="6" class="container text-box" style="font-size: 0.9rem;margin-left: 20%;padding: 2%;margin-top: 2%">
                 12:01
             </a-col>
         </a-row>
-        <a-row style="width: 90%;height: 42%;margin-left: auto;margin-right: auto;margin-top: 2.5%">
+        <a-row style="width: 90%;height: 45%;margin-left: auto;margin-right: auto">
             <span class="title">
                 你好你好你好你好你好，你好你好你好你好你好你好你好你好
             </span>
@@ -32,20 +41,26 @@
 
 <style scoped>
 .body {
-    height: 22rem;
-    width: 14rem;
+    height: 100%;
+    width: 100%;
     border-radius: 0.7rem;
     box-shadow: 0 0 0.4rem rgba(0, 0, 0, 1);
-    margin: 10px 15px;
+}
+.body:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+.body:active {
+    opacity: 1;
 }
 .cover {
     width: 100%;
-    height: 70%;
+    height: 65%;
     border-radius: 0.7rem 0.7rem 0 0;
 }
 .info {
     width: 100%;
-    height: 30%;
+    height: 35%;
     background: var(--component-background-color);
     border-radius: 0 0 0.7rem 0.7rem;
 }
