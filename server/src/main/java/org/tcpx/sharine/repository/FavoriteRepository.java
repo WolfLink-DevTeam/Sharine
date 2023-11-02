@@ -12,7 +12,7 @@ import java.util.List;
 @CacheConfig(cacheNames = DatabaseConst.FAVOURITE)
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     @Cacheable(unless = "#result==null")
-    Long countByUserId(Long userId);
+    Integer countByUserId(Long userId);
 
     void deleteByUserIdAndVideoId(Long userId, Long videoId);
 

@@ -28,7 +28,7 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAllByTitleRegex(title, pageRequest);
         List<CategoryVO> list = categories.stream().map(CategoryVO::of).toList();
 
-        Long count = categoryRepository.countByTitleRegex(title);
+        Long count = categoryRepository.countByTitleRegex(title).longValue();
 
         return PageVO.<CategoryVO>builder().total(count).list(list).build();
     }

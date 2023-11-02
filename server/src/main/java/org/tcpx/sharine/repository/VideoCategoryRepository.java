@@ -13,5 +13,5 @@ public interface VideoCategoryRepository extends JpaRepository<VideoCategoryRela
     @Cacheable(unless = "#result==null||result.size()==0")
     List<VideoCategoryRelation> findByCategoryId(Long categoryId, Pageable pageable);
     @Cacheable(unless = "#result==null")
-    Long countByCategoryId(Long categoryId);
+    Integer countByCategoryId(Long categoryId);
 }

@@ -28,7 +28,7 @@ public class FavoriteService {
      * @return 关注数
      */
     public Long countUserFavorite(Long userId) {
-        return favoriteRepository.countByUserId(userId);
+        return favoriteRepository.countByUserId(userId).longValue();
     }
 
     /**

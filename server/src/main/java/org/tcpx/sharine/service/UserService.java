@@ -192,7 +192,7 @@ public class UserService {
         userDetailVO.setFavouriteCount(favoriteService.countUserFavorite(userId));
         userDetailVO.setFollowingCount(userRelationService.countUserFollowing(userId));
         userDetailVO.setFollowedCount(userRelationService.countUserFollowed(userId));
-        userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId));
+        userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId).longValue());
 
         return userDetailVO;
     }
@@ -210,7 +210,7 @@ public class UserService {
 
         return users.stream().map(user -> {
                     UserDetailVO result = buildUserDetailVO(user);
-                    result.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()));
+                    result.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()).longValue());
                     result.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
                     result.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
                     result.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));

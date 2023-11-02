@@ -17,13 +17,13 @@ public interface UserRelationRepository extends JpaRepository<UserRelation, Long
             "WHERE (f.userId1 = :userId AND f.status = 1) " +
             "OR (f.userId2 = :userId AND f.status = 2)")
     @Cacheable(unless = "#result==null")
-    Long countUserFollowing(Long userId);
+    Integer countUserFollowing(Long userId);
 
     @Query("SELECT COUNT(f) FROM UserRelation f " +
             "WHERE (f.userId1 = :userId AND f.status = 2) " +
             "OR (f.userId2 = :userId AND f.status = 1)")
     @Cacheable(unless = "#result==null")
-    Long countUserFollowed(Long userId);
+    Integer countUserFollowed(Long userId);
 
     @Query("SELECT f FROM UserRelation f " +
             "WHERE (f.userId1 = :userId AND f.status = 2) " +

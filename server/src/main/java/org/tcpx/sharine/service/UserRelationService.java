@@ -19,7 +19,7 @@ public class UserRelationService {
      * @return          关注数量
      */
     public Long countUserFollowing(Long userId) {
-        return userRelationRepository.countUserFollowing(userId);
+        return userRelationRepository.countUserFollowing(userId).longValue();
     }
 
     /**
@@ -28,7 +28,7 @@ public class UserRelationService {
      * @return          粉丝数量
      */
     public Long countUserFollowed(Long userId) {
-        return userRelationRepository.countUserFollowed(userId);
+        return userRelationRepository.countUserFollowed(userId).longValue();
     }
 
     /**

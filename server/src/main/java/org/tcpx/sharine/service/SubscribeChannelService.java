@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class SubscribeChannelService {
 
-    @Value("${application.subscription-channel-size}")
+    @Value("${application.subscribe-channel-size}")
     Integer channelSize;
     RedisService redisService;
     UserRelationService userRelationService;

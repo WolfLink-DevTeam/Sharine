@@ -29,10 +29,10 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     void deleteByUserIdAndVideoId(Long userId, Long videoId);
 
     @Cacheable(unless = "#result==null")
-    Long countByUserId(Long userId);
+    Integer countByUserId(Long userId);
 
     @Cacheable(unless = "#result==null")
-    Long countByVideoId(Long videoId);
+    Integer countByVideoId(Long videoId);
 
 
     List<Bookmark> findByUserId(Long userId, Pageable pageable);

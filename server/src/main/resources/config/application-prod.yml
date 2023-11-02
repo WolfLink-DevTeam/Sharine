@@ -51,4 +51,4 @@ qiniu:
   bucket: sharine
   domain-of-bucket: s336zn7wo.hn-bkt.clouddn.com
 application:
-  subscription-channel-size: 128
+  subscribe-channel-size: 128
