@@ -1,5 +1,6 @@
 package org.tcpx.sharine.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -57,7 +58,7 @@ public class EmailService {
         if (!checkResult) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
-        String code = (String) redisService.get(RedisPrefixConst.TOKEN + mail);
+        String code = (String) redisService.get(StpUtil.getTokenValue());
         // 验证码错误
         if (code == null || !code.equals(verificationCode)) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);

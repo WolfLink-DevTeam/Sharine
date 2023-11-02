@@ -67,7 +67,7 @@ public class UserController extends BaseController {
     /**
      * 用户请求验证码接口
      *
-     * @param userPass 登录通行证信息
+     * @param userPass 登录通行证信息(可能还未注册)
      * @return 请求结果
      */
     @PostMapping("/sendCode")
@@ -87,98 +87,106 @@ public class UserController extends BaseController {
         return ok(userService.findUserDetailInfo(userId));
     }
 
-    @GetMapping("/{userId}/favorites")
-    public Object findUserFavorites(@PathVariable Long userId, ConditionDTO conditionDTO) {
-        return ok(favoriteService.findUserFavoriteVideoIds(userId, conditionDTO));
-    }
+//    使用 getUserFavoriteVideos 接口代替这个接口
+//    @GetMapping("/{userId}/favorites")
+//    public Object findUserFavorites(@PathVariable Long userId, ConditionDTO conditionDTO) {
+//        return ok(favoriteService.findUserFavoriteVideoIds(userId, conditionDTO));
+//    }
 
-    @PostMapping("/{userId}/favorite/{videoId}")
-    public Object favorite(@PathVariable Long userId, @PathVariable Long videoId) {
-        favoriteService.favoriteVideo(userId, videoId);
+    @PostMapping("/favorite/{videoId}")
+    public Object favorite(UserPass userPass, @PathVariable Long videoId) {
+        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        User user = userService.verifyUserPass(userPass);
+        favoriteService.favoriteVideo(user.getId(), videoId);
         return ok();
     }
 
-    @DeleteMapping("/{userId}/favorite/{videoId}")
-    public Object undoFavorite(@PathVariable Long userId, @PathVariable Long videoId) {
-        favoriteService.undoFavoriteVideo(userId, videoId);
+    @DeleteMapping("/favorite/{videoId}")
+    public Object undoFavorite(UserPass userPass, @PathVariable Long videoId) {
+        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        User user = userService.verifyUserPass(userPass);
+        favoriteService.undoFavoriteVideo(user.getId(), videoId);
         return ok();
     }
-
-    @GetMapping("/{userId}/bookmarks")
-    public Object findUserBookmarks(@PathVariable Long userId, ConditionDTO conditionDTO) {
-        return ok(bookmarkService.findUserBookmarkVideoIds(userId, conditionDTO));
-    }
+//    使用 getUserBookmarkVideos 接口代替这个接口
+//    @GetMapping("/{userId}/bookmarks")
+//    public Object findUserBookmarks(@PathVariable Long userId, ConditionDTO conditionDTO) {
+//        return ok(bookmarkService.findUserBookmarkVideoIds(userId, conditionDTO));
+//    }
 
     /**
      * 收藏视频
-     * @param userId    用户ID
+     * @param userPass  用户令牌
      * @param videoId   视频ID
      */
-    @PostMapping("/{userId}/bookmark/{videoId}")
-    public Object bookmark(@PathVariable Long userId, @PathVariable Long videoId) {
-        bookmarkService.bookmarkVideo(userId, videoId);
+    @PostMapping("/bookmark/{videoId}")
+    public Object bookmark(UserPass userPass, @PathVariable Long videoId) {
+        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        User user = userService.verifyUserPass(userPass);
+        bookmarkService.bookmarkVideo(user.getId(), videoId);
         return ok();
     }
 
     /**
      * 取消收藏视频
-     * @param userId    用户ID
+     * @param userPass  用户令牌
      * @param videoId   视频ID
      */
-    @DeleteMapping("/{userId}/bookmark/{videoId}")
-    public Object undoBookmark(@PathVariable Long userId, @PathVariable Long videoId) {
-        bookmarkService.undoBookmarkVideo(userId, videoId);
+    @DeleteMapping("/bookmark/{videoId}")
+    public Object undoBookmark(UserPass userPass, @PathVariable Long videoId) {
+        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        User user = userService.verifyUserPass(userPass);
+        bookmarkService.undoBookmarkVideo(user.getId(), videoId);
         return ok();
     }
 
     /**
      * TODO 要同时用到好几个 Service ，不知道该放哪个 Service 里面，我先写到这里吧
+     * 只允许查询用户自己的视频列表数据
      */
-    @GetMapping("/{userId}/videos/favorite")
-    public Object getUserFavoriteVideos(@PathVariable Long userId, UserPass userPass) {
-        // 未登录
+    @GetMapping("/favorite/videos")
+    public Object getUserFavoriteVideos(UserPass userPass) {
+        // 当前 Session 是否登录
         if (!StpUtil.isLogin()) {
             throw new WarnException(StatusCodeEnum.NOT_LOGIN);
         }
-        // 非本人禁止查看
-        if (!userService.findUserSimpleInfo(userPass.getAccount()).getId().equals(userId)) {
-            throw new WarnException(StatusCodeEnum.UNAUTHORIZED);
-        }
+        // 用户通行证是否正确
+        User user = userService.verifyUserPass(userPass);
         // 获取用户喜欢的视频ID列表
-        List<Long> favoriteVideoIds = favoriteService.findUserFavoriteVideoIds(userId);
+        List<Long> favoriteVideoIds = favoriteService.findUserFavoriteVideoIds(user.getId());
         // 转 VideoVO 列表
         return ok(videoService.findVideos(favoriteVideoIds));
     }
 
     /**
      * TODO 这个接口跟上面的差不多
+     * 只允许查询用户自己的视频列表数据
      */
-    @GetMapping("/{userId}/videos/bookmark")
-    public Object getUserBookmarkVideos(@PathVariable Long userId, UserPass userPass) {
-        // 未登录
-        if (!StpUtil.isLogin()) {
-            throw new WarnException(StatusCodeEnum.NOT_LOGIN);
-        }
-        // 非本人禁止查看
-        if (!userService.findUserSimpleInfo(userPass.getAccount()).getId().equals(userId)) {
-            throw new WarnException(StatusCodeEnum.UNAUTHORIZED);
-        }
+    @GetMapping("/bookmark/videos")
+    public Object getUserBookmarkVideos(UserPass userPass) {
+        // 当前 Session 是否登录
+        if (!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        // 用户通行证是否正确
+        User user = userService.verifyUserPass(userPass);
         // 获取用户喜欢的视频ID列表
-        List<Long> bookmarkVideoIds = bookmarkService.findUserBookmarkVideoIds(userId);
+        List<Long> bookmarkVideoIds = bookmarkService.findUserBookmarkVideoIds(user.getId());
         // 转 VideoVO 列表
         return ok(videoService.findVideos(bookmarkVideoIds));
     }
 
     /**
-     * 获取用户订阅视频列表
+     * 获取用户订阅视频列表(不可查看他人订阅频道)
      * @param userPass  用户登录令牌
      * @return          订阅视频信息列表
      */
-    @GetMapping("/{userId}/videos/subscribe")
+    @GetMapping("/subscribe/videos")
     public Object getUserSubscribeVideos(UserPass userPass) {
+        // 当前 Session 是否登录
         if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
-        UserSimpleVO userSimpleVO = userService.findUserSimpleInfo(userPass.getAccount());
-        return videoService.getSubscribeVideos(userSimpleVO.getId());
+        // 用户通行证是否正确
+        User user = userService.verifyUserPass(userPass);
+        // 用户自己的订阅频道列表
+        return videoService.getSubscribeVideos(user.getId());
     }
 
     /**
@@ -186,7 +194,7 @@ public class UserController extends BaseController {
      * @param userId    用户ID
      * @return          投稿视频信息列表
      */
-    @GetMapping("/{userId}/videos/upload")
+    @GetMapping("/upload/videos/{userId}")
     public Object getUserUploadVideos(@PathVariable Long userId) {
         return ok(videoService.findVideosByUserId(userId));
     }

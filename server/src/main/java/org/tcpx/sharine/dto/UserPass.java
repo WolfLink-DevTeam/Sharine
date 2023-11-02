@@ -13,5 +13,4 @@ public class UserPass {
 
     private String verificationCode;
 
-    private String token;
 }

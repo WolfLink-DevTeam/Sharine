@@ -19,5 +19,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT COUNT(c) FROM Category c WHERE c.title LIKE %:title%")
     @Cacheable(unless = "#result==null")
-    Long countByTitleRegex(String title);
+    Integer countByTitleRegex(String title);
 }

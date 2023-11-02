@@ -51,17 +51,26 @@ public class UserService {
     }
 
     public UserSimpleVO login(UserPass userPass) {
+        User user = verifyUserPass(userPass);
+        StpUtil.login(user.getId());
+        return buildUserSimpleVO(user);
+    }
+
+    /**
+     * 验证用户通行证的账号密码是否正确
+     * @param userPass  用户通行证
+     * @return          用户信息
+     */
+    public User verifyUserPass(UserPass userPass) {
         Optional<User> byUsername = userRepository.findByAccount(userPass.getAccount());
         if (byUsername.isEmpty()) {
             throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
         }
-
         User user = byUsername.get();
         if (!EncryptionUtil.match(userPass.getPassword(), user.getPassword())) {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
-        StpUtil.login(user.getId());
-        return buildUserSimpleVO(user);
+        return user;
     }
 
     public UserSimpleVO register(UserPass userPass) {
@@ -121,13 +130,14 @@ public class UserService {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
 
-        if (redisService.get(username) != null) {
-            throw new WarnException(StatusCodeEnum.FAIL.getCode(), "请在" + redisService.getExpire(username) + "秒后重新发送");
+        String tokenValue = StpUtil.getTokenInfo().getTokenValue();
+        if (redisService.get(tokenValue) != null) {
+            throw new WarnException(StatusCodeEnum.FAIL.getCode(), "请在" + redisService.getExpire(tokenValue) + "秒后重新发送");
         }
 
         // 五分钟过期
         String code = StringUtils.getRandomCode(6);
-        redisService.set(RedisPrefixConst.TOKEN + username, code, 5 * 60);
+        redisService.set(tokenValue, code, 5 * 60);
 
         try {
             emailService.sendCode(username, code, 5L);
@@ -192,7 +202,7 @@ public class UserService {
         userDetailVO.setFavouriteCount(favoriteService.countUserFavorite(userId));
         userDetailVO.setFollowingCount(userRelationService.countUserFollowing(userId));
         userDetailVO.setFollowedCount(userRelationService.countUserFollowed(userId));
-        userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId));
+        userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId).longValue());
 
         return userDetailVO;
     }
@@ -210,7 +220,7 @@ public class UserService {
 
         return users.stream().map(user -> {
                     UserDetailVO result = buildUserDetailVO(user);
-                    result.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()));
+                    result.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()).longValue());
                     result.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
                     result.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
                     result.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));

@@ -16,6 +16,7 @@ import java.util.Map;
 public abstract class BaseController {
     @ExceptionHandler(Exception.class)
     protected final Object exception(Exception ex) {
+        ex.printStackTrace();
         return error("程序内部错误: " + ex.getMessage());
     }
 
