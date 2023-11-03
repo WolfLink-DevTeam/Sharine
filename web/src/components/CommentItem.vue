@@ -1,18 +1,22 @@
-<script setup>
+<script setup lang="ts">
+import {VideoComment} from "@/models/VideoComment";
 
+const props = defineProps({
+    data: {
+        type: VideoComment,
+        require: true
+    }
+})
 </script>
 
 <template>
 <div>
     <div id="first-line">
-        <img src="@/assets/logo.png" id="avatar">
-        <div id="name">这里是非常非常长的用户名</div>
+        <img :src="data?.author.avatar" id="avatar">
+        <div id="name">{{data.author.nickname}}</div>
     </div>
     <div id="content">
-        这里是评论内容。
-        这里是评论内容。
-        这里是评论内容。
-        这里是评论内容。
+        {{data.content}}
     </div>
 </div>
 </template>
@@ -28,9 +32,11 @@
     margin-bottom: 0.5rem;
 }
 #avatar {
-    width: 2.5rem;
-    height: 2.5rem;
+    padding: 0.25rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: 2rem;
+    background: white;
 }
 #name {
     width: 100%;

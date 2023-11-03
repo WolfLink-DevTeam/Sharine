@@ -14,6 +14,8 @@ import org.tcpx.sharine.entity.Video;
 import org.tcpx.sharine.enums.QiniuFileType;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
+import org.tcpx.sharine.repository.BookmarkRepository;
+import org.tcpx.sharine.repository.FavoriteRepository;
 import org.tcpx.sharine.repository.UserRepository;
 import org.tcpx.sharine.repository.VideoRepository;
 import org.tcpx.sharine.utils.IOC;
@@ -30,6 +32,10 @@ public class VideoService {
 
     @Resource
     private VideoRepository videoRepository;
+    @Resource
+    private BookmarkRepository bookmarkRepository;
+    @Resource
+    private FavoriteRepository favoriteRepository;
     @Resource
     private QiniuUtils qiniuUtils;
 
@@ -82,7 +88,7 @@ public class VideoService {
     public VideoVO findVideoInfo(Long videoId) {
         Video video = videoRepository.findById(videoId)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
-        return VideoVO.of(video);
+        return buildVideoVO(video);
     }
 
     /**
@@ -116,17 +122,16 @@ public class VideoService {
      * @return          视频展示数据对象列表
      */
     private List<VideoVO> buildVideoVOs(List<Video> videos) {
-        Map<Long, UserDetailVO> userDetailVOMap = userService.findUserDetailInfo(videos.stream().map(Video::getUserId).collect(Collectors.toList()));
-
-        return videos.stream().map(video -> {
-            VideoVO videoVO = VideoVO.of(video);
-
-            videoVO.setAuthor(userDetailVOMap.get(video.getUserId()));
-
-            videoVO.setCategory(videoCategoryService.findVideoCategory(video.getId()));
-
-            return videoVO;
-        }).collect(Collectors.toList());
+        return videos.stream().map(this::buildVideoVO).collect(Collectors.toList());
+    }
+    public VideoVO buildVideoVO(Video video) {
+        VideoVO videoVO = VideoVO.of(video);
+        UserDetailVO userDetailVO = userService.findUserDetailInfo(video.getId());
+        videoVO.setAuthor(userDetailVO);
+        videoVO.setCategory(videoCategoryService.findVideoCategory(video.getId()));
+        videoVO.setBookmarkCount(bookmarkRepository.countByVideoId(video.getId()));
+        videoVO.setFavoriteCount(favoriteRepository.countByVideoId(video.getId()));
+        return videoVO;
     }
     /**
      * 查询用户订阅频道

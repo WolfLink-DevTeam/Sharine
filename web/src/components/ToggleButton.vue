@@ -3,7 +3,7 @@ function toggleVideoType(value) {
     videoType.value = value
 }
 
-import "@/store/modules/system.js"
+import "@/store/system.ts"
 import {ref, watch} from "vue";
 // 视频类型，0为原创，1为转载
 const videoType = ref(-1)
@@ -34,7 +34,7 @@ videoType.value = 0
 </template>
 
 <style scoped lang="less">
-@import "@/common/css/global-var.less";
+@import "@/commons/global-var.less";
 .text-selected {
     width: 45%;
     text-align: center;

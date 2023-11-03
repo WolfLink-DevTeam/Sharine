@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import SearchBar from "@/components/SearchBar.vue";
 import "@/components/CategoryBar.vue";
 import HomeContent from '@/views/home/cpns/HomeContent.vue'
 import HomeCategory from '@/views/home/cpns/HomeCategory.vue'
 import { ref } from "vue";
-import { useSystemStore } from "@/store/modules/system.js"
+import { useSystemStore } from "@/store/system"
 import CategoryBar from "@/components/CategoryBar.vue";
 
 // home页面内容和分类得切换
@@ -12,90 +12,6 @@ const systemStore = useSystemStore()
 const changeSearchClick = () => {
     systemStore.homeContentToCategoryChange()
 }
-const num = ref([
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-    {count : 1},
-])
 </script>
 
 <template>

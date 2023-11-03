@@ -53,6 +53,7 @@ public class UserService {
     public UserSimpleVO login(UserPass userPass) {
         User user = verifyUserPass(userPass);
         StpUtil.login(user.getId());
+        System.out.println("用户"+user.getId()+"登录成功");
         return buildUserSimpleVO(user);
     }
 
@@ -62,20 +63,16 @@ public class UserService {
      * @return          用户信息
      */
     public User verifyUserPass(UserPass userPass) {
-        Optional<User> byUsername = userRepository.findByAccount(userPass.getAccount());
-        if (byUsername.isEmpty()) {
-            throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
-        }
-        User user = byUsername.get();
+        User user = userRepository.findByAccount(userPass.getAccount()).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
         if (!EncryptionUtil.match(userPass.getPassword(), user.getPassword())) {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
         return user;
     }
 
-    public UserSimpleVO register(UserPass userPass) {
+    public UserSimpleVO register(String ipAddress,UserPass userPass) {
         String account = userPass.getAccount();
-        emailService.mailVerify(account, userPass.getVerificationCode());
+        emailService.mailVerify(ipAddress,account, userPass.getVerificationCode());
 
         // 用户已存在
         if (userRepository.existsByAccount(account).equals(true)) {
@@ -122,22 +119,21 @@ public class UserService {
         return buildUserSimpleVO(user);
     }
 
-    public void requestForCode(UserPass userPass) {
+    public void requestForCode(String ipAddress,UserPass userPass) {
         String username = userPass.getAccount();
         boolean checked = StringUtils.checkEmail(username);
         // 非邮箱
         if (!checked) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
-
-        String tokenValue = StpUtil.getTokenInfo().getTokenValue();
-        if (redisService.get(tokenValue) != null) {
-            throw new WarnException(StatusCodeEnum.FAIL.getCode(), "请在" + redisService.getExpire(tokenValue) + "秒后重新发送");
+        String cacheKey = "email-cache:"+ipAddress;
+        if (redisService.get(cacheKey) != null) {
+            throw new WarnException(StatusCodeEnum.FAIL.getCode(), "请在" + redisService.getExpire(cacheKey) + "秒后重新发送");
         }
 
         // 五分钟过期
         String code = StringUtils.getRandomCode(6);
-        redisService.set(tokenValue, code, 5 * 60);
+        redisService.set(cacheKey, code, 5 * 60);
 
         try {
             emailService.sendCode(username, code, 5L);
@@ -146,11 +142,11 @@ public class UserService {
         }
     }
 
-    private static UserSimpleVO buildUserSimpleVO(User user) {
+    public UserSimpleVO buildUserSimpleVO(User user) {
         return UserSimpleVO.of(user);
     }
 
-    private static UserDetailVO buildUserDetailVO(User user) {
+    public UserDetailVO buildUserDetailVO(User user) {
         return UserDetailVO.of(user);
     }
 
@@ -182,7 +178,7 @@ public class UserService {
 
         List<User> allByIdIn = userRepository.findAllById(userIds);
 
-        return allByIdIn.stream().map(UserService::buildUserSimpleVO)
+        return allByIdIn.stream().map(this::buildUserSimpleVO)
                 .collect(
                         Collectors.toMap(UserSimpleVO::getId, person -> person)
                 );

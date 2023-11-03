@@ -41,4 +41,7 @@ public class CategoryService {
 
         return CategoryVO.of(byId.get());
     }
+    public List<CategoryVO> findAll() {
+        return categoryRepository.findAll().stream().map(CategoryVO::of).toList();
+    }
 }

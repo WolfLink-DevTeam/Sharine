@@ -1,16 +1,22 @@
 package org.tcpx.sharine.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.google.gson.JsonObject;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.web.bind.annotation.*;
 import org.tcpx.sharine.dto.ConditionDTO;
+import org.tcpx.sharine.dto.UserLoginDTO;
 import org.tcpx.sharine.dto.UserPass;
+import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.service.BookmarkService;
 import org.tcpx.sharine.service.FavoriteService;
 import org.tcpx.sharine.service.UserService;
 import org.tcpx.sharine.service.VideoService;
+import org.tcpx.sharine.utils.IpUtils;
 import org.tcpx.sharine.vo.UserSimpleVO;
 
 import java.util.List;
@@ -38,7 +44,9 @@ public class UserController extends BaseController {
      */
     @PostMapping("/login")
     public Object login(@RequestBody UserPass userPass) {
-        return ok(userService.login(userPass));
+        UserSimpleVO userSimpleVO = userService.login(userPass);
+        String token = StpUtil.getTokenValue();
+        return ok(new UserLoginDTO(userSimpleVO,token));
     }
 
     /**
@@ -48,8 +56,8 @@ public class UserController extends BaseController {
      * @return 注册结果
      */
     @PostMapping("/register")
-    public Object register(@RequestBody UserPass userPass) {
-        return ok(userService.register(userPass));
+    public Object register(HttpServletRequest request, @RequestBody UserPass userPass) {
+        return ok(userService.register(IpUtils.getIpAddress(request),userPass));
     }
 
     /**
@@ -70,8 +78,8 @@ public class UserController extends BaseController {
      * @return 请求结果
      */
     @PostMapping("/sendCode")
-    public Object requestForCode(@RequestBody UserPass userPass) {
-        userService.requestForCode(userPass);
+    public Object requestForCode(HttpServletRequest request, @RequestBody UserPass userPass) {
+        userService.requestForCode(IpUtils.getIpAddress(request),userPass);
         return ok();
     }
 
@@ -143,7 +151,7 @@ public class UserController extends BaseController {
      * TODO 要同时用到好几个 Service ，不知道该放哪个 Service 里面，我先写到这里吧
      * 只允许查询用户自己的视频列表数据
      */
-    @GetMapping("/favorite/videos")
+    @PostMapping("/favorite/videos")
     public Object getUserFavoriteVideos(UserPass userPass) {
         // 当前 Session 是否登录
         if (!StpUtil.isLogin()) {
@@ -161,7 +169,7 @@ public class UserController extends BaseController {
      * TODO 这个接口跟上面的差不多
      * 只允许查询用户自己的视频列表数据
      */
-    @GetMapping("/bookmark/videos")
+    @PostMapping("/bookmark/videos")
     public Object getUserBookmarkVideos(UserPass userPass) {
         // 当前 Session 是否登录
         if (!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
@@ -178,7 +186,7 @@ public class UserController extends BaseController {
      * @param userPass  用户登录令牌
      * @return          订阅视频信息列表
      */
-    @GetMapping("/subscribe/videos")
+    @PostMapping("/subscribe/videos")
     public Object getUserSubscribeVideos(UserPass userPass) {
         // 当前 Session 是否登录
         if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);

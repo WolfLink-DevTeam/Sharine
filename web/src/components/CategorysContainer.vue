@@ -1,6 +1,7 @@
-<script setup>
+<script setup lang="ts">
 
 import CategoryCard from "@/components/CategoryItem.vue";
+import {categoryService} from "@/services/CategoryService";
 </script>
 
 <template>
@@ -10,18 +11,18 @@ import CategoryCard from "@/components/CategoryItem.vue";
             <a-col class="subTitle" :flex="1">Categories</a-col>
             <a-col :flex="20"/>
         </a-row>
-<!--        临时样式，改为循环组件放置-->
-        <a-row class="categoryRow" type="flex" justify="space-between">
-            <a-col :span="5"><CategoryCard img="@/assets/category-icon/alltype-category.png" text="综合"/></a-col>
-            <a-col :span="5"><CategoryCard img="@/assets/category-icon/alltype-category.png" text="综合"/></a-col>
-            <a-col :span="5"><CategoryCard img="@/assets/category-icon/alltype-category.png" text="综合"/></a-col>
-            <a-col :span="5"><CategoryCard img="@/assets/category-icon/alltype-category.png" text="综合"/></a-col>
+        <a-row class="categoryRow" :gutter="[40,30]">
+            <template v-for="category in categoryService.list">
+                <a-col :span="6" style="height: 2.5rem">
+                    <CategoryCard :img="category.url" :text="category.title"/>
+                </a-col>
+            </template>
         </a-row>
     </div>
 </template>
 
 <style scoped lang="less">
-@import "@/common/css/global-var.less";
+@import "@/commons/global-var.less";
 .category-container {
     width: 100%;
     height: 100%;

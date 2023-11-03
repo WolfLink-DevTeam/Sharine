@@ -29,4 +29,8 @@ public class CategoryController extends BaseController {
     public Object find(ConditionDTO conditionDTO) {
         return ok(categoryService.find(conditionDTO));
     }
+    @GetMapping("/all")
+    public Object findAll() {
+        return ok(categoryService.findAll());
+    }
 }

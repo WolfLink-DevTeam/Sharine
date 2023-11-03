@@ -1,7 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router'
 import {h, ref} from "vue";
 import { LoadingOutlined } from '@ant-design/icons-vue';
+import {categoryService} from "./services/CategoryService";
 
 const router = useRouter()
 let lastLoading = 0
@@ -15,13 +16,11 @@ const indicator = h(LoadingOutlined, {
 router.beforeEach((to, from, next) => {
     loading.value = true; // Show loading animation
     lastLoading = Date.now()
-    console.log("before:"+lastLoading)
     next();
 });
 
 router.afterEach((to, from) => {
     let now = Date.now()
-    console.log("now:"+now)
     if(now - lastLoading < 400) {
         setTimeout(()=>{
             lastLoading = now
@@ -31,6 +30,10 @@ router.afterEach((to, from) => {
         lastLoading = now
         loading.value = false;
     }
+    // TODO 调试接口
+
+
+
 });
 
 </script>
@@ -42,32 +45,5 @@ router.afterEach((to, from) => {
 </template>
 
 <style lang="less" scoped>
-.body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
-    height: 100%;
-    width: 100%;
-}
-.left-bar {
-    display: flex;
-    align-items: end;
-    float: left;
-    position: fixed;
-    height: 100%;
-    width: 8%;
-}
-.right-bar {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    float: right;
-    position: fixed;
-    right: 0;
-    height: 100%;
-    width: 8%;
-}
+
 </style>

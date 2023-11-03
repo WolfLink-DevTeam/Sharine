@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum VideoTypeEnum {
     ORIGINAL(1, "原创"),
 
-    Reprint(2, "转载");
+    REPRINT(2, "转载");
 
     /**
      * 状态码

@@ -27,9 +27,17 @@ public class Category {
     @Column(nullable = false)
     String title;
 
+    @Column(nullable = false)
+    String url;
+
     @CreationTimestamp
     Long createTime;
 
     @UpdateTimestamp
     Long updateTime;
+
+    public Category(String title,String url) {
+        this.title = title;
+        this.url = url;
+    }
 }

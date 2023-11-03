@@ -77,7 +77,7 @@ props.fivePairs.forEach((pair,i,a)=>{
 </template>
 
 <style scoped lang="less">
-@import "@/common/css/global-var.less";
+@import "@/commons/global-var.less";
 .row {
     display: flex;
     align-items: center;

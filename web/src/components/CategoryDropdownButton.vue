@@ -10,6 +10,6 @@
 </template>
 
 <style scoped lang="less">
-@import "@/common/css/global-var.less";
+@import "@/commons/global-var.less";
 
 </style>

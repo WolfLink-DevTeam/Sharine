@@ -17,7 +17,7 @@ const props = defineProps({
     </div>
 </template>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .basic-card-body {
     border-radius: 0.8rem;
     color: white;

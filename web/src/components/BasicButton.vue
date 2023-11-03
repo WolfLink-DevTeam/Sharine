@@ -17,7 +17,7 @@ const props = defineProps({
     </div>
 </template>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .btn-body {
     border-radius: 0.8rem;
     color: white;
@@ -27,10 +27,12 @@ const props = defineProps({
     align-items: center;
     display: flex;
 }
+
 .btn-body:hover {
     background: #60679d;
     cursor: pointer;
 }
+
 .btn-body:active {
     background: #3f4c9b;
 }

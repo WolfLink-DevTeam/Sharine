@@ -1,5 +1,5 @@
 <script setup>
-import "@/common/css/global.css";
+import "@/commons/global.css";
 const props = defineProps({
     progress: {
         type: Number,

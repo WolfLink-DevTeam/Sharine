@@ -1,0 +1,24 @@
+:root {
+    --background-color: #EFEFEF;
+    --component-background-color: #555D8B;
+    --component-foreground-color: #ECA4B8;
+    --component-secondary-color: #766C9B;
+    --primary-text-color: #FFFFFF;
+    --contrast-text-color: #3D3D3D;
+    background-color: var(--background-color);
+}
+* {
+    font-family: SHS-Normal, serif;
+}
+.text-shadow-focus {
+    text-shadow: -0.15rem 0.15rem 0.15rem rgba(0, 0, 0, 0.3);
+}
+.text-shadow-blur {
+    text-shadow: -0.15rem 0.15rem 0.15rem rgba(0, 0, 0, 0.3);
+}
+.box-shadow-focus {
+    box-shadow: -0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.6);
+}
+.box-shadow-blur {
+    box-shadow: -0.15rem 0.15rem 0.5rem rgba(0, 0, 0, 0.4);
+}

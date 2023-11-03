@@ -46,7 +46,6 @@ public class Video {
 
     @Column(nullable = false)
     VideoTypeEnum type;
-
     @UpdateTimestamp
     Long updateTime;
 

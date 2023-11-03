@@ -1,10 +1,13 @@
 package org.tcpx.sharine.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.tcpx.sharine.dto.CommentDTO;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UploadVideoDTO;
+import org.tcpx.sharine.enums.StatusCodeEnum;
+import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.service.CommentService;
 import org.tcpx.sharine.service.VideoService;
 
@@ -38,13 +41,10 @@ public class VideoController extends BaseController {
     }
 
     @PutMapping("/{videoId}/comments")
-    public Object addVideoComments(@PathVariable Long videoId, @RequestBody CommentDTO commentDTO) {
-        commentDTO.setVideoId(videoId);
-
-        commentService.add(commentDTO);
+    public Object addVideoComments(@RequestBody CommentDTO commentDTO) {
+        commentService.addComment(commentDTO);
         return ok();
     }
-
     @GetMapping
     public Object findVideos(ConditionDTO conditionDTO) {
         return ok(videoService.findVideos(conditionDTO));

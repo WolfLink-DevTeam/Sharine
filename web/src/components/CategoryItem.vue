@@ -1,5 +1,5 @@
 <script setup>
-import {getImageUrl} from "@/common/js/ResourceUtils.js";
+import {getImageUrl} from "@/utilities/ResourceUtility.ts";
 const props = defineProps({
     img: {
         type: String,

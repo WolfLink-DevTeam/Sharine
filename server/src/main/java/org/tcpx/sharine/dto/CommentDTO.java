@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentDTO {
 
-    Long userId;
+    UserPass userPass;
 
     Long replyId;
 

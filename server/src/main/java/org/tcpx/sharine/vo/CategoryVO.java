@@ -18,6 +18,8 @@ public class CategoryVO {
 
     String title;
 
+    String url;
+
     Long createTime;
 
     Long updateTime;

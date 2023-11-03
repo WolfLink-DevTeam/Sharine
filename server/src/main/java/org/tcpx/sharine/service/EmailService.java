@@ -53,12 +53,12 @@ public class EmailService {
         // 发送邮件
         javaMailSender.send(message);
     }
-    public void mailVerify(String mail,String verificationCode) {
+    public void mailVerify(String ipAddress,String mail,String verificationCode) {
         boolean checkResult = StringUtils.checkEmail(mail);
         if (!checkResult) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
-        String code = (String) redisService.get(StpUtil.getTokenValue());
+        String code = (String) redisService.get("email-cache:"+ipAddress);
         // 验证码错误
         if (code == null || !code.equals(verificationCode)) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);

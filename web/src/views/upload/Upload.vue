@@ -3,7 +3,7 @@ import ProgressBar from "@/components/ProgressBar.vue";
 import ToggleButton from "@/components/ToggleButton.vue";
 import CategoryDropdownButton from "@/components/CategoryDropdownButton.vue";
 import BasicButton from "@/components/BasicButton.vue";
-import "@/common/css/global.css";
+import "@/commons/global.css";
 </script>
 
 <template>
