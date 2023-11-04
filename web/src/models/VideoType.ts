@@ -9,6 +9,6 @@ const videoTypeNames = {
     [VideoType.UNKNOWN]: "未知类型"
 };
 
-export function chineseName(videoType: VideoType) {
+export function VideoTypeChineseName(videoType: VideoType) {
     return videoTypeNames[videoType] || "未知类型";
 }

@@ -61,7 +61,7 @@ public class VideoService {
         User user = IOC.getBean(UserRepository.class).findById(uploadVideoDTO.getUserId())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         // 七牛云数据库查询
-        FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileName(), QiniuFileType.MP4)
+        FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileName())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         // MD5 比对
         if (!fileInfo.md5.equals(uploadVideoDTO.getMd5())) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);

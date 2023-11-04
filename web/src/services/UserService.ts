@@ -95,25 +95,39 @@ export class UserService {
         }))
     }
     async getUserFavoriteVideos() {
-        return pack(httpClient.post("/users/favorite/videos",{
-            account: this.getAccount(),
-            password: this.getPassword()
+        return pack(httpClient.get("/users/favorite/videos",{
+            params: {
+                account: this.getAccount(),
+                password: this.getPassword()
+            }
         }))
     }
     async getUserBookmarkVideos() {
-        return pack(httpClient.post("/users/bookmark/videos",{
-            account: this.getAccount(),
-            password: this.getPassword()
+        return pack(httpClient.get("/users/bookmark/videos",{
+            params: {
+                account: this.getAccount(),
+                password: this.getPassword()
+            }
         }))
     }
     async getUserSubscribeVideos() {
-        return pack(httpClient.post("/users/subscribe/videos",{
-            account: this.getAccount(),
-            password: this.getPassword()
+        return pack(httpClient.get("/users/subscribe/videos",{
+            params: {
+                account: this.getAccount(),
+                password: this.getPassword()
+            }
         }))
     }
     async getUserUploadVideos(userId: number) {
         return pack(httpClient.get("/users/upload/videos/"+userId))
+    }
+    async getSubscribeVideos() {
+        return pack(httpClient.get("/users/subscribe/videos",{
+            params: {
+                account: this.getAccount(),
+                password: this.getPassword()
+            }
+        }))
     }
 }
 export const userService = new UserService()

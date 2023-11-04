@@ -41,7 +41,7 @@ public class QiniuUtils {
     @Value("${qiniu.domain-of-bucket}")
     String domainOfBucket;
 
-    private String generateToken(String fileKey) {
+    public String generateToken(String fileKey) {
         return Auth.create(accessKey, secretKey).uploadToken(bucket, fileKey);
     }
 
@@ -71,13 +71,12 @@ public class QiniuUtils {
     /**
      * 获取七牛云文件下载URL
      *
-     * @param fileName 文件名(不带有后缀)
-     * @param fileType 文件类型
+     * @param fileName 文件名称
      * @return URL
      */
-    public String getDownloadUrl(long uploaderId, String fileName, QiniuFileType fileType) {
+    public String getDownloadUrl(long uploaderId, String fileName) {
         try {
-            String fileKey = concatKey(uploaderId, fileName, fileType);
+            String fileKey = concatKey(uploaderId, fileName);
             String encodedFileName = URLEncoder.encode(fileKey, StandardCharsets.UTF_8).replace("+", "%20");
             DownloadUrl url = new DownloadUrl(domainOfBucket, false, fileKey);
             long expireInSeconds = 3600;
@@ -89,15 +88,21 @@ public class QiniuUtils {
         return "";
     }
 
-    private String concatKey(long uniqueId, String fileName, QiniuFileType fileType) {
-        return uniqueId + "-" + fileName + "." + fileType.name().toLowerCase();
+    /**
+     * 七牛云文件 Key 拼接
+     * @param userId    用户ID
+     * @param fileName  文件名称
+     * @return          Key
+     */
+    public String concatKey(long userId, String fileName) {
+        return userId + "-" + fileName;
     }
 
     /**
      * 校验文件是否存在于数据库中，并且由正确的用户上传
      *
      * @param uploader 上传者(测试可传null)
-     * @param fileName 文件名(不包括后缀)
+     * @param fileName 文件名称
      * @param fileType 文件类型
      * @return 校验结果
      */
@@ -106,18 +111,25 @@ public class QiniuUtils {
             long uniqueId = 0;
             if (uploader != null) uniqueId = uploader.getId();
             BucketManager bucketManager = new BucketManager(Auth.create(accessKey, secretKey), (Configuration) null);
-            bucketManager.stat(bucket, concatKey(uniqueId, fileName, fileType));
+            bucketManager.stat(bucket, concatKey(uniqueId, fileName));
             return true;
         } catch (Exception ignore) {
         }
         return false;
     }
-    public Optional<FileInfo> getFileInfo(@Nullable User uploader, String fileName, QiniuFileType fileType) {
+
+    /**
+     * 从七牛云中查询文件信息
+     * @param uploader  上传者
+     * @param fileName  文件名称
+     * @return          文件Key
+     */
+    public Optional<FileInfo> getFileInfo(@Nullable User uploader, String fileName) {
         try {
             long uniqueId = 0;
             if (uploader != null) uniqueId = uploader.getId();
             BucketManager bucketManager = new BucketManager(Auth.create(accessKey, secretKey), (Configuration) null);
-            FileInfo fileInfo = bucketManager.stat(bucket, concatKey(uniqueId, fileName, fileType));
+            FileInfo fileInfo = bucketManager.stat(bucket, concatKey(uniqueId, fileName));
             return Optional.of(fileInfo);
         } catch (Exception ignore) {
         }

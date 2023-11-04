@@ -3,7 +3,7 @@
 import {ref} from "vue";
 import {userService} from "@/services/UserService.js";
 import {useSystemStore} from "@/store/system";
-import {User} from "@/models/User";
+import {accountService} from "@/services/AccountService";
 
 const modalVisible = ref(false)
 const isRegister = ref(false)
@@ -11,31 +11,20 @@ const tempAccount = ref(userService.getAccount())
 const tempPassword = ref(userService.getPassword())
 const verificationCode = ref(0)
 
-const hideLoginBtn = ref(false)
+const store = useSystemStore()
 function autoLogin() {
-    if(!useSystemStore().isLogin && userService.getPassword().length != 0) {
-        login()
+    if(!store.isLogin && userService.getPassword().length != 0) {
+        btnLogin()
     }
 }
 autoLogin()
-function logout() {
-    userService.saveLocalUser(null)
-    userService.savePassword("")
-    hideLoginBtn.value = false
-    useSystemStore().logout()
-}
-function setHideLoginBtn(value: boolean) {
-    hideLoginBtn.value = value
-}
+
 function setModalVisible(value: boolean) {
     modalVisible.value = value
 }
-function saveInfo() {
-    userService.saveAccount(tempAccount.value)
-    userService.savePassword(tempPassword.value)
-}
+
 function setRegister(value: boolean) {
-    saveInfo()
+    accountService.saveInfo(tempAccount.value,tempPassword.value)
     if(!isRegister.value && value) {
         userService.askForEmailVerification().then(pack => {
             if(pack.code === 0) alert("验证码已发放至邮箱！")
@@ -59,40 +48,22 @@ function setRegister(value: boolean) {
 
     isRegister.value = value
 }
-function login() {
-    saveInfo()
-    userService.login().then(pack => {
-        if(pack.code === 0) {
-            const userSimpleVO = pack.data.userSimpleVO
-            const user = new User()
-            user.id = userSimpleVO.id
-            user.nickname = userSimpleVO.nickname
-            user.avatar = userSimpleVO.avatar
-            user.content = userSimpleVO.content
-            user.followedCount = userSimpleVO.followedCount
-            user.followingCount = userSimpleVO.followingCount
-            user.favoriteCount = userSimpleVO.favoriteCount
-            user.bookmarkCount = userSimpleVO.bookmarkCount
-            user.createTime = userSimpleVO.createTime
-            user.updateTime = userSimpleVO.updateTime
-
-            userService.saveLocalUser(user)
-            userService.saveToken(pack.data.token)
+function btnLogin() {
+    accountService.saveInfo(tempAccount.value,tempPassword.value)
+    accountService.login().then(result => {
+        if(result) {
             setModalVisible(false)
-            setHideLoginBtn(true)
-            useSystemStore().login()
         }
-        else alert(pack.msg)
     })
 }
 
 </script>
 
 <template>
-    <a-button class="login-button" @click="setModalVisible(true)" v-if="!hideLoginBtn">
+    <a-button class="login-button" @click="setModalVisible(true)" v-if="!store.isLogin">
        <span class="login-text">未登录</span>
     </a-button>
-    <a-button v-else class="user-button" @click="logout">
+    <a-button v-else class="user-button" @click="accountService.logout()">
         <img class="user-avatar" :src="userService.getLocalUser()?.avatar" alt="">
         <span class="user-info">{{ userService.getLocalUser().nickname }}</span>
     </a-button>
@@ -114,7 +85,7 @@ function login() {
                 </div>
                 <div style="margin-top: 2rem">
                     <a-button style="background: #b4b9ff;width: 7rem;height: 2.4rem;border-radius: 1rem;color: white;font-family: SHS-Bold,serif;font-size: 1.2rem;margin-right: 1rem" @click="setRegister(true)">注册</a-button>
-                    <a-button @click="login" v-if="!isRegister" style="background: #ECA4B8;width: 7rem;height: 2.4rem;border-radius: 1rem;color: white;font-family: SHS-Bold,serif;font-size: 1.2rem">登录</a-button>
+                    <a-button @click="btnLogin" v-if="!isRegister" style="background: #ECA4B8;width: 7rem;height: 2.4rem;border-radius: 1rem;color: white;font-family: SHS-Bold,serif;font-size: 1.2rem">登录</a-button>
                 </div>
                 <span style="font-size: 1rem">忘记密码？</span>
             </div>

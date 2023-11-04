@@ -6,8 +6,22 @@ import {User} from "@/models/User";
 import {Category} from "@/models/Category";
 import {VideoComment} from "@/models/VideoComment";
 import {userService} from "@/services/UserService";
+import {VideoType, VideoTypeChineseName} from "@/models/VideoType";
 
 export class VideoService {
+    async uploadVideo(userId: number,fileName: string,md5: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,type: VideoType) {
+        return pack(httpClient.post("/videos/verify",{
+            userId: userId,
+            fileName: fileName,
+            md5: md5,
+            categoryId: categoryId,
+            title: title,
+            content: content,
+            url: url,
+            coverUrl: coverUrl,
+            type: VideoTypeChineseName(type)
+        }))
+    }
     async getVideos(current: number,size: number): Promise<ResponsePack> {
         return pack(httpClient.get("/videos", {
             params: {

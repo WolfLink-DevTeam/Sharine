@@ -1,42 +1,37 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 import LeftBarItem from "@/components/NavBarItem.vue";
 import { useRouter } from "vue-router";
+import {persist} from "@/store/system.js";
 
-const selectPage = ref(1)
 const router = useRouter()
 
-const radioClasses = ref([true, false, false, false])
-
-watch(selectPage, (newValue, oldValue) => {
-    radioClasses.value[oldValue - 1] = false;
-    radioClasses.value[newValue - 1] = true;
-})
-
-const changeButton = (count) => {
-    selectPage.value = count
-    if(count === 1){
-        router.push({name: "home"})
+const navIndex = ref(persist.getNavIndex())
+function navChange(index: number) {
+    if(persist.getNavIndex() === index) return
+    if(index === 0){
+        router.push("home")
     }
-    if(count === 2){
-        router.push({name: "favorite"})
+    if(index === 1){
+        router.push("favorite")
     }
-    if(count === 3){
-        router.push({name: "upload"})
+    if(index === 2){
+        router.push("upload")
     }
-    if(count === 4){
-        router.push({name: "person"})
+    if(index === 3){
+        router.push("person")
     }
-
+    persist.setNavIndex(index)
+    navIndex.value = index
 }
 </script>
 
 <template>
     <div class="container">
-        <LeftBarItem img="@/assets/ui-icon/home-navbar-icon.png" title="首页" sub-title="Home" :enabled="radioClasses[0]" @click="changeButton(1)"/>
-        <LeftBarItem img="@/assets/ui-icon/favorite-navbar-icon.png" title="关注" sub-title="Favorite" :enabled="radioClasses[1]" @click="changeButton(2)"/>
-        <LeftBarItem img="@/assets/ui-icon/upload-navbar-icon.png" title="投稿" sub-title="Upload" :enabled="radioClasses[2]" @click="changeButton(3)"/>
-        <LeftBarItem img="@/assets/ui-icon/person-navbar-icon.png" title="个人" sub-title="Person" :enabled="radioClasses[3]" @click="changeButton(4)"/>
+        <LeftBarItem img="@/assets/ui-icon/home-navbar-icon.png" title="首页" sub-title="Home" :enabled="navIndex === 0" @click="navChange(0)"/>
+        <LeftBarItem img="@/assets/ui-icon/favorite-navbar-icon.png" title="关注" sub-title="Favorite" :enabled="navIndex === 1" @click="navChange(1)"/>
+        <LeftBarItem img="@/assets/ui-icon/upload-navbar-icon.png" title="投稿" sub-title="Upload" :enabled="navIndex === 2" @click="navChange(2)"/>
+        <LeftBarItem img="@/assets/ui-icon/person-navbar-icon.png" title="个人" sub-title="Person" :enabled="navIndex === 3" @click="navChange(3)"/>
     </div>
 </template>
 

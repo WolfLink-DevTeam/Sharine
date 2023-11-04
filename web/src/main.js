@@ -9,5 +9,4 @@ import { router } from './router/index.js'
 import VueVideoPlayer from '@videojs-player/vue';
 import 'video.js/dist/video-js.css'
 import {createPinia} from "pinia";
-import axios from "axios";
 createApp(App).use(Antd).use(router).use(createPinia()).use(VueVideoPlayer).mount('#app')

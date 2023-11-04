@@ -24,7 +24,7 @@ public class VideoController extends BaseController {
     final VideoService videoService;
     final CommentService commentService;
 
-    @PutMapping("/verify")
+    @PostMapping("/verify")
     public Object verifyVideo(@RequestBody UploadVideoDTO uploadVideoDTO) {
         videoService.verifyAndSaveVideo(uploadVideoDTO);
         return ok();

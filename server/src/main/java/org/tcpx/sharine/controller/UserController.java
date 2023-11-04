@@ -169,7 +169,7 @@ public class UserController extends BaseController {
      * TODO 这个接口跟上面的差不多
      * 只允许查询用户自己的视频列表数据
      */
-    @PostMapping("/bookmark/videos")
+    @GetMapping("/bookmark/videos")
     public Object getUserBookmarkVideos(UserPass userPass) {
         // 当前 Session 是否登录
         if (!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
@@ -186,10 +186,10 @@ public class UserController extends BaseController {
      * @param userPass  用户登录令牌
      * @return          订阅视频信息列表
      */
-    @PostMapping("/subscribe/videos")
+    @GetMapping("/subscribe/videos")
     public Object getUserSubscribeVideos(UserPass userPass) {
         // 当前 Session 是否登录
-        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        StpUtil.checkLogin();
         // 用户通行证是否正确
         User user = userService.verifyUserPass(userPass);
         // 用户自己的订阅频道列表

@@ -12,7 +12,6 @@ import {storeToRefs} from "pinia";
 import {useRoute} from "vue-router";
 
 const userId:number = Number(useRoute().query['userId']) || userService.getLocalUser()?.id || -1
-console.log(userId)
 const {isLogin} = storeToRefs(useSystemStore())
 
 let favoriteVideos = new Array<Video>()
