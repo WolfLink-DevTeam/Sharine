@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.tcpx.sharine.dto.QiniuAuthorizationRequest;
 import org.tcpx.sharine.dto.QiniuUptokenRequest;
 import org.tcpx.sharine.dto.QiniuUptokenResponse;
 import org.tcpx.sharine.entity.User;
@@ -29,5 +30,13 @@ public class QiniuController extends BaseController {
         response.setKey(key);
         response.setToken(qiniuUtils.generateToken(key));
         return ok(response);
+    }
+    @PostMapping("/authorization")
+    public Object getAuthorization(@RequestBody QiniuAuthorizationRequest request) {
+        return ok(qiniuUtils.encodeAuthorization(request.getUrl(),request.getJsonBody()));
+    }
+    @GetMapping("/downloadUrl/{fileKey}")
+    public Object getDownloadUrl(@PathVariable String fileKey) {
+        return ok(qiniuUtils.getDownloadUrl(fileKey));
     }
 }

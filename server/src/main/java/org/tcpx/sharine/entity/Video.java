@@ -44,8 +44,6 @@ public class Video {
     @Column(nullable = false)
     String coverUrl;
 
-    @Column(nullable = false)
-    VideoTypeEnum type;
     @UpdateTimestamp
     Long updateTime;
 

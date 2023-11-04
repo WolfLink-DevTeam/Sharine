@@ -2,6 +2,7 @@ package org.tcpx.sharine.service;
 
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.tcpx.sharine.entity.Video;
 import org.tcpx.sharine.entity.VideoCategoryRelation;
 import org.tcpx.sharine.exception.ErrorException;
 import org.tcpx.sharine.repository.VideoCategoryRepository;
@@ -18,12 +19,18 @@ public class VideoCategoryService {
         this.videoCategoryRepository = videoCategoryRepository;
         this.categoryService = categoryService;
     }
+    public void saveVideoCategoryRelation(Long videoId,Long categoryId) {
+        VideoCategoryRelation relation = new VideoCategoryRelation();
+        relation.setCategoryId(categoryId);
+        relation.setCategoryId(videoId);
+        videoCategoryRepository.save(relation);
+    }
 
     public CategoryVO findVideoCategory(Long videoId) {
         VideoCategoryRelation videoCategoryRelation = VideoCategoryRelation.builder()
                 .videoId(videoId)
                 .build();
-        Optional<VideoCategoryRelation> one = videoCategoryRepository.findOne(Example.of(videoCategoryRelation));
+        Optional<VideoCategoryRelation> one = videoCategoryRepository.findByVideoId(videoId);
         if (one.isEmpty()) {
             throw new ErrorException("数据错误");
         }

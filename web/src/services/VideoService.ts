@@ -9,17 +9,20 @@ import {userService} from "@/services/UserService";
 import {VideoType, VideoTypeChineseName} from "@/models/VideoType";
 
 export class VideoService {
-    async uploadVideo(userId: number,fileName: string,md5: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,type: VideoType) {
+    async uploadVideo(fileKey: string,hash: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,videoType: VideoType) {
         return pack(httpClient.post("/videos/verify",{
-            userId: userId,
-            fileName: fileName,
-            md5: md5,
+            userPass: {
+                account: userService.getAccount(),
+                password: userService.getPassword()
+            },
+            fileKey: fileKey,
+            hash: hash,
             categoryId: categoryId,
             title: title,
             content: content,
             url: url,
             coverUrl: coverUrl,
-            type: VideoTypeChineseName(type)
+            videoType: videoType
         }))
     }
     async getVideos(current: number,size: number): Promise<ResponsePack> {

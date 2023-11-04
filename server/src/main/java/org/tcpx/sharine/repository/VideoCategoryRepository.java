@@ -8,10 +8,13 @@ import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.entity.VideoCategoryRelation;
 
 import java.util.List;
+import java.util.Optional;
+
 @CacheConfig(cacheNames = DatabaseConst.VIDEO_CATEGORY_RELATION)
 public interface VideoCategoryRepository extends JpaRepository<VideoCategoryRelation, Long> {
     @Cacheable(unless = "#result==null||result.size()==0")
     List<VideoCategoryRelation> findByCategoryId(Long categoryId, Pageable pageable);
+    Optional<VideoCategoryRelation> findByVideoId(Long videoId);
     @Cacheable(unless = "#result==null")
     Integer countByCategoryId(Long categoryId);
 }

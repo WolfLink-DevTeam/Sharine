@@ -1,23 +1,28 @@
 import {Category} from "@/models/Category";
 import {httpClient, pack} from "@/utilities/HttpUtility";
 import {ResponsePack} from "@/models/ResponsePack";
+import {Ref, ref} from "vue";
 
 export class CategoryService {
 
-    list: Array<Category> = new Array<Category>()
+
+    list: Ref<Array<Category>> = ref(new Array<Category>())
 
     constructor() {
         this.getAllCategories().then(result => {
-                this.list = result.data.map((it: any) => {
+                this.list.value = result.data.map((it: any) => {
                     const category = new Category()
                     category.id = it.id
                     category.title = it.title
                     category.url = it.url
+
                     return category
                 })
             })
     }
-
+    getCategory(index: number): Category {
+        return this.list.value[index]
+    }
     /**
      * 获取全部分类数据
      */

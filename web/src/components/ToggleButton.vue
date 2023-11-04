@@ -1,35 +1,31 @@
-<script setup>
-function toggleVideoType(value) {
-    videoType.value = value
-}
+<script setup lang="ts">
 
-import "@/store/system.ts"
-import {ref, watch} from "vue";
-// 视频类型，0为原创，1为转载
-const videoType = ref(-1)
-
-const classes = ref(["text-unselect","text-unselect"])
-
-watch(videoType,(newValue,oldValue)=>{
-    if(newValue === 0) {
-        classes.value[0] = "text-selected"
-        classes.value[1] = "text-unselect"
-    }
-    else {
-        classes.value[0] = "text-unselect"
-        classes.value[1] = "text-selected"
+const props = defineProps({
+    videoType: {
+        type: Number,
+        required: true
     }
 })
-videoType.value = 0
+defineEmits(['type-toggle'])
 
+import "@/store/system.ts"
+// 视频类型，1为原创，2为转载
 
 </script>
 
 <template>
 <div style="height: 100%;width: 100%;border-radius: 0.5rem;display: flex;align-items: center;justify-content: center;background: #555D8B;padding: 1rem 1rem">
-    <div :class="classes[0]" @click="toggleVideoType(0)">原创</div>
-    <div style="height: 1.75rem;width: 0.25rem;border-radius: 0.2rem;background: #9589BF;margin: 1rem 1rem"/>
-    <div :class="classes[1]" @click="toggleVideoType(1)">转载</div>
+    <template v-if="videoType === 1">
+        <div class="text-selected">原创</div>
+        <div style="height: 1.75rem;width: 0.25rem;border-radius: 0.2rem;background: #9589BF;margin: 1rem 1rem"/>
+        <div class="text-unselect" @click="$emit('type-toggle')">转载</div>
+    </template>
+    <template v-else>
+        <div class="text-unselect" @click="$emit('type-toggle')">原创</div>
+        <div style="height: 1.75rem;width: 0.25rem;border-radius: 0.2rem;background: #9589BF;margin: 1rem 1rem"/>
+        <div class="text-selected">转载</div>
+    </template>
+
 </div>
 </template>
 

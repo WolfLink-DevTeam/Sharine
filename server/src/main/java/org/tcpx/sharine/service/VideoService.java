@@ -11,20 +11,16 @@ import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UploadVideoDTO;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.entity.Video;
-import org.tcpx.sharine.enums.QiniuFileType;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.BookmarkRepository;
 import org.tcpx.sharine.repository.FavoriteRepository;
-import org.tcpx.sharine.repository.UserRepository;
 import org.tcpx.sharine.repository.VideoRepository;
-import org.tcpx.sharine.utils.IOC;
 import org.tcpx.sharine.utils.QiniuUtils;
 import org.tcpx.sharine.vo.UserDetailVO;
 import org.tcpx.sharine.vo.VideoVO;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,17 +52,18 @@ public class VideoService {
      * @param uploadVideoDTO    投稿视频传输层数据对象
      */
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
-        if (!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        StpUtil.checkLogin();
+        // 用户账户查询
         // 用户数据查询
-        User user = IOC.getBean(UserRepository.class).findById(uploadVideoDTO.getUserId())
-                .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        User user = userService.verifyUserPass(uploadVideoDTO.getUserPass());
         // 七牛云数据库查询
-        FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileName())
+        FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileKey())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
-        // MD5 比对
-        if (!fileInfo.md5.equals(uploadVideoDTO.getMd5())) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);
+        if (!fileInfo.hash.equals(uploadVideoDTO.getHash())) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);
         Video video = Video.of(uploadVideoDTO);
+        video.setUserId(user.getId());
         videoRepository.save(video);
+        videoCategoryService.saveVideoCategoryRelation(video.getId(), uploadVideoDTO.getCategoryId());
         // 异步更新视频队列
         subscribeChannelService.notifyFans(user.getId(),video.getId());
     }
@@ -126,7 +123,7 @@ public class VideoService {
     }
     public VideoVO buildVideoVO(Video video) {
         VideoVO videoVO = VideoVO.of(video);
-        UserDetailVO userDetailVO = userService.findUserDetailInfo(video.getId());
+        UserDetailVO userDetailVO = userService.findUserDetailInfo(video.getUserId());
         videoVO.setAuthor(userDetailVO);
         videoVO.setCategory(videoCategoryService.findVideoCategory(video.getId()));
         videoVO.setBookmarkCount(bookmarkRepository.countByVideoId(video.getId()));

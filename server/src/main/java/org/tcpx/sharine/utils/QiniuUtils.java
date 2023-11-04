@@ -71,13 +71,11 @@ public class QiniuUtils {
     /**
      * 获取七牛云文件下载URL
      *
-     * @param fileName 文件名称
+     * @param fileKey   存储键
      * @return URL
      */
-    public String getDownloadUrl(long uploaderId, String fileName) {
+    public String getDownloadUrl(String fileKey) {
         try {
-            String fileKey = concatKey(uploaderId, fileName);
-            String encodedFileName = URLEncoder.encode(fileKey, StandardCharsets.UTF_8).replace("+", "%20");
             DownloadUrl url = new DownloadUrl(domainOfBucket, false, fileKey);
             long expireInSeconds = 3600;
             long deadline = System.currentTimeMillis() / 1000 + expireInSeconds;
@@ -102,17 +100,16 @@ public class QiniuUtils {
      * 校验文件是否存在于数据库中，并且由正确的用户上传
      *
      * @param uploader 上传者(测试可传null)
-     * @param fileName 文件名称
-     * @param fileType 文件类型
+     * @param fileKey  文件存储Key
      * @return 校验结果
      */
-    public boolean verifyFile(@Nullable User uploader, String fileName, QiniuFileType fileType) {
+    public boolean verifyFile(@Nullable User uploader, String fileKey) {
         try {
             long uniqueId = 0;
             if (uploader != null) uniqueId = uploader.getId();
             BucketManager bucketManager = new BucketManager(Auth.create(accessKey, secretKey), (Configuration) null);
-            bucketManager.stat(bucket, concatKey(uniqueId, fileName));
-            return true;
+            bucketManager.stat(bucket, fileKey);
+            if(fileKey.startsWith(String.valueOf(uniqueId))) return true;
         } catch (Exception ignore) {
         }
         return false;
@@ -121,15 +118,15 @@ public class QiniuUtils {
     /**
      * 从七牛云中查询文件信息
      * @param uploader  上传者
-     * @param fileName  文件名称
-     * @return          文件Key
+     * @param fileKey   文件Key
+     * @return          FileInfo
      */
-    public Optional<FileInfo> getFileInfo(@Nullable User uploader, String fileName) {
+    public Optional<FileInfo> getFileInfo(@Nullable User uploader, String fileKey) {
         try {
             long uniqueId = 0;
             if (uploader != null) uniqueId = uploader.getId();
             BucketManager bucketManager = new BucketManager(Auth.create(accessKey, secretKey), (Configuration) null);
-            FileInfo fileInfo = bucketManager.stat(bucket, concatKey(uniqueId, fileName));
+            FileInfo fileInfo = bucketManager.stat(bucket, fileKey);
             return Optional.of(fileInfo);
         } catch (Exception ignore) {
         }

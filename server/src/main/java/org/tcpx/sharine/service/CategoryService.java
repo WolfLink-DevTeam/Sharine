@@ -38,7 +38,6 @@ public class CategoryService {
         if (byId.isEmpty()) {
             throw new ErrorException("数据错误");
         }
-
         return CategoryVO.of(byId.get());
     }
     public List<CategoryVO> findAll() {
