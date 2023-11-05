@@ -30,9 +30,9 @@
                     <img class="actionImg" src="@/assets/ui-icon/filled-bookmark-icon.png" alt="" v-else>
                     <span class="actionText">{{video.bookmarkCount}}</span>
                 </BasicButton>
-                <BasicButton class="actionBtn" width="8rem" height="3rem">
-                    <img class="actionImg" src="@/assets/ui-icon/share-icon.png" alt=""><span class="actionText">转发</span>
-                </BasicButton>
+<!--                <BasicButton class="actionBtn" width="8rem" height="3rem">-->
+<!--                    <img class="actionImg" src="@/assets/ui-icon/share-icon.png" alt=""><span class="actionText">转发</span>-->
+<!--                </BasicButton>-->
             </span>
             </div>
         </div>
