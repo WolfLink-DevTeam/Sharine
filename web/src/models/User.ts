@@ -7,6 +7,8 @@ export class User {
     followedCount: number = 0
     favoriteCount: number = 0
     bookmarkCount: number = 0
+    beenFavoriteCount: number = 0
+    beenViewCount: number = 0
     createTime: Date = new Date()
     updateTime: Date = new Date()
 }

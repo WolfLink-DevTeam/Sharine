@@ -3,7 +3,6 @@ package org.tcpx.sharine.service;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qiniu.storage.model.FileInfo;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +20,7 @@ import org.tcpx.sharine.utils.QiniuUtils;
 import org.tcpx.sharine.vo.UserDetailVO;
 import org.tcpx.sharine.vo.VideoVO;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,6 +66,7 @@ public class VideoService {
         if(!qiniuUtils.textSensor(uploadVideoDTO.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
         Video video = Video.of(uploadVideoDTO);
         video.setUserId(user.getId());
+        video.setViewCount(0L);
         videoRepository.save(video);
         videoCategoryService.saveVideoCategoryRelation(video.getId(), uploadVideoDTO.getCategoryId());
         // 异步更新视频队列
@@ -80,8 +78,11 @@ public class VideoService {
      * @param userId    用户ID
      * @return          用户投稿视频信息列表
      */
-    public List<VideoVO> findVideosByUserId(Long userId) {
-        return buildVideoVOs(videoRepository.findAllByUserId(userId));
+    public List<VideoVO> findVideoVOsByUserId(Long userId) {
+        return buildVideoVOs(findVideosByUserId(userId));
+    }
+    public List<Video> findVideosByUserId(Long userId) {
+        return videoRepository.findAllByUserId(userId);
     }
 
     /**

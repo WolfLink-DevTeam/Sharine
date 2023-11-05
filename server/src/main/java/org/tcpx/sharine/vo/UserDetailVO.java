@@ -36,6 +36,12 @@ public class UserDetailVO {
     // 视频收藏数 不存在字段 通过 BookmarkService 获取
     Long bookmarkCount;
 
+    // 获赞数 不存在字段 通过 FavoriteService 获取
+    Long beenFavoriteCount;
+
+    // 视频播放量 不存在字段 通过 ViewCountService 获取
+    Long beenViewCount;
+
     Long createTime;
 
     Long updateTime;

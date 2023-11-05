@@ -21,8 +21,8 @@ userService.findUserDetailInfo(props.userId).then(pack => {
             <img class="person-avatar" :src="user.avatar" alt="">
             <div style="display: flex;flex-direction: column;margin-top: 1.3rem;margin-left: 1.5rem;font-size: 1.2rem">
                 <span style="color: white;margin-top: 1rem"><span style="font-family: SHS-ExtraLight,serif">粉丝</span><span style="font-family: SHS-Bold,serif;margin-left: 1rem">{{user.followedCount}}</span></span>
-                <span style="color: white;margin-top: 1rem"><span style="font-family: SHS-ExtraLight,serif">获赞</span><span style="font-family: SHS-Bold,serif;margin-left: 1rem">1145</span></span>
-                <span style="color: white;margin-top: 1rem"><span style="font-family: SHS-ExtraLight,serif">播放</span><span style="font-family: SHS-Bold,serif;margin-left: 1rem">1万</span></span>
+                <span style="color: white;margin-top: 1rem"><span style="font-family: SHS-ExtraLight,serif">获赞</span><span style="font-family: SHS-Bold,serif;margin-left: 1rem">{{user.beenFavoriteCount}}</span></span>
+                <span style="color: white;margin-top: 1rem"><span style="font-family: SHS-ExtraLight,serif">播放</span><span style="font-family: SHS-Bold,serif;margin-left: 1rem">{{user.beenViewCount}}</span></span>
             </div>
         </div>
         <div style="margin-top: 0.7rem;width: 100%;text-align: center;background: rgba(255,255,255,0.15);padding-top: 0.2rem;padding-bottom: 0.2rem">

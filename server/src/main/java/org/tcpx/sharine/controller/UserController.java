@@ -1,12 +1,9 @@
 package org.tcpx.sharine.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.web.bind.annotation.*;
-import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UserLoginDTO;
 import org.tcpx.sharine.dto.UserPass;
 import org.tcpx.sharine.entity.User;
@@ -213,6 +210,6 @@ public class UserController extends BaseController {
      */
     @GetMapping("/upload/videos/{userId}")
     public Object getUserUploadVideos(@PathVariable Long userId) {
-        return ok(videoService.findVideosByUserId(userId));
+        return ok(videoService.findVideoVOsByUserId(userId));
     }
 }

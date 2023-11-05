@@ -151,6 +151,8 @@ export class UserService {
         user.followingCount = userVO.followingCount
         user.favoriteCount = userVO.favoriteCount
         user.bookmarkCount = userVO.bookmarkCount
+        user.beenFavoriteCount = userVO.beenFavoriteCount
+        user.beenViewCount = userVO.beenViewCount
         user.createTime = userVO.createTime
         user.updateTime = userVO.updateTime
         return user
