@@ -129,5 +129,19 @@ export class UserService {
             }
         }))
     }
+    parseUserVO(userVO: any): User {
+        const user = new User()
+        user.id = userVO.id
+        user.nickname = userVO.nickname
+        user.avatar = userVO.avatar
+        user.content = userVO.content
+        user.followedCount = userVO.followedCount
+        user.followingCount = userVO.followingCount
+        user.favoriteCount = userVO.favoriteCount
+        user.bookmarkCount = userVO.bookmarkCount
+        user.createTime = userVO.createTime
+        user.updateTime = userVO.updateTime
+        return user
+    }
 }
 export const userService = new UserService()

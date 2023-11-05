@@ -65,7 +65,7 @@ if(userId > 0) {
             </a-col>
         </div>
         <div style="width: 30%;justify-content: center;align-items: center;display: flex">
-            <PersonCard class="person-card"/>
+            <PersonCard class="person-card" :user-id="userId"/>
         </div>
     </div>
     <div v-else style="width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;flex-direction: column">
@@ -107,9 +107,7 @@ if(userId > 0) {
     width: 0;
 }
 .person-card {
-    height: 40%;
-    width: 60%;
-    min-height: 20rem;
-    min-width: 20rem;
+    height: 335px;
+    width: 300px;
 }
 </style>
