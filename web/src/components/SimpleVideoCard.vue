@@ -2,7 +2,7 @@
 
 import {useRouter} from "vue-router";
 import {Video} from "@/models/Video";
-import {dateFormat, simpleDateFormat} from "@/utilities/ResourceUtility";
+import {dateFormat, getImageUrl, simpleDateFormat} from "@/utilities/ResourceUtility";
 
 const router = useRouter()
 
@@ -25,18 +25,19 @@ function gotoVideoPage() {
     <img class="cover" :src="props.data?.coverUrl">
     <div class="info">
         <a-row style="height: 27%">
-            <a-col :span="8" class="container" style="margin-left: 5%;margin-top: 0.1rem;background: rgba(0,0,0,0.3);border-radius: 1rem">
+            <a-col :span="8" class="container" style="margin-left: 5%;margin-top: 0.1rem;background: rgba(0,0,0,0.3);border-radius: 0.5rem">
                 <img src="@/assets/ui-icon/like-icon.png" style="width: 1rem;height: 1rem" alt="">
                 <span style="margin-left: 0.5rem;color: #fdfdff;font-size: 0.9rem;font-family: SHS-Bold,serif">{{data.favoriteCount}}</span>
             </a-col>
             <a-col :span="4"/>
-            <a-col :span="8" class="container" style="margin-left: 5%;margin-top: 0.1rem;background: rgba(0,0,0,0.3);border-radius: 1rem">
+            <a-col :span="8" class="container" style="margin-left: 5%;margin-top: 0.1rem;background: rgba(0,0,0,0.3);border-radius: 0.5rem">
                 <img src="@/assets/ui-icon/bookmark-icon.png" style="width: 1rem;height: 1rem" alt="">
                 <span style="margin-left: 0.5rem;color: #fdfdff;font-size: 0.9rem;font-family: SHS-Bold,serif">{{data.bookmarkCount}}</span>
             </a-col>
         </a-row>
         <a-row style="width: 90%;height: 45%;margin-left: auto;margin-right: auto">
             <span class="title">
+                <img :src="getImageUrl(data.category.url)" style="height: 1.2rem;width: 1.2rem;margin-right: 0.5rem" alt="">
                 {{data.title}}
             </span>
         </a-row>
