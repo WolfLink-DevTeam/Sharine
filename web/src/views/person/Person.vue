@@ -48,9 +48,9 @@ if(userId > 0) {
 
 <template>
     <div class="person" v-if="isLogin">
-        <div class="search">
-            <SearchBar/>
-        </div>
+<!--        <div class="search">-->
+<!--            <SearchBar/>-->
+<!--        </div>-->
         <div style="width: 70%;">
             <PersonVideoBar class="video-bar" v-if="userId === userService.getLocalUser()?.id"
                             :btn1-value="uploadVideos.length"

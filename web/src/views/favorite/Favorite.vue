@@ -19,9 +19,9 @@ if(useSystemStore().isLogin) {
 
 <template>
     <div class="favorite" v-if="useSystemStore().isLogin">
-        <div class="search">
-            <SearchBar></SearchBar>
-        </div>
+<!--        <div class="search">-->
+<!--            <SearchBar></SearchBar>-->
+<!--        </div>-->
         <div class="favorite-page">
             <div class="favorite-list">
                 <template v-for="(video,index) in videos" :key="video">
