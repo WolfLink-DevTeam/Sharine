@@ -12,21 +12,6 @@ videoService.getVideos(0,30).then(pack => {
     pack.data.forEach((it: any) => {
         const video = videoService.parseVideoVO(it)
         videos.value.push(video)
-        //TODO 测试
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
-        videos.value.push(video)
     })
 })
 
@@ -40,7 +25,7 @@ videoService.getVideos(0,30).then(pack => {
             <a-row :gutter="[24,18]" style="width: 100%">
                 <template v-for="item in videos" :key="item">
                     <a-col :span="4">
-                        <SimpleVideoCard :data="item" style="height: 23.5rem"/>
+                        <SimpleVideoCard :data="item"/>
                     </a-col>
                 </template>
             </a-row>

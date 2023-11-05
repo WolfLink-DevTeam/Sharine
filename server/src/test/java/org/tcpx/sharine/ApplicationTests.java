@@ -1,5 +1,6 @@
 package org.tcpx.sharine;
 
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.tcpx.sharine.service.CategoryService;
 import org.tcpx.sharine.service.SubscribeChannelService;
 import org.tcpx.sharine.service.VideoService;
 import org.tcpx.sharine.utils.IOC;
+import org.tcpx.sharine.utils.QiniuUtils;
 
 import java.util.List;
 
@@ -38,6 +40,8 @@ class ApplicationTests {
     VideoService videoService;
     @Autowired
     VideoRepository videoRepository;
+    @Autowired
+    QiniuUtils qiniuUtils;
     /**
      * 测试环境初始化
      */
@@ -63,6 +67,7 @@ class ApplicationTests {
     }
     @Test
     void tempTest() {
-        User user = userRepository.findByAccount("3401286177@qq.com").orElseThrow();
+        System.out.println( qiniuUtils.verifyFile(null,"1-2023-06-17 16-40-56.mkv"));
+//        User user = userRepository.findByAccount("3401286177@qq.com").orElseThrow();
     }
 }

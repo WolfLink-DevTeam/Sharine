@@ -12,7 +12,7 @@ import {categoryService} from "@/services/CategoryService";
             <a-col :flex="20"/>
         </a-row>
         <a-row class="categoryRow" :gutter="[40,30]">
-            <template v-for="category in categoryService.list">
+            <template v-for="category in categoryService.list.value">
                 <a-col :span="6" style="height: 2.5rem">
                     <CategoryCard :img="category.url" :text="category.title"/>
                 </a-col>
