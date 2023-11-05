@@ -5,8 +5,8 @@
                 <span id="title" class="text-shadow-focus">{{video.title}}</span>
                 <span id="subTitle">
 <!--                    TODO-->
-                    <span class="titleTag box-shadow-focus" style="margin-right: 1rem;">播放 114514万(TODO)</span>
-                    <span class="titleTag box-shadow-focus">{{ dateFormat(video.createTime) }}</span>
+                    <span class="titleTag box-shadow-focus" style="margin-right: 1rem;justify-content: center;display: flex"><img src="@/assets/ui-icon/view-count.png" style="height: 1.5rem;width: 1.5rem;margin-right: 0.5rem">{{video.viewCount}}</span>
+                    <span class="titleTag box-shadow-focus" style="justify-content: center;display: flex"><img src="@/assets/ui-icon/date-icon.png" style="height: 1.5rem;width: 1.5rem;margin-right: 0.5rem">{{ dateFormat(video.createTime) }}</span>
                 </span>
             </span>
             <div class="box-shadow-focus" style="width: 60vw;height: 0.15rem;background: #555D8B;margin-bottom: 1rem;border-radius: 1rem"/>
@@ -83,6 +83,7 @@ const videoId = Number(route.query['videoId'])
 const video = ref<Video>(new Video())
 videoService.getVideo(videoId).then(it => {
     video.value = videoService.parseVideoVO(it.data)
+    videoService.viewVideo(video.value.id)
 })
 
 const comments = ref(new Array<VideoComment>)

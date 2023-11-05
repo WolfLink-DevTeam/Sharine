@@ -41,10 +41,13 @@ public class VideoService {
 
     final SubscribeChannelService subscribeChannelService;
 
-    public VideoService(UserService userService, VideoCategoryService videoCategoryService, SubscribeChannelService subscribeChannelService) {
+    final RedisService redisService;
+
+    public VideoService(UserService userService, VideoCategoryService videoCategoryService, SubscribeChannelService subscribeChannelService,RedisService redisService) {
         this.userService = userService;
         this.videoCategoryService = videoCategoryService;
         this.subscribeChannelService = subscribeChannelService;
+        this.redisService = redisService;
     }
 
     /**
@@ -139,5 +142,11 @@ public class VideoService {
     public List<VideoVO> getSubscribeVideos(Long userId) {
         List<Long> videoIds = subscribeChannelService.getSubscribeVideoIds(userId);
         return findVideos(videoIds);
+    }
+    public void addViewCount(String userIp,Long videoId) {
+        String key = "viewcount-"+userIp+"-"+videoId;
+        if(redisService.hasKey(key)) return;
+        redisService.set(key,0,60 * 60 * 24);
+        videoRepository.incrementCount(videoId);
     }
 }

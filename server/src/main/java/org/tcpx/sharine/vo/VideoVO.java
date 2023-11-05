@@ -31,6 +31,8 @@ public class VideoVO {
 
     String content;
 
+    Long viewCount;
+
     Long updateTime;
 
     Long createTime;

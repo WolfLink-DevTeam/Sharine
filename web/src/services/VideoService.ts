@@ -9,6 +9,9 @@ import {userService} from "@/services/UserService";
 import {VideoType, VideoTypeChineseName} from "@/models/VideoType";
 
 export class VideoService {
+    async viewVideo(videoId: number) {
+        httpClient.get("/videos/"+videoId+"/addViewCount")
+    }
     async uploadVideo(fileKey: string,hash: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,videoType: VideoType) {
         return pack(httpClient.post("/videos/verify",{
             userPass: {
@@ -82,6 +85,7 @@ export class VideoService {
         video.id = videoVO.id
         video.favoriteCount = videoVO.favoriteCount
         video.bookmarkCount = videoVO.bookmarkCount
+        video.viewCount = videoVO.viewCount
 
         const author = new User()
         author.nickname = videoVO.author.nickname

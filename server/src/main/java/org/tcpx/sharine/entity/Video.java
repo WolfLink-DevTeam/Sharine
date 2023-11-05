@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.tcpx.sharine.constants.DatabaseConst;
@@ -43,6 +44,10 @@ public class Video {
 
     @Column(nullable = false)
     String coverUrl;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    Long viewCount;
 
     @UpdateTimestamp
     Long updateTime;
