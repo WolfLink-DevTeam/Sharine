@@ -19,6 +19,8 @@ import org.tcpx.sharine.utils.BeanCopyUtils;
 @Entity
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Table(name = DatabaseConst.VIDEO)
 public class Video {
 
