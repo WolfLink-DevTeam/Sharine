@@ -99,7 +99,25 @@ async function notifyServer() {
         return
     }
     // 通知后端校验
-    await videoService.uploadVideo(key.value, hash.value, categoryService.list.value[categoryIndex.value].id, title.value, content.value, videoUrl.value, coverUrl.value, videoType.value)
+    videoService.uploadVideo(
+        key.value,
+        hash.value,
+        categoryService.list.value[categoryIndex.value].id,
+        title.value,
+        content.value,
+        videoUrl.value,
+        coverUrl.value,
+        videoType.value
+    ).then(pack => {
+        if(pack.code === 0) {
+            alert("投稿成功")
+            uploadStatus.value = false
+            title.value = ""
+            content.value = ""
+            progress.value = "0"
+        }
+        else alert("投稿失败！请重新尝试")
+    })
 
 }
 async function uploadCover(file: File) {
@@ -172,7 +190,7 @@ function onCategorySelected(index: number) {
 <template>
     <div class="upload" v-if="useSystemStore().isLogin">
         <div class="upload-page">
-            <input type="file" ref="fileInput" @change="handleFile" style="display: none" />
+            <input type="file" accept="video/mp4" ref="fileInput" @change="handleFile" style="display: none" />
             <ProgressBar class="progress-bar" :progress="progress"/>
             <a-row class="row-1" v-if="uploadStatus">
                 <a-col :span="7" class="cover"><a-image style="border-radius: 1rem;height: 100%;width: 100%" :src="coverUrl" alt="" class="box-shadow-blur" @click="selectImageFile"/></a-col>
