@@ -3,6 +3,7 @@ package org.tcpx.sharine.service;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qiniu.storage.model.FileInfo;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,9 @@ import org.tcpx.sharine.utils.QiniuUtils;
 import org.tcpx.sharine.vo.UserDetailVO;
 import org.tcpx.sharine.vo.VideoVO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -142,11 +145,5 @@ public class VideoService {
     public List<VideoVO> getSubscribeVideos(Long userId) {
         List<Long> videoIds = subscribeChannelService.getSubscribeVideoIds(userId);
         return findVideos(videoIds);
-    }
-    public void addViewCount(String userIp,Long videoId) {
-        String key = "viewcount-"+userIp+"-"+videoId;
-        if(redisService.hasKey(key)) return;
-        redisService.set(key,0,60 * 60 * 24);
-        videoRepository.incrementCount(videoId);
     }
 }

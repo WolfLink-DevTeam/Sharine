@@ -45,7 +45,7 @@ public class SubscribeChannelService {
      */
     List<Long> getSubscribeVideoIds(Long userId) {
         try {
-            return Objects.requireNonNull(redisService.lRange(String.valueOf(userId), 0, 127))
+            return Objects.requireNonNull(redisService.lRange(String.valueOf(userId), 0, channelSize-1))
                     .stream().map(it -> Long.parseLong(String.valueOf(it))).collect(Collectors.toList());
         } catch (Exception ignore) {
             return new ArrayList<>();

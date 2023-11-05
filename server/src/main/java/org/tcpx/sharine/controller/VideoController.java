@@ -13,6 +13,7 @@ import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.service.CommentService;
 import org.tcpx.sharine.service.UserService;
 import org.tcpx.sharine.service.VideoService;
+import org.tcpx.sharine.service.ViewCountService;
 import org.tcpx.sharine.utils.IpUtils;
 import org.tcpx.sharine.utils.QiniuUtils;
 
@@ -30,6 +31,7 @@ public class VideoController extends BaseController {
     final CommentService commentService;
     final UserService userService;
     final QiniuUtils qiniuUtils;
+    final ViewCountService viewCountService;
 
     @PostMapping("/verify")
     public Object verifyVideo(@RequestBody UploadVideoDTO uploadVideoDTO) {
@@ -58,7 +60,7 @@ public class VideoController extends BaseController {
     @GetMapping("/{videoId}/addViewCount")
     public Object addViewCount(HttpServletRequest request, @PathVariable Long videoId) {
         String ip = IpUtils.getIpAddress(request);
-        videoService.addViewCount(ip,videoId);
+        viewCountService.addViewCount(ip,videoId);
         return ok();
     }
     @GetMapping
