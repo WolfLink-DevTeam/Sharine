@@ -22,7 +22,7 @@ public class VideoCategoryService {
     public void saveVideoCategoryRelation(Long videoId,Long categoryId) {
         VideoCategoryRelation relation = new VideoCategoryRelation();
         relation.setCategoryId(categoryId);
-        relation.setCategoryId(videoId);
+        relation.setVideoId(videoId);
         videoCategoryRepository.save(relation);
     }
 
@@ -32,7 +32,7 @@ public class VideoCategoryService {
                 .build();
         Optional<VideoCategoryRelation> one = videoCategoryRepository.findByVideoId(videoId);
         if (one.isEmpty()) {
-            throw new ErrorException("数据错误");
+            throw new ErrorException(videoId+"数据错误");
         }
 
         return categoryService.find(one.get().getCategoryId());

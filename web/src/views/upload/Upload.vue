@@ -175,16 +175,16 @@ function onCategorySelected(index: number) {
             <input type="file" ref="fileInput" @change="handleFile" style="display: none" />
             <ProgressBar class="progress-bar" :progress="progress"/>
             <a-row class="row-1" v-if="uploadStatus">
-                <a-col :span="7" class="cover"><img style="border-radius: 1rem;height: 100%;width: 100%" :src="coverUrl" alt="" class="box-shadow-blur" @click="selectImageFile"></a-col>
+                <a-col :span="7" class="cover"><a-image style="border-radius: 1rem;height: 100%;width: 100%" :src="coverUrl" alt="" class="box-shadow-blur" @click="selectImageFile"/></a-col>
                 <a-col :span="17" style="justify-content: center;align-items: center;display: flex;flex-direction: column;padding: 1rem">
                     <a-row style="width: 100%;height: 100%;align-items: center">
                         <span style="font-size: 1.4rem;font-family: SHS-Bold,serif;" class="text-shadow-focus">视频抽帧</span>
                         <span style=";font-size: 0.9rem;font-family: SHS-Light,serif;color: #7C7C7C;margin-left: 0.7rem" class="text-shadow-focus">下列封面来自视频内容抽帧，可选择其作为视频封面。</span>
                     </a-row>
                     <a-row justify="space-between" style="width: 100%;height: 100%">
-                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" :src="videoFrames[0]" alt="" @click="coverUrl = videoFrames[0]"></a-col>
-                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" :src="videoFrames[1]" alt="" @click="coverUrl = videoFrames[1]"></a-col>
-                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" :src="videoFrames[2]" alt="" @click="coverUrl = videoFrames[2]"></a-col>
+                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" :src="videoFrames[0]" alt="" @click="coverUrl = videoFrames[0]"/></a-col>
+                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" :src="videoFrames[1]" alt="" @click="coverUrl = videoFrames[1]"/></a-col>
+                        <a-col :span="7" style="justify-content: center;align-items: end;display: flex"><img class="small-cover box-shadow-blur" :src="videoFrames[2]" alt="" @click="coverUrl = videoFrames[2]"/></a-col>
                     </a-row>
                 </a-col>
             </a-row>

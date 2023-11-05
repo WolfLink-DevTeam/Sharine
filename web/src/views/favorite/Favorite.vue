@@ -5,12 +5,13 @@ import {Video} from "@/models/Video";
 import {videoService} from "@/services/VideoService";
 import {userService} from "@/services/UserService";
 import {useSystemStore} from "@/store/system";
-const videos = new Array<Video>()
+import {ref} from "vue";
+const videos = ref(new Array<Video>())
 
 if(useSystemStore().isLogin) {
     userService.getSubscribeVideos().then(pack => {
         pack.data?.forEach((it:any)=>{
-            videos.push(videoService.parseVideoVO(it))
+            videos.value.push(videoService.parseVideoVO(it))
         })
     })
 }
@@ -24,7 +25,7 @@ if(useSystemStore().isLogin) {
         <div class="favorite-page">
             <div class="favorite-list">
                 <template v-for="(video,index) in videos" :key="video">
-                    <DetailVideoCard :direction="index%2===0 ? 'left' : 'right'"/>
+                    <DetailVideoCard :video="video" :direction="index%2===0 ? 'left' : 'right'"/>
                 </template>
             </div>
         </div>

@@ -203,7 +203,7 @@ public class UserController extends BaseController {
         // 用户通行证是否正确
         User user = userService.verifyUserPass(userPass);
         // 用户自己的订阅频道列表
-        return videoService.getSubscribeVideos(user.getId());
+        return ok(videoService.getSubscribeVideos(user.getId()));
     }
 
     /**
