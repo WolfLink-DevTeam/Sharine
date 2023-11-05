@@ -174,7 +174,7 @@ function onCategorySelected(index: number) {
         <div class="upload-page">
             <input type="file" ref="fileInput" @change="handleFile" style="display: none" />
             <ProgressBar class="progress-bar" :progress="progress"/>
-            <a-row class="row-1">
+            <a-row class="row-1" v-if="uploadStatus">
                 <a-col :span="7" class="cover"><img style="border-radius: 1rem;height: 100%;width: 100%" :src="coverUrl" alt="" class="box-shadow-blur" @click="selectImageFile"></a-col>
                 <a-col :span="17" style="justify-content: center;align-items: center;display: flex;flex-direction: column;padding: 1rem">
                     <a-row style="width: 100%;height: 100%;align-items: center">
@@ -228,7 +228,7 @@ function onCategorySelected(index: number) {
         align-items: center;
         //overflow-y: scroll;
         .progress-bar {
-            width: 50%;
+            width: 60%;
             height: 15%;
         }
     }
@@ -251,34 +251,34 @@ function onCategorySelected(index: number) {
 }
 .row-1 {
     height: 12rem;
-    width: 50%;
+    width: 60%;
 }
 .row-2 {
     margin-top: 1rem;
-    width: 50%;
+    width: 60%;
     height: 3rem;
 }
 .row-3 {
     margin-top: 1rem;
-    width: 50%;
+    width: 60%;
     height: 9rem;
 }
 .row-4 {
     align-items: center;
     margin-top: 1rem;
-    width: 50%;
+    width: 60%;
     height: 4rem;
 }
 .row-5 {
     align-items: center;
     margin-top: 1rem;
-    width: 50%;
+    width: 60%;
     height: 4rem;
 }
 .row-6 {
     align-items: center;
     margin-top: 1rem;
-    width: 50%;
+    width: 60%;
     height: 4rem;
     justify-content: center;
 }

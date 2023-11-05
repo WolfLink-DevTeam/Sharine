@@ -72,6 +72,18 @@ export class UserService {
             password: this.getPassword()
         }))
     }
+    async hasFavorite(videoId: number) {
+        return pack(httpClient.post("/users/favorite/"+videoId+"/status",{
+            account: this.getAccount(),
+            password: this.getPassword()
+        }))
+    }
+    async hasBookmark(videoId: number) {
+        return pack(httpClient.post("/users/bookmark/"+videoId+"/status",{
+            account: this.getAccount(),
+            password: this.getPassword()
+        }))
+    }
     async undoFavorite(videoId: number) {
         return pack(httpClient.delete("/users/favorite/"+videoId,{
             data: {

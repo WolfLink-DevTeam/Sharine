@@ -9,11 +9,10 @@
                     <span class="titleTag box-shadow-focus">{{ dateFormat(video.createTime) }}</span>
                 </span>
             </span>
-            <div class="box-shadow-focus" style="width: 72rem;height: 0.15rem;background: #555D8B;margin-bottom: 1rem;border-radius: 1rem"/>
-            <div class="box-shadow-focus" style="border-radius: 1rem" @wheel="onWheel">
+            <div class="box-shadow-focus" style="width: 60vw;height: 0.15rem;background: #555D8B;margin-bottom: 1rem;border-radius: 1rem"/>
+            <div class="box-shadow-focus" style="border-radius: 1rem;width: 60vw" @wheel="onWheel">
                 <video-player
-                    :height="648"
-                    :width="1152"
+                    style="height: 60vh;width: 100%"
                     :src="video.url"
                     poster=""
                     autoplay="true"
@@ -21,11 +20,15 @@
                     :loop="true"
                     :volume="0.6"/>
                 <span id="videoActions">
-                <BasicButton class="actionBtn" width="8rem" height="3rem">
-                    <img class="actionImg" src="@/assets/ui-icon/like-icon.png" alt=""><span class="actionText">{{video.favoriteCount}}</span>
+                <BasicButton class="actionBtn" width="8rem" height="3rem" @click="btnFavorite">
+                    <img class="actionImg" src="@/assets/ui-icon/like-icon.png" alt="" v-if="!hasFavorite">
+                    <img class="actionImg" src="@/assets/ui-icon/filled-like-icon.png" alt="" v-else>
+                    <span class="actionText">{{video.favoriteCount}}</span>
                 </BasicButton>
-                <BasicButton class="actionBtn" width="8rem" height="3rem">
-                    <img class="actionImg" src="@/assets/ui-icon/bookmark-icon.png" alt=""><span class="actionText">{{video.bookmarkCount}}</span>
+                <BasicButton class="actionBtn" width="8rem" height="3rem" @click="btnBookmark">
+                    <img class="actionImg" src="@/assets/ui-icon/bookmark-icon.png" alt="" v-if="!hasBookmark">
+                    <img class="actionImg" src="@/assets/ui-icon/filled-bookmark-icon.png" alt="" v-else>
+                    <span class="actionText">{{video.bookmarkCount}}</span>
                 </BasicButton>
                 <BasicButton class="actionBtn" width="8rem" height="3rem">
                     <img class="actionImg" src="@/assets/ui-icon/share-icon.png" alt=""><span class="actionText">转发</span>
@@ -42,10 +45,10 @@
             </BasicCard>
             <BasicCard width="80%" height="55%" class="box-shadow-focus" style="display: flex;flex-direction: column;">
                 <div style="margin-bottom: 1rem;width: 100%;display: flex;flex-direction: row">
-                    <span style="width: 15%;margin-left: 3%;font-size: 1.4rem;font-family: SHS-Bold,serif">| 评论</span>
-                    <a-input-group compact style="width: 75%;margin-left: 3%" v-show="useSystemStore().isLogin">
-                        <a-input v-model:value="userCommentText" style="width: 80%" />
-                        <a-button type="primary" style="width: 20%" @click="addComment">发布</a-button>
+                    <span style="width: 4rem;margin-left: 3%;font-size: 1.4rem;font-family: SHS-Bold,serif">| 评论</span>
+                    <a-input-group compact style="width: 80%;margin-left: 3%" v-show="useSystemStore().isLogin">
+                        <a-input v-model:value="userCommentText" style="width: 70%" />
+                        <a-button type="primary" style="width: 25%;" @click="addComment">发布</a-button>
                     </a-input-group>
                 </div>
                 <div class="card-body">
@@ -131,13 +134,43 @@ function onWheel(event: any) {
         console.log('down');
     }
 }
+const hasFavorite = ref(false)
+const hasBookmark = ref(false)
+userService.hasFavorite(videoId).then(pack => hasFavorite.value = pack.data)
+userService.hasBookmark(videoId).then(pack => hasBookmark.value = pack.data)
+function btnFavorite() {
+    let promise = null
+    if(hasFavorite.value) {
+        promise = userService.undoFavorite(videoId)
+    } else promise = userService.favorite(videoId)
+    promise.then(pack => {
+        if(pack.code === 0) {
+            hasFavorite.value = !hasFavorite.value
+            if(hasFavorite.value) video.value.favoriteCount++
+            else video.value.favoriteCount--
+        }
+    })
+}
+function btnBookmark() {
+    let promise = null
+    if(hasBookmark.value) {
+        promise = userService.undoBookmark(videoId)
+    } else promise = userService.bookmark(videoId)
+    promise.then(pack => {
+        if(pack.code === 0) {
+            hasBookmark.value = !hasBookmark.value
+            if(hasBookmark.value) video.value.bookmarkCount++
+            else video.value.bookmarkCount--
+        }
+    })
+}
 </script>
 
 <style scoped>
 #title {
     font-size: 1.8rem;
     font-family: SHS-Medium,serif;
-    width: 60rem;
+    width: 60vw;
 }
 #subTitle {
     display: flex;
@@ -155,7 +188,7 @@ function onWheel(event: any) {
 #videoActions {
     background: #555D8B;
     border-radius: 0 0 1rem 1rem;
-    width: 72rem;
+    width: 60vw;
     height: 4rem;
     display: flex;
     align-items: center;
@@ -165,7 +198,7 @@ function onWheel(event: any) {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 72rem;
+    width: 60vw;
     height: 4rem;
 //background: #555D8B;
     border-radius: 1rem 1rem 0 0;

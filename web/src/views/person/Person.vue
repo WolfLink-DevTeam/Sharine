@@ -14,9 +14,9 @@ import {useRoute} from "vue-router";
 const userId:number = Number(useRoute().query['userId']) || userService.getLocalUser()?.id || -1
 const {isLogin} = storeToRefs(useSystemStore())
 
-let favoriteVideos = new Array<Video>()
-let bookmarkVideos = new Array<Video>()
-let uploadVideos = new Array<Video>()
+let favoriteVideos = ref(new Array<Video>())
+let bookmarkVideos = ref(new Array<Video>())
+let uploadVideos = ref(new Array<Video>())
 const videos = ref(new Array<Video>())
 
 if(userId > 0) {
@@ -25,22 +25,22 @@ if(userId > 0) {
         pack.data.forEach((videoVO: any) => {
             array.push(videoService.parseVideoVO(videoVO))
         })
-        uploadVideos = array
-        videos.value = uploadVideos
+        uploadVideos.value = array
+        videos.value = uploadVideos.value
     })
     userService.getUserFavoriteVideos().then(pack => {
         const array = new Array<Video>()
         pack.data?.forEach((videoVO: any) => {
             array.push(videoService.parseVideoVO(videoVO))
         })
-        favoriteVideos = array
+        favoriteVideos.value = array
     })
     userService.getUserBookmarkVideos().then(pack => {
         const array = new Array<Video>()
         pack.data?.forEach((videoVO: any) => {
             array.push(videoService.parseVideoVO(videoVO))
         })
-        bookmarkVideos = array
+        bookmarkVideos.value = array
     })
 }
 
@@ -52,10 +52,14 @@ if(userId > 0) {
             <SearchBar/>
         </div>
         <div style="width: 70%;">
-            <PersonVideoBar class="video-bar"
+            <PersonVideoBar class="video-bar" v-if="userId === userService.getLocalUser()?.id"
                             :btn1-value="uploadVideos.length"
-                            :btn2-value="(userId === userService.getLocalUser()?.id) ? favoriteVideos.length : 'lock'"
-                            :btn3-value="(userId === userService.getLocalUser()?.id) ? bookmarkVideos.length : 'lock'" @btn1clicked="videos = uploadVideos" @btn2clicked="videos = favoriteVideos" @btn3clicked="videos = bookmarkVideos"/>
+                            :btn2-value="favoriteVideos.length"
+                            :btn3-value="bookmarkVideos.length" @btn1clicked="videos = uploadVideos" @btn2clicked="videos = favoriteVideos" @btn3clicked="videos = bookmarkVideos"/>
+            <PersonVideoBar class="video-bar" v-else
+                            :btn1-value="uploadVideos.length"
+                            btn2-value="lock"
+                            btn3-value="lock" @btn1clicked="videos = uploadVideos" @btn2clicked="videos = favoriteVideos" @btn3clicked="videos = bookmarkVideos"/>
             <a-col class="video-list">
                 <a-row :gutter="[24,12]">
                     <template v-for="video in videos" :key="video">

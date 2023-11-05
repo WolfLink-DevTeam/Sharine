@@ -28,10 +28,10 @@ userService.findUserDetailInfo(props.userId).then(pack => {
         <div style="margin-top: 0.7rem;width: 100%;text-align: center;background: rgba(255,255,255,0.15);padding-top: 0.2rem;padding-bottom: 0.2rem">
             <span class="person-name">{{user.nickname}}</span>
         </div>
-        <div class="tag-line">
-            <span><img style="background: rgba(61,61,61,0.5);border-radius: 1rem;margin-left: 1rem;width: 1.6rem;height: 1.6rem;padding: 0.08rem" src="@/assets/ui-icon/boy-icon.png" alt=""></span>
-            <span style="margin-left: 0.3rem;color: #e6e6e6;background: rgba(61,61,61,0.5);border-radius: 1rem;padding: 0.15rem 0.5rem">IP属地：未知</span>
-        </div>
+<!--        <div class="tag-line">-->
+<!--            <span><img style="background: rgba(61,61,61,0.5);border-radius: 1rem;margin-left: 1rem;width: 1.6rem;height: 1.6rem;padding: 0.08rem" src="@/assets/ui-icon/boy-icon.png" alt=""></span>-->
+<!--            <span style="margin-left: 0.3rem;color: #e6e6e6;background: rgba(61,61,61,0.5);border-radius: 1rem;padding: 0.15rem 0.5rem">IP属地：未知</span>-->
+<!--        </div>-->
         <div style="width: 100%;padding: 1rem;">
             <span style="color: white;font-size: 1rem;font-family: SHS-ExtraLight,serif">{{user.content}}</span>
         </div>
