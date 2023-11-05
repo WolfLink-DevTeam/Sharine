@@ -101,15 +101,20 @@ public class UserController extends BaseController {
 //    }
 
     @PostMapping("/favorite/{videoId}")
-    public Object favorite(UserPass userPass, @PathVariable Long videoId) {
+    public Object favorite(@RequestBody UserPass userPass, @PathVariable Long videoId) {
         if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
         User user = userService.verifyUserPass(userPass);
         favoriteService.favoriteVideo(user.getId(), videoId);
         return ok();
     }
-
+    @PostMapping("/favorite/{videoId}/status")
+    public Object hasFavorite(@RequestBody UserPass userPass, @PathVariable Long videoId) {
+        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        User user = userService.verifyUserPass(userPass);
+        return ok(favoriteService.hasFavoriteVideo(user.getId(), videoId));
+    }
     @DeleteMapping("/favorite/{videoId}")
-    public Object undoFavorite(UserPass userPass, @PathVariable Long videoId) {
+    public Object undoFavorite(@RequestBody UserPass userPass, @PathVariable Long videoId) {
         if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
         User user = userService.verifyUserPass(userPass);
         favoriteService.undoFavoriteVideo(user.getId(), videoId);
@@ -127,20 +132,25 @@ public class UserController extends BaseController {
      * @param videoId   视频ID
      */
     @PostMapping("/bookmark/{videoId}")
-    public Object bookmark(UserPass userPass, @PathVariable Long videoId) {
+    public Object bookmark(@RequestBody UserPass userPass, @PathVariable Long videoId) {
         if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
         User user = userService.verifyUserPass(userPass);
         bookmarkService.bookmarkVideo(user.getId(), videoId);
         return ok();
     }
-
+    @PostMapping("/bookmark/{videoId}/status")
+    public Object hasBookmark(@RequestBody UserPass userPass, @PathVariable Long videoId) {
+        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        User user = userService.verifyUserPass(userPass);
+        return ok(bookmarkService.hasBookmarkVideo(user.getId(), videoId));
+    }
     /**
      * 取消收藏视频
      * @param userPass  用户令牌
      * @param videoId   视频ID
      */
     @DeleteMapping("/bookmark/{videoId}")
-    public Object undoBookmark(UserPass userPass, @PathVariable Long videoId) {
+    public Object undoBookmark(@RequestBody UserPass userPass, @PathVariable Long videoId) {
         if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
         User user = userService.verifyUserPass(userPass);
         bookmarkService.undoBookmarkVideo(user.getId(), videoId);
@@ -151,7 +161,7 @@ public class UserController extends BaseController {
      * TODO 要同时用到好几个 Service ，不知道该放哪个 Service 里面，我先写到这里吧
      * 只允许查询用户自己的视频列表数据
      */
-    @PostMapping("/favorite/videos")
+    @GetMapping("/favorite/videos")
     public Object getUserFavoriteVideos(UserPass userPass) {
         // 当前 Session 是否登录
         if (!StpUtil.isLogin()) {

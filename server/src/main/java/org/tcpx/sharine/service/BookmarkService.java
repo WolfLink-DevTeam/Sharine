@@ -28,12 +28,15 @@ public class BookmarkService {
      * @param videoId 视频ID
      */
     public void bookmarkVideo(Long userId, Long videoId) {
-        // 已经点赞了
-        if (bookmarkRepository.existsByUserIdAndVideoId(userId, videoId)) {
+        // 已经收藏
+        if (hasBookmarkVideo(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_EXIST);
         }
         Bookmark bookmark = Bookmark.builder().userId(userId).videoId(videoId).build();
         bookmarkRepository.save(bookmark);
+    }
+    public boolean hasBookmarkVideo(Long userId,Long videoId) {
+        return bookmarkRepository.existsByUserIdAndVideoId(userId,videoId);
     }
 
     /**

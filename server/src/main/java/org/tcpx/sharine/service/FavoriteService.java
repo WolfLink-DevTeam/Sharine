@@ -39,13 +39,15 @@ public class FavoriteService {
      */
     public void favoriteVideo(Long userId, Long videoId) {
         // 已经点赞了
-        if (favoriteRepository.existsByUserIdAndVideoId(userId, videoId)) {
+        if (hasFavoriteVideo(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_EXIST);
         }
         Favorite favorite = Favorite.builder().videoId(videoId).userId(userId).build();
         favoriteRepository.save(favorite);
     }
-
+    public boolean hasFavoriteVideo(Long userId,Long videoId) {
+        return favoriteRepository.existsByUserIdAndVideoId(userId,videoId);
+    }
     /**
      * 用户撤销点赞视频
      *
@@ -66,13 +68,14 @@ public class FavoriteService {
      * @return          用户关注视频ID列表
      */
     public List<Long> findUserFavoriteVideoIds(Long userId) {
-        List<Favorite> byUserId = favoriteRepository.findByUserId(userId);
+        List<Favorite> byUserId = favoriteRepository.findAllByUserId(userId);
+        System.out.println(byUserId);
         return byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList());
     }
     public List<Long> findUserFavoriteVideoIds(Long userId, ConditionDTO conditionDTO) {
         Pageable pageable = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
 
-        List<Favorite> byUserId = favoriteRepository.findByUserId(userId, pageable);
+        List<Favorite> byUserId = favoriteRepository.findAllByUserId(userId, pageable);
 
         return byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList());
     }

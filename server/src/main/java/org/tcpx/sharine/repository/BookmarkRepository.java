@@ -1,5 +1,6 @@
 package org.tcpx.sharine.repository;
 
+import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -7,6 +8,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.tcpx.sharine.constants.DatabaseConst;
 import org.tcpx.sharine.entity.Bookmark;
 
@@ -19,19 +21,18 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     @CachePut(unless = "#result==null")
     <S extends Bookmark> S save(@NotNull S entity);
 
-    @Cacheable(unless = "#result==null")
     Bookmark findByUserIdAndVideoId(Long userId, Long videoId);
 
-    @Cacheable(unless = "#result==null")
     boolean existsByUserIdAndVideoId(Long userId, Long videoId);
 
-    @CacheEvict
+    @Modifying
+    @Transactional
     void deleteByUserIdAndVideoId(Long userId, Long videoId);
 
-    @Cacheable(unless = "#result==null")
+//    @Cacheable(unless = "#result==null")
     Integer countByUserId(Long userId);
 
-    @Cacheable(unless = "#result==null")
+//    @Cacheable(unless = "#result==null")
     Integer countByVideoId(Long videoId);
 
 
