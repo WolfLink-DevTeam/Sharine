@@ -20,6 +20,7 @@ import org.tcpx.sharine.vo.UserSimpleVO;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +83,7 @@ public class UserService {
         User user = User.builder()
                 .account(account)
                 .password(EncryptionUtil.encode(userPass.getPassword()))
-                .nickname(UserConst.DEFAULT_NICKNAME)
+                .nickname("用户"+ UUID.randomUUID())
                 .avatar(UserConst.DEFAULT_AVATAR)
                 .content(UserConst.DEFAULT_CONTENT)
                 .build();
