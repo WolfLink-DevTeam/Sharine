@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.*;
 import org.tcpx.sharine.dto.CommentDTO;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UploadVideoDTO;
+import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.service.CommentService;
+import org.tcpx.sharine.service.UserService;
 import org.tcpx.sharine.service.VideoService;
+import org.tcpx.sharine.utils.QiniuUtils;
 
 /**
  * 视频信息控制器
@@ -23,6 +26,8 @@ public class VideoController extends BaseController {
 
     final VideoService videoService;
     final CommentService commentService;
+    final UserService userService;
+    final QiniuUtils qiniuUtils;
 
     @PostMapping("/verify")
     public Object verifyVideo(@RequestBody UploadVideoDTO uploadVideoDTO) {
@@ -42,6 +47,9 @@ public class VideoController extends BaseController {
 
     @PutMapping("/{videoId}/comments")
     public Object addVideoComments(@RequestBody CommentDTO commentDTO) {
+        User user = userService.verifyUserPass(commentDTO.getUserPass());
+        if(commentDTO.getContent().isEmpty() || commentDTO.getContent().isBlank()) throw new WarnException(StatusCodeEnum.FAILED_PRECONDITION);
+        if(qiniuUtils.textSensor(commentDTO.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
         commentService.addComment(commentDTO);
         return ok();
     }

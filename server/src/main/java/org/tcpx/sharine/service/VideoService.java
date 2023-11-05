@@ -53,13 +53,14 @@ public class VideoService {
      */
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
         StpUtil.checkLogin();
-        // 用户账户查询
         // 用户数据查询
         User user = userService.verifyUserPass(uploadVideoDTO.getUserPass());
         // 七牛云数据库查询
         FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileKey())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         if (!fileInfo.hash.equals(uploadVideoDTO.getHash())) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);
+        // 文本内容审核
+        if(!qiniuUtils.textSensor(uploadVideoDTO.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
         Video video = Video.of(uploadVideoDTO);
         video.setUserId(user.getId());
         videoRepository.save(video);
