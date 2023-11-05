@@ -1,7 +1,10 @@
-<script setup>
+<script setup lang="ts">
 
 import CategorysContainer from "@/components/CategorysContainer.vue";
 import TopChart from "@/components/TopChart.vue";
+import {Category} from "@/models/Category";
+
+defineEmits(['selectCategory'])
 
 const fivePairs1 = [
     {
@@ -60,7 +63,7 @@ const fivePairs2 = [
                 <TopChart date="2023.10" :five-pairs="fivePairs2" title-img="" title="最常浏览"/>
             </a-col>
         </a-row>
-        <CategorysContainer class="all-category"/>
+        <CategorysContainer class="all-category" @selectCategory="(category:Category) => {$emit('selectCategory',category)}"/>
     </div>
 </template>
 

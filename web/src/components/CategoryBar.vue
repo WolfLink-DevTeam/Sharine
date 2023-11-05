@@ -1,11 +1,20 @@
-<script setup>
-import {useSystemStore} from "@/store/system.ts"
+<script setup lang="ts">
+import {useSystemStore} from "@/store/system"
+import {Category} from "@/models/Category";
+import {getImageUrl} from "@/utilities/ResourceUtility";
 
 // home页面内容和分类得切换
 const systemStore = useSystemStore()
 const changeSearchClick = () => {
     systemStore.homeContentToCategoryChange()
 }
+
+const props = defineProps({
+    category: {
+        type: Category,
+        required: true
+    }
+})
 </script>
 
 <template>
@@ -13,10 +22,10 @@ const changeSearchClick = () => {
         <span style="font-size: 1.5rem;color: var(--primary-text-color);font-weight: lighter">当前</span>
         <span style="font-size: 1.5rem;color: var(--primary-text-color);font-weight: lighter">分区</span>
         <span style="width: 3.5rem;height: 0.15rem;background: #9589BF;margin-bottom: 1rem;margin-top: 1rem"/>
-        <img alt="" src="../assets/category-icon/alltype-category.png"
+        <img alt="" :src="getImageUrl(category.url)"
              style="width: 4rem;height: 4rem;margin-bottom: 1rem">
         <span
-            style=" writing-mode: vertical-rl;text-orientation: upright;font-size: 2.4rem;font-weight: bold;letter-spacing: 0.8rem;color: var(--primary-text-color)">综合</span>
+            style=" writing-mode: vertical-rl;text-orientation: upright;font-size: 2.4rem;font-weight: bold;letter-spacing: 0.8rem;color: var(--primary-text-color)">{{category.title}}</span>
         <div class="toggle-btn" @click="changeSearchClick()">
             <img v-if="systemStore.homeContentToCategory" alt="" class="img"
                  src="../assets/ui-icon/left-icon.png" style="margin-right: 0.3rem;">
