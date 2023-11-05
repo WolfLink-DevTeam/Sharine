@@ -1,20 +1,13 @@
 <script setup lang="ts">
 import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
-import {ref} from "vue";
 import {Video} from "@/models/Video.js";
-import {videoService} from "@/services/VideoService";
-import {User} from "@/models/User";
-import {Category} from "@/models/Category";
-import {timeStrParse} from "@/utilities/ResourceUtility";
 
-const videos = ref(new Array<Video>())
-videoService.getVideos(0,30).then(pack => {
-    pack.data.forEach((it: any) => {
-        const video = videoService.parseVideoVO(it)
-        videos.value.push(video)
-    })
+const props = defineProps({
+    videos: {
+        type: Array<Video>,
+        required: true
+    }
 })
-
 
 </script>
 

@@ -6,21 +6,42 @@ import HomeCategory from '@/views/home/cpns/HomeCategory.vue'
 import { ref } from "vue";
 import { useSystemStore } from "@/store/system"
 import CategoryBar from "@/components/CategoryBar.vue";
+import {Video} from "@/models/Video";
+import {videoService} from "@/services/VideoService";
 
 // home页面内容和分类得切换
 const systemStore = useSystemStore()
 const changeSearchClick = () => {
     systemStore.homeContentToCategoryChange()
 }
+function onSearch(text: string) {
+    if(text.length === 0) {
+        displayVideos.value = videos.value
+    } else {
+        displayVideos.value = displayVideos.value.filter(video => video.title.includes(text) || video.content.includes(text))
+    }
+}
+// 从服务器获取的全部视频
+const videos = ref(new Array<Video>())
+videoService.getVideos(0,30).then(pack => {
+    pack.data.forEach((it: any) => {
+        const video = videoService.parseVideoVO(it)
+        videos.value.push(video)
+    })
+    // 初始化实际展示视频列表
+    displayVideos.value = videos.value
+})
+// 实际展示的视频
+const displayVideos = ref(new Array<Video>())
 </script>
 
 <template>
     <div class="home">
         <div class="search">
-            <SearchBar></SearchBar>
+            <SearchBar @onSearch="onSearch"/>
         </div>
         <div class="home-body">
-            <HomeContent/>
+            <HomeContent :videos="displayVideos"/>
 <!--            <HomeCategory v-show="!systemStore.homeContentToCategory"></HomeCategory>-->
             <div class="category-bar" style="z-index: 10">
                 <CategoryBar style="height: 27rem;width: 5rem;right: 0;"/>
