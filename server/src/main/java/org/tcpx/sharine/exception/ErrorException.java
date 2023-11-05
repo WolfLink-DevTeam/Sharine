@@ -17,17 +17,13 @@ public class ErrorException extends RuntimeException {
      */
     private Integer code = StatusCodeEnum.SYSTEM_ERROR.getCode();
 
-    /**
-     * 错误信息
-     */
-    private final String message;
 
     public ErrorException(String message) {
-        this.message = message;
+        super(message);
     }
 
     public ErrorException(StatusCodeEnum statusCodeEnum) {
+        super(statusCodeEnum.getDesc());
         this.code = statusCodeEnum.getCode();
-        this.message = statusCodeEnum.getDesc();
     }
 }

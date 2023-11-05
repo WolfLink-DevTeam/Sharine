@@ -1,0 +1,29 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "@videojs-player/vue": "^1.0.0",
+    "ant-design-vue": "^4.0.0-rc.6",
+    "axios": "^1.5.1",
+    "less": "^4.2.0",
+    "less-loader": "^11.1.3",
+    "pinia": "^2.1.7",
+    "qiniu-js": "^3.4.1",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "eslint": "^8.52.0",
+    "eslint-plugin-vue": "^9.18.0",
+    "vite": "^4.4.5"
+  }
+}

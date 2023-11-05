@@ -1,5 +1,7 @@
 package org.tcpx.sharine.utils;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class BeanCopyUtils {
         List<T> list = new ArrayList<>();
         if (null != source && !source.isEmpty()) {
             for (Object obj : source) {
-                list.add(BeanCopyUtils.copyObject(obj, target));
+                list.add(copyObject(obj, target));
             }
         }
         return list;

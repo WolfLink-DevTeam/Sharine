@@ -2,12 +2,9 @@ package org.tcpx.sharine.controller;
 
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.vo.PageVO;
 
@@ -16,11 +13,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
-@RequestMapping("")
-public class BaseController {
+public abstract class BaseController {
     @ExceptionHandler(Exception.class)
     protected final Object exception(Exception ex) {
+        ex.printStackTrace();
         return error("程序内部错误: " + ex.getMessage());
     }
 
@@ -46,7 +42,6 @@ public class BaseController {
         map.put("total", total);
         return createResult(StatusCodeEnum.SUCCESS.getCode(), null, map);
     }
-
     protected final Object ok(PageVO<?> data) {
         return ok(data.getList(), data.getTotal());
     }
@@ -59,6 +54,7 @@ public class BaseController {
         return createResult(StatusCodeEnum.SUCCESS.getCode(), null, null);
     }
 
+    protected final Object todo() { return createResult(StatusCodeEnum.TODO.getCode(),StatusCodeEnum.TODO.getDesc(),null); }
     private Object createResult(int code, String msg, Object data) {
         Map<String, Object> result = new HashMap<>(3);
         result.put("code", code);
@@ -72,11 +68,6 @@ public class BaseController {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         CustomDateEditor editor = new CustomDateEditor(format, true);
         binder.registerCustomEditor(Date.class, editor);
-    }
-
-    @GetMapping("hello")
-    public Object hello() {
-        return ok("Hello!");
     }
 
 }

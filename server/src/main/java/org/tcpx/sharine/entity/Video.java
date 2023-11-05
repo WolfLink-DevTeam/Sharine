@@ -1,18 +1,30 @@
 package org.tcpx.sharine.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.tcpx.sharine.constants.DatabaseConstants;
+import org.tcpx.sharine.constants.DatabaseConst;
+import org.tcpx.sharine.dto.UploadVideoDTO;
+import org.tcpx.sharine.enums.VideoTypeEnum;
+import org.tcpx.sharine.utils.BeanCopyUtils;
 
 /**
  * 视频
  */
 @Entity
 @Data
-@Table(name = DatabaseConstants.VIDEO)
+@NoArgsConstructor
+@Table(name = DatabaseConst.VIDEO)
 public class Video {
+
+    public static Video of(UploadVideoDTO uploadVideoDTO) {
+        return BeanCopyUtils.copyObject(uploadVideoDTO, Video.class);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -22,6 +34,9 @@ public class Video {
 
     @Column(nullable = false)
     String title;
+
+    @Column
+    String content;
 
     @Column(nullable = false)
     String url;

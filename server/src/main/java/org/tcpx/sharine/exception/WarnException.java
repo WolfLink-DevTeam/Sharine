@@ -17,19 +17,16 @@ public class WarnException extends RuntimeException {
     /**
      * 错误码
      */
-    private Integer code = StatusCodeEnum.FAIL.getCode();
+    private Integer code;
 
-    /**
-     * 错误信息
-     */
-    private final String message;
 
-    public WarnException(String message) {
-        this.message = message;
+    public WarnException(Integer code,String message) {
+        super(message);
+        this.code = code;
     }
 
     public WarnException(StatusCodeEnum statusCodeEnum) {
+        super(statusCodeEnum.getDesc());
         this.code = statusCodeEnum.getCode();
-        this.message = statusCodeEnum.getDesc();
     }
 }
