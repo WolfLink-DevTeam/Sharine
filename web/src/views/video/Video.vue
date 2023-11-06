@@ -68,7 +68,7 @@ import BasicButton from "@/components/BasicButton.vue";
 import BasicCard from "@/components/BasicCard.vue";
 import CommentItem from "@/components/CommentItem.vue";
 import Divider from "@/components/Divider.vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {Video} from "@/models/Video.js";
 import {videoService} from "@/services/VideoService.js";
 import {ref} from "vue";
@@ -78,20 +78,26 @@ import {userService} from "@/services/UserService";
 import {useSystemStore} from "@/store/system";
 import {categoryService} from "@/services/CategoryService";
 const route = useRoute()
+const router = useRouter()
 // TODO 捕获到视频ID
 // console.log('videoId = '+route.query['videoId'])
-const videoId = Number(route.query['videoId'])
+const videoId = ref(Number(route.query['videoId']))
 const video = ref<Video>(new Video())
-videoService.getVideo(videoId).then(it => {
-    video.value = videoService.parseVideoVO(it.data)
-    videoService.viewVideo(video.value.id)
-    categoryService.hasViewed(video.value)
-})
+
+function initVideo() {
+    videoService.getVideo(videoId.value).then(it => {
+        video.value = videoService.parseVideoVO(it.data)
+        videoService.viewVideo(video.value.id)
+        categoryService.hasViewed(video.value)
+    })
+}
+initVideo()
+
 
 const comments = ref(new Array<VideoComment>)
 
 function updateVideoComments() {
-    videoService.getVideoComments(videoId).then(pack => {
+    videoService.getVideoComments(videoId.value).then(pack => {
         const array: Array<any> = pack.data
         let tempComments = new Array<VideoComment>()
         for (let index in array) {
@@ -115,7 +121,7 @@ function addComment() {
     const comment = new VideoComment()
     comment.content = userCommentText.value
     comment.author = userService.getLocalUser()!
-    comment.videoId = videoId
+    comment.videoId = videoId.value
     comment.replyId = -1
     videoService.addComment(comment).then(pack => {
         if(pack.code === 0) {
@@ -125,27 +131,52 @@ function addComment() {
     })
 }
 
+function up() {
+    videoId.value--
+    router.push('video?videoId='+(videoId.value))
+    initVideo()
+    updateVideoComments()
+}
+function down() {
+    videoId.value++
+    router.push('video?videoId='+(videoId.value))
+    initVideo()
+    updateVideoComments()
+}
+
 // TODO 滚轮翻页
-// 每0.6秒可触发一次鼠标滚轮事件
+// 每0.5秒可触发一次鼠标滚轮事件
 function onWheel(event: any) {
     if(cooldown) return
     cooldown = true
-    setTimeout(()=>cooldown = false,600)
+    setTimeout(()=>cooldown = false,500)
     if (event.deltaY < 0) {
-        console.log('up');
+        up()
     } else {
-        console.log('down');
+        down()
+    }
+}
+function onKeydown(event: any) {
+    if(cooldown) return
+    cooldown = true
+    setTimeout(()=>cooldown = false,500)
+    let e1 = event || window.event || arguments.callee.caller.arguments[0]
+    //键盘按键判断:左箭头-37;上箭头-38；右箭头-39;下箭头-40
+    if (e1 && e1.keyCode == 38) {
+        up()
+    } else if (e1 && e1.keyCode == 40) {
+        down()
     }
 }
 const hasFavorite = ref(false)
 const hasBookmark = ref(false)
-userService.hasFavorite(videoId).then(pack => hasFavorite.value = pack.data)
-userService.hasBookmark(videoId).then(pack => hasBookmark.value = pack.data)
+userService.hasFavorite(videoId.value).then(pack => hasFavorite.value = pack.data)
+userService.hasBookmark(videoId.value).then(pack => hasBookmark.value = pack.data)
 function btnFavorite() {
     let promise = null
     if(hasFavorite.value) {
-        promise = userService.undoFavorite(videoId)
-    } else promise = userService.favorite(videoId)
+        promise = userService.undoFavorite(videoId.value)
+    } else promise = userService.favorite(videoId.value)
     promise.then(pack => {
         if(pack.code === 0) {
             hasFavorite.value = !hasFavorite.value
@@ -157,8 +188,8 @@ function btnFavorite() {
 function btnBookmark() {
     let promise = null
     if(hasBookmark.value) {
-        promise = userService.undoBookmark(videoId)
-    } else promise = userService.bookmark(videoId)
+        promise = userService.undoBookmark(videoId.value)
+    } else promise = userService.bookmark(videoId.value)
     promise.then(pack => {
         if(pack.code === 0) {
             hasBookmark.value = !hasBookmark.value
@@ -167,6 +198,7 @@ function btnBookmark() {
         }
     })
 }
+document.addEventListener('keydown',onKeydown)
 </script>
 
 <style scoped>
