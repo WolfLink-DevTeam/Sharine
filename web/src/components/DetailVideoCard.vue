@@ -58,7 +58,7 @@ function backgroundImgStyle() {
         </a-row>
         <a-col class="cover" :style="backgroundImgStyle()">
             <div class="cover-span">
-                <img src="../assets/ui-icon/like-icon.png" style="width: 2.2rem;height: 2.2rem;margin-left: 1rem" alt="">
+                <img src="../../public/ui-icon/like-icon.png" style="width: 2.2rem;height: 2.2rem;margin-left: 1rem" alt="">
                 <span style="font-family: SHS-Bold,serif;color: white;font-size: 1.2rem;margin-left: 0.6rem">20.6万</span>
                 <span style="position: absolute;right: 1.5rem;color: white;font-size: 1.2rem;font-family: SHS-Bold,serif">04:05</span>
             </div>

@@ -15,7 +15,7 @@ const props = defineProps({
 
 <template>
 <a-row class="card-body" type="flex">
-    <a-col :span="7"><img style="width: 2rem;height: 2rem" :src="getImageUrl(img)" alt=""></a-col>
+    <a-col :span="7"><img style="width: 2rem;height: 2rem" :src="img" alt=""></a-col>
     <a-col :span="2"/>
     <a-col :span="7" class="text">{{text}}</a-col>
 </a-row>

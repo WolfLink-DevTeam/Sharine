@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import LeftBarItem from "@/components/NavBarItem.vue";
 import { useRouter } from "vue-router";
 import {persist} from "@/store/system.js";
+import {getImageUrl} from "@/utilities/ResourceUtility";
 
 const router = useRouter()
 
@@ -28,10 +29,10 @@ function navChange(index: number) {
 
 <template>
     <div class="container">
-        <LeftBarItem img="@/assets/ui-icon/home-navbar-icon.png" title="首页" sub-title="Home" :enabled="navIndex === 0" @click="navChange(0)"/>
-        <LeftBarItem img="@/assets/ui-icon/favorite-navbar-icon.png" title="关注" sub-title="Favorite" :enabled="navIndex === 1" @click="navChange(1)"/>
-        <LeftBarItem img="@/assets/ui-icon/upload-navbar-icon.png" title="投稿" sub-title="Upload" :enabled="navIndex === 2" @click="navChange(2)"/>
-        <LeftBarItem img="@/assets/ui-icon/person-navbar-icon.png" title="个人" sub-title="Person" :enabled="navIndex === 3" @click="navChange(3)"/>
+        <LeftBarItem img="ui-icon/home-navbar-icon.png" title="首页" sub-title="Home" :enabled="navIndex === 0" @click="navChange(0)"/>
+        <LeftBarItem img="ui-icon/favorite-navbar-icon.png" title="关注" sub-title="Favorite" :enabled="navIndex === 1" @click="navChange(1)"/>
+        <LeftBarItem img="ui-icon/upload-navbar-icon.png" title="投稿" sub-title="Upload" :enabled="navIndex === 2" @click="navChange(2)"/>
+        <LeftBarItem img="ui-icon/person-navbar-icon.png" title="个人" sub-title="Person" :enabled="navIndex === 3" @click="navChange(3)"/>
     </div>
 </template>
 

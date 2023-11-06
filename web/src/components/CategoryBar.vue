@@ -28,9 +28,9 @@ const props = defineProps({
             style=" writing-mode: vertical-rl;text-orientation: upright;font-size: 2.4rem;font-weight: bold;letter-spacing: 0.8rem;color: var(--primary-text-color)">{{category.title}}</span>
         <div class="toggle-btn" @click="changeSearchClick()">
             <img v-if="systemStore.homeContentToCategory" alt="" class="img"
-                 src="../assets/ui-icon/left-icon.png" style="margin-right: 0.3rem;">
+                 src="../../public/ui-icon/left-icon.png" style="margin-right: 0.3rem;">
             <img v-if="!systemStore.homeContentToCategory" alt="" class="img"
-                 src="../assets/ui-icon/right-icon.png" style="margin-left: 0.3rem;">
+                 src="../../public/ui-icon/right-icon.png" style="margin-left: 0.3rem;">
         </div>
 
     </div>

@@ -9,7 +9,7 @@ const searchText = ref("")
     <div class="container">
         <input placeholder="搜你想搜..." v-model="searchText" @input="$emit('onSearch',searchText)">
         <button class="circle">
-            <img alt="" src="../assets/ui-icon/search-icon.png" style="width: 2.5rem;height: 2.5rem">
+            <img alt="" src="../../public/ui-icon/search-icon.png" style="width: 2.5rem;height: 2.5rem">
         </button>
     </div>
 </template>
