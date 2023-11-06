@@ -27,11 +27,11 @@ let maxValue = -1
 let subTitle = ref("")
 props.fivePairs.forEach((pair,i,a)=>{
     const v = Number(pair['frequency'])
-    totalValue += v;
+    totalValue += v
     const k = pair['category'].title
     if(v > maxValue) {
-        maxValue = v;
-        subTitle.value = k;
+        maxValue = v
+        subTitle.value = k
     }
 })
 </script>
@@ -41,7 +41,7 @@ props.fivePairs.forEach((pair,i,a)=>{
     <a-row class="row">
         <a-col class="title-part-1">{{title}}</a-col>
         <a-col style="width: 0.2rem;height: 1.8rem;background: #9589BF;border-radius: 0.5rem;margin: 1rem 1rem;"/>
-        <a-col><img src="@/assets/category-icon/live-category.png" alt="" style="width: 2rem;height: 2rem;margin-right: 0.6rem"></a-col>
+        <a-col><img :src="props.fivePairs[0]?.category.url" alt="" style="width: 2rem;height: 2rem;margin-right: 0.6rem"></a-col>
         <a-col class="title-part-2">
             {{subTitle}}
         </a-col>

@@ -1,5 +1,5 @@
-export function getImageUrl(imgName: string) {
-    return imgName.replace("@", "src")
+export function getImageUrl(imgName: string|null) {
+    return imgName?.replace("@", "src") || ""
 }
 export function timeStrParse(time: number): Date {
     const timeStr = String(time)
