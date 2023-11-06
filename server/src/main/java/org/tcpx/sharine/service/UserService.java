@@ -80,7 +80,7 @@ public class UserService {
         User user = User.builder()
                 .account(account)
                 .password(EncryptionUtil.encode(userPass.getPassword()))
-                .nickname("用户"+ UUID.randomUUID())
+                .nickname("用户"+UUID.randomUUID().toString().substring(0,8))
                 .avatar(UserConst.DEFAULT_AVATAR)
                 .content(UserConst.DEFAULT_CONTENT)
                 .build();

@@ -23,5 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Cacheable(unless = "#result==null")
     Optional<User> findByAccount(String account);
 
+    @Cacheable(unless = "#result==null")
     Boolean existsByAccount(String account);
 }
