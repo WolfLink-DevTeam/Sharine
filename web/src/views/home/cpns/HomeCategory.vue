@@ -5,6 +5,7 @@ import TopChart from "@/components/TopChart.vue";
 import {Category} from "@/models/Category";
 import {categoryService} from "@/services/CategoryService";
 import {videoService} from "@/services/VideoService";
+import {simpleDateFormat} from "@/utilities/ResourceUtility";
 
 defineEmits(['selectCategory'])
 
@@ -18,11 +19,11 @@ const categoryFrequencies2 = categoryService.topFiveDailyCategories()
     <div class="category-body">
         <a-row class="chart-row" type="flex">
             <a-col :flex="10">
-                <TopChart date="2023.10" :five-pairs="categoryFrequencies1" title-img="" title="热门分区"/>
+                <TopChart :date="simpleDateFormat(new Date())" :five-pairs="categoryFrequencies1" title-img="" title="热门分区"/>
             </a-col>
             <a-col :flex="2"/>
             <a-col :flex="10">
-                <TopChart date="2023.10" :five-pairs="categoryFrequencies2" title-img="" title="最常浏览"/>
+                <TopChart :date="simpleDateFormat(new Date())" :five-pairs="categoryFrequencies2" title-img="" title="最常浏览"/>
             </a-col>
         </a-row>
         <CategorysContainer class="all-category" @selectCategory="(category:Category) => {$emit('selectCategory',category)}"/>

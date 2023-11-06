@@ -103,8 +103,7 @@ props.fivePairs.forEach((pair,i,a)=>{
 .date {
     position: absolute;
     right: 1rem;
-    padding: 0.4rem;
-    width: 6rem;
+    padding: 0.4rem 0.5rem;
     text-align: center;
     border-radius: 1.2rem;
     background: rgba(0, 0, 0, 0.3);
