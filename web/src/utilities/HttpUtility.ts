@@ -3,8 +3,8 @@ import {ResponsePack} from "@/models/ResponsePack";
 import {userService} from "@/services/UserService";
 
 export const httpClient = axios.create({
-    baseURL: import.meta.env.VITE_SHARINE_API_BASE_URL,
-    timeout: Number(import.meta.env.VITE_SHARINE_API_TIMEOUT)
+    baseURL: import.meta.env.VITE_SHARINE_SERVER_URL,
+    timeout: 1000
 });
 
 httpClient.interceptors.request.use(

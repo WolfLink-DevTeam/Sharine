@@ -24,7 +24,7 @@ export class AccountService {
                 return true;
             }
             else {
-                alert(pack.msg)
+                if(pack.msg.length !== 0) alert(pack.msg)
                 return false;
             }
         }).catch(error => {
