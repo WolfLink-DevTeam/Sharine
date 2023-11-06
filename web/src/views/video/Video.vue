@@ -76,6 +76,7 @@ import {dateFormat} from "../../utilities/ResourceUtility";
 import {VideoComment} from "@/models/VideoComment";
 import {userService} from "@/services/UserService";
 import {useSystemStore} from "@/store/system";
+import {categoryService} from "@/services/CategoryService";
 const route = useRoute()
 // TODO 捕获到视频ID
 // console.log('videoId = '+route.query['videoId'])
@@ -84,6 +85,7 @@ const video = ref<Video>(new Video())
 videoService.getVideo(videoId).then(it => {
     video.value = videoService.parseVideoVO(it.data)
     videoService.viewVideo(video.value.id)
+    categoryService.hasViewed(video.value)
 })
 
 const comments = ref(new Array<VideoComment>)

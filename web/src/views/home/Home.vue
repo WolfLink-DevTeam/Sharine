@@ -24,7 +24,7 @@ function onSearch(text: string) {
     }
 }
 // 从服务器获取的全部视频
-const videos = ref(new Array<Video>())
+const videos = videoService.videos
 // 分区视频列表
 const categoryVideos = ref(new Array<Video>())
 // 实际展示的视频

@@ -7,8 +7,13 @@ import {Category} from "@/models/Category";
 import {VideoComment} from "@/models/VideoComment";
 import {userService} from "@/services/UserService";
 import {VideoType, VideoTypeChineseName} from "@/models/VideoType";
+import {ref} from "vue";
+import {categoryService} from "@/services/CategoryService";
 
 export class VideoService {
+
+    videos = ref(new Array<Video>())
+
     async viewVideo(videoId: number) {
         httpClient.get("/videos/"+videoId+"/addViewCount")
     }
