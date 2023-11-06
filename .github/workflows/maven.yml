@@ -25,5 +25,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: artifact
-        path: target/*.jar
+        path: server/target/*.jar
         retention-days: 15
