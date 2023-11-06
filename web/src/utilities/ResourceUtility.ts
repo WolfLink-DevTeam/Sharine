@@ -1,5 +1,5 @@
-export function getImageUrl(imgName: string) {
-    return imgName.replace("@", "src")
+export function getImageUrl(imgName: string|null) {
+    return imgName?.replace("@", "src") || ""
 }
 export function timeStrParse(time: number): Date {
     const timeStr = String(time)
@@ -19,4 +19,10 @@ export function dateFormat(date: Date): string {
     const minute = date.getMinutes().toString().padStart(2, '0')
     const second = date.getSeconds().toString().padStart(2, '0')
     return `${year}-${month}-${day} ${hour}:${minute}:${second}`
+}
+export function simpleDateFormat(date: Date): string {
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const day = date.getDate().toString().padStart(2, '0')
+    return `${year}-${month}-${day}`
 }

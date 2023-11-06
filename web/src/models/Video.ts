@@ -15,6 +15,7 @@ export class Video {
     comments: Array<VideoComment> = new Array<VideoComment>()
     bookmarkCount: number = 0
     favoriteCount: number = 0
+    viewCount: number = 0
     createTime: Date = new Date()
     updateTime: Date = new Date()
 }

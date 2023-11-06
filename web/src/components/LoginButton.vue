@@ -42,10 +42,14 @@ function setRegister(value: boolean) {
             return
         }
         userService.register(verificationCode.value).then(pack => {
-            console.log(pack)
+            if(pack.code === 0) {
+                alert("注册成功！现在可以登录了。")
+                setModalVisible(false)
+            } else {
+                alert("注册失败，原因："+pack.msg)
+            }
         })
     }
-
     isRegister.value = value
 }
 function btnLogin() {

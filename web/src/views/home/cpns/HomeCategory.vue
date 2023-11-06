@@ -1,66 +1,32 @@
-<script setup>
+<script setup lang="ts">
 
 import CategorysContainer from "@/components/CategorysContainer.vue";
 import TopChart from "@/components/TopChart.vue";
+import {Category} from "@/models/Category";
+import {categoryService} from "@/services/CategoryService";
+import {videoService} from "@/services/VideoService";
+import {simpleDateFormat} from "@/utilities/ResourceUtility";
 
-const fivePairs1 = [
-    {
-        key: "生活",
-        value: 0.2
-    },
-    {
-        key: "游戏",
-        value: 0.6
-    },
-    {
-        key: "娱乐",
-        value: 0.15
-    },
-    {
-        key: "科技",
-        value: 0.3
-    },
-    {
-        key: "音乐",
-        value: 0.9
-    },
-]
-const fivePairs2 = [
-    {
-        key: "生活",
-        value: 0.4
-    },
-    {
-        key: "游戏",
-        value: 0.35
-    },
-    {
-        key: "娱乐",
-        value: 0.2
-    },
-    {
-        key: "科技",
-        value: 0.7
-    },
-    {
-        key: "音乐",
-        value: 0.5
-    },
-]
+defineEmits(['selectCategory'])
+
+const categoryFrequencies1 =
+categoryService.topFiveHotCategories(videoService.videos.value)
+
+const categoryFrequencies2 = categoryService.topFiveDailyCategories()
 </script>
 
 <template>
     <div class="category-body">
         <a-row class="chart-row" type="flex">
             <a-col :flex="10">
-                <TopChart date="2023.10" :five-pairs="fivePairs1" title-img="" title="热门分区"/>
+                <TopChart :date="simpleDateFormat(new Date())" :five-pairs="categoryFrequencies1" title-img="" title="热门分区"/>
             </a-col>
             <a-col :flex="2"/>
             <a-col :flex="10">
-                <TopChart date="2023.10" :five-pairs="fivePairs2" title-img="" title="最常浏览"/>
+                <TopChart :date="simpleDateFormat(new Date())" :five-pairs="categoryFrequencies2" title-img="" title="最常浏览"/>
             </a-col>
         </a-row>
-        <CategorysContainer class="all-category"/>
+        <CategorysContainer class="all-category" @selectCategory="(category:Category) => {$emit('selectCategory',category)}"/>
     </div>
 </template>
 

@@ -7,8 +7,16 @@ import {Category} from "@/models/Category";
 import {VideoComment} from "@/models/VideoComment";
 import {userService} from "@/services/UserService";
 import {VideoType, VideoTypeChineseName} from "@/models/VideoType";
+import {ref} from "vue";
+import {categoryService} from "@/services/CategoryService";
 
 export class VideoService {
+
+    videos = ref(new Array<Video>())
+
+    async viewVideo(videoId: number) {
+        httpClient.get("/videos/"+videoId+"/addViewCount")
+    }
     async uploadVideo(fileKey: string,hash: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,videoType: VideoType) {
         return pack(httpClient.post("/videos/verify",{
             userPass: {
@@ -82,6 +90,7 @@ export class VideoService {
         video.id = videoVO.id
         video.favoriteCount = videoVO.favoriteCount
         video.bookmarkCount = videoVO.bookmarkCount
+        video.viewCount = videoVO.viewCount
 
         const author = new User()
         author.nickname = videoVO.author.nickname

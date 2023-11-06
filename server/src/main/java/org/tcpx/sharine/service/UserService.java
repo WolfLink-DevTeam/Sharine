@@ -1,7 +1,9 @@
 package org.tcpx.sharine.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.constants.RedisPrefixConst;
 import org.tcpx.sharine.constants.UserConst;
@@ -11,6 +13,7 @@ import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.ErrorException;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.BookmarkRepository;
+import org.tcpx.sharine.repository.FavoriteRepository;
 import org.tcpx.sharine.repository.UserRepository;
 import org.tcpx.sharine.utils.EncryptionUtil;
 import org.tcpx.sharine.utils.StringUtils;
@@ -20,35 +23,30 @@ import org.tcpx.sharine.vo.UserSimpleVO;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+    @Resource
+    UserRepository userRepository;
+    @Resource
+    BookmarkRepository bookmarkRepository;
+    @Resource
+    FavoriteRepository favoriteRepository;
+    @Resource
+    FavoriteService favoriteService;
+    @Resource
+    UserRelationService userRelationService;
+    @Resource
+    RedisService redisService;
+    @Resource
+    EmailService emailService;
+    @Resource
+    @Lazy
+    VideoService videoService;
 
-    final UserRepository userRepository;
-    final BookmarkRepository bookmarkRepository;
-
-    final FavoriteService favoriteService;
-
-    final UserRelationService userRelationService;
-
-    final RedisService redisService;
-
-    final EmailService emailService;
-
-    public UserService(UserRepository userRepository,
-                       FavoriteService favoriteService,
-                       UserRelationService userRelationService,
-                       RedisService redisService,
-                       EmailService emailService,
-                       BookmarkRepository bookmarkRepository) {
-        this.userRepository = userRepository;
-        this.favoriteService = favoriteService;
-        this.userRelationService = userRelationService;
-        this.redisService = redisService;
-        this.emailService = emailService;
-        this.bookmarkRepository = bookmarkRepository;
-    }
 
     public UserSimpleVO login(UserPass userPass) {
         User user = verifyUserPass(userPass);
@@ -82,7 +80,7 @@ public class UserService {
         User user = User.builder()
                 .account(account)
                 .password(EncryptionUtil.encode(userPass.getPassword()))
-                .nickname(UserConst.DEFAULT_NICKNAME)
+                .nickname("用户"+UUID.randomUUID().toString().substring(0,8))
                 .avatar(UserConst.DEFAULT_AVATAR)
                 .content(UserConst.DEFAULT_CONTENT)
                 .build();
@@ -199,7 +197,14 @@ public class UserService {
         userDetailVO.setFollowingCount(userRelationService.countUserFollowing(userId));
         userDetailVO.setFollowedCount(userRelationService.countUserFollowed(userId));
         userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId).longValue());
-
+        AtomicReference<Long> beenFavoriteCount = new AtomicReference<>(0L);
+        AtomicReference<Long> beenViewCount = new AtomicReference<>(0L);
+        videoService.findVideosByUserId(userId).forEach(video -> {
+            beenFavoriteCount.updateAndGet(v -> v + favoriteRepository.countByVideoId(video.getId()));
+            beenViewCount.updateAndGet(v -> v + video.getViewCount());
+        });
+        userDetailVO.setBeenFavoriteCount(beenFavoriteCount.get());
+        userDetailVO.setBeenViewCount(beenViewCount.get());
         return userDetailVO;
     }
 

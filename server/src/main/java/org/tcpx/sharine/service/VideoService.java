@@ -41,10 +41,13 @@ public class VideoService {
 
     final SubscribeChannelService subscribeChannelService;
 
-    public VideoService(UserService userService, VideoCategoryService videoCategoryService, SubscribeChannelService subscribeChannelService) {
+    final RedisService redisService;
+
+    public VideoService(UserService userService, VideoCategoryService videoCategoryService, SubscribeChannelService subscribeChannelService,RedisService redisService) {
         this.userService = userService;
         this.videoCategoryService = videoCategoryService;
         this.subscribeChannelService = subscribeChannelService;
+        this.redisService = redisService;
     }
 
     /**
@@ -53,15 +56,17 @@ public class VideoService {
      */
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
         StpUtil.checkLogin();
-        // 用户账户查询
         // 用户数据查询
         User user = userService.verifyUserPass(uploadVideoDTO.getUserPass());
         // 七牛云数据库查询
         FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileKey())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         if (!fileInfo.hash.equals(uploadVideoDTO.getHash())) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);
+        // 文本内容审核
+        if(!qiniuUtils.textSensor(uploadVideoDTO.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
         Video video = Video.of(uploadVideoDTO);
         video.setUserId(user.getId());
+        video.setViewCount(0L);
         videoRepository.save(video);
         videoCategoryService.saveVideoCategoryRelation(video.getId(), uploadVideoDTO.getCategoryId());
         // 异步更新视频队列
@@ -73,8 +78,11 @@ public class VideoService {
      * @param userId    用户ID
      * @return          用户投稿视频信息列表
      */
-    public List<VideoVO> findVideosByUserId(Long userId) {
-        return buildVideoVOs(videoRepository.findAllByUserId(userId));
+    public List<VideoVO> findVideoVOsByUserId(Long userId) {
+        return buildVideoVOs(findVideosByUserId(userId));
+    }
+    public List<Video> findVideosByUserId(Long userId) {
+        return videoRepository.findAllByUserId(userId);
     }
 
     /**

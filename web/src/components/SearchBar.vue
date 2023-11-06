@@ -1,14 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import {ref} from "vue";
 
+defineEmits(['onSearch'])
 const searchText = ref("")
 </script>
 
 <template>
     <div class="container">
-        <input placeholder="搜你想搜..." v-model="searchText">
+        <input placeholder="搜你想搜..." v-model="searchText" @input="$emit('onSearch',searchText)">
         <button class="circle">
-            <img src="../assets/ui-icon/search-icon.png" style="width: 2.5rem;height: 2.5rem">
+            <img alt="" src="../../public/ui-icon/search-icon.png" style="width: 2.5rem;height: 2.5rem">
         </button>
     </div>
 </template>

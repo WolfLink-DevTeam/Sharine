@@ -8,6 +8,7 @@ import org.tcpx.sharine.entity.Bookmark;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.BookmarkRepository;
+import org.tcpx.sharine.repository.UserRelationRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +17,11 @@ import java.util.stream.Collectors;
 public class BookmarkService {
 
     final BookmarkRepository bookmarkRepository;
+    final UserRelationService userRelationService;
 
-    public BookmarkService(BookmarkRepository bookmarkRepository) {
+    public BookmarkService(BookmarkRepository bookmarkRepository,UserRelationService userRelationService) {
         this.bookmarkRepository = bookmarkRepository;
+        this.userRelationService = userRelationService;
     }
 
     /**
@@ -28,12 +31,16 @@ public class BookmarkService {
      * @param videoId 视频ID
      */
     public void bookmarkVideo(Long userId, Long videoId) {
-        // 已经点赞了
-        if (bookmarkRepository.existsByUserIdAndVideoId(userId, videoId)) {
+        // 已经收藏
+        if (hasBookmarkVideo(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_EXIST);
         }
         Bookmark bookmark = Bookmark.builder().userId(userId).videoId(videoId).build();
         bookmarkRepository.save(bookmark);
+        userRelationService.followVideo(userId,videoId);
+    }
+    public boolean hasBookmarkVideo(Long userId,Long videoId) {
+        return bookmarkRepository.existsByUserIdAndVideoId(userId,videoId);
     }
 
     /**
@@ -48,6 +55,7 @@ public class BookmarkService {
             throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
         }
         bookmarkRepository.deleteByUserIdAndVideoId(userId, videoId);
+        userRelationService.undoFollowVideo(userId,videoId);
     }
 
     public List<Long> findUserBookmarkVideoIds(Long userId) {

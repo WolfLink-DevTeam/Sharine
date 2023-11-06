@@ -5,15 +5,14 @@
                 <span id="title" class="text-shadow-focus">{{video.title}}</span>
                 <span id="subTitle">
 <!--                    TODO-->
-                    <span class="titleTag box-shadow-focus" style="margin-right: 1rem;">播放 114514万(TODO)</span>
-                    <span class="titleTag box-shadow-focus">{{ dateFormat(video.createTime) }}</span>
+                    <span class="titleTag box-shadow-focus" style="margin-right: 1rem;justify-content: center;display: flex"><img src="@/assets/ui-icon/view-count.png" style="height: 1.5rem;width: 1.5rem;margin-right: 0.5rem">{{video.viewCount}}</span>
+                    <span class="titleTag box-shadow-focus" style="justify-content: center;display: flex"><img src="@/assets/ui-icon/date-icon.png" style="height: 1.5rem;width: 1.5rem;margin-right: 0.5rem">{{ dateFormat(video.createTime) }}</span>
                 </span>
             </span>
-            <div class="box-shadow-focus" style="width: 72rem;height: 0.15rem;background: #555D8B;margin-bottom: 1rem;border-radius: 1rem"/>
-            <div class="box-shadow-focus" style="border-radius: 1rem" @wheel="onWheel">
+            <div class="box-shadow-focus" style="width: 60vw;height: 0.15rem;background: #555D8B;margin-bottom: 1rem;border-radius: 1rem"/>
+            <div class="box-shadow-focus" style="border-radius: 1rem;width: 60vw" @wheel="onWheel">
                 <video-player
-                    :height="648"
-                    :width="1152"
+                    style="height: 60vh;width: 100%"
                     :src="video.url"
                     poster=""
                     autoplay="true"
@@ -21,15 +20,19 @@
                     :loop="true"
                     :volume="0.6"/>
                 <span id="videoActions">
-                <BasicButton class="actionBtn" width="8rem" height="3rem">
-                    <img class="actionImg" src="@/assets/ui-icon/like-icon.png" alt=""><span class="actionText">{{video.favoriteCount}}</span>
+                <BasicButton class="actionBtn" width="8rem" height="3rem" @click="btnFavorite">
+                    <img class="actionImg" src="@/assets/ui-icon/like-icon.png" alt="" v-if="!hasFavorite">
+                    <img class="actionImg" src="@/assets/ui-icon/filled-like-icon.png" alt="" v-else>
+                    <span class="actionText">{{video.favoriteCount}}</span>
                 </BasicButton>
-                <BasicButton class="actionBtn" width="8rem" height="3rem">
-                    <img class="actionImg" src="@/assets/ui-icon/bookmark-icon.png" alt=""><span class="actionText">{{video.bookmarkCount}}</span>
+                <BasicButton class="actionBtn" width="8rem" height="3rem" @click="btnBookmark">
+                    <img class="actionImg" src="@/assets/ui-icon/bookmark-icon.png" alt="" v-if="!hasBookmark">
+                    <img class="actionImg" src="@/assets/ui-icon/filled-bookmark-icon.png" alt="" v-else>
+                    <span class="actionText">{{video.bookmarkCount}}</span>
                 </BasicButton>
-                <BasicButton class="actionBtn" width="8rem" height="3rem">
-                    <img class="actionImg" src="@/assets/ui-icon/share-icon.png" alt=""><span class="actionText">转发</span>
-                </BasicButton>
+<!--                <BasicButton class="actionBtn" width="8rem" height="3rem">-->
+<!--                    <img class="actionImg" src="@/assets/ui-icon/share-icon.png" alt=""><span class="actionText">转发</span>-->
+<!--                </BasicButton>-->
             </span>
             </div>
         </div>
@@ -42,10 +45,10 @@
             </BasicCard>
             <BasicCard width="80%" height="55%" class="box-shadow-focus" style="display: flex;flex-direction: column;">
                 <div style="margin-bottom: 1rem;width: 100%;display: flex;flex-direction: row">
-                    <span style="width: 15%;margin-left: 3%;font-size: 1.4rem;font-family: SHS-Bold,serif">| 评论</span>
-                    <a-input-group compact style="width: 75%;margin-left: 3%" v-show="useSystemStore().isLogin">
-                        <a-input v-model:value="userCommentText" style="width: 80%" />
-                        <a-button type="primary" style="width: 20%" @click="addComment">发布</a-button>
+                    <span style="width: 4rem;margin-left: 3%;font-size: 1.4rem;font-family: SHS-Bold,serif">| 评论</span>
+                    <a-input-group compact style="width: 80%;margin-left: 3%" v-show="useSystemStore().isLogin">
+                        <a-input v-model:value="userCommentText" style="width: 70%" />
+                        <a-button type="primary" style="width: 25%;" @click="addComment">发布</a-button>
                     </a-input-group>
                 </div>
                 <div class="card-body">
@@ -65,7 +68,7 @@ import BasicButton from "@/components/BasicButton.vue";
 import BasicCard from "@/components/BasicCard.vue";
 import CommentItem from "@/components/CommentItem.vue";
 import Divider from "@/components/Divider.vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {Video} from "@/models/Video.js";
 import {videoService} from "@/services/VideoService.js";
 import {ref} from "vue";
@@ -73,19 +76,28 @@ import {dateFormat} from "../../utilities/ResourceUtility";
 import {VideoComment} from "@/models/VideoComment";
 import {userService} from "@/services/UserService";
 import {useSystemStore} from "@/store/system";
+import {categoryService} from "@/services/CategoryService";
 const route = useRoute()
+const router = useRouter()
 // TODO 捕获到视频ID
 // console.log('videoId = '+route.query['videoId'])
-const videoId = Number(route.query['videoId'])
+const videoId = ref(Number(route.query['videoId']))
 const video = ref<Video>(new Video())
-videoService.getVideo(videoId).then(it => {
-    video.value = videoService.parseVideoVO(it.data)
-})
+
+function initVideo() {
+    videoService.getVideo(videoId.value).then(it => {
+        video.value = videoService.parseVideoVO(it.data)
+        videoService.viewVideo(video.value.id)
+        categoryService.hasViewed(video.value)
+    })
+}
+initVideo()
+
 
 const comments = ref(new Array<VideoComment>)
 
 function updateVideoComments() {
-    videoService.getVideoComments(videoId).then(pack => {
+    videoService.getVideoComments(videoId.value).then(pack => {
         const array: Array<any> = pack.data
         let tempComments = new Array<VideoComment>()
         for (let index in array) {
@@ -109,7 +121,7 @@ function addComment() {
     const comment = new VideoComment()
     comment.content = userCommentText.value
     comment.author = userService.getLocalUser()!
-    comment.videoId = videoId
+    comment.videoId = videoId.value
     comment.replyId = -1
     videoService.addComment(comment).then(pack => {
         if(pack.code === 0) {
@@ -119,25 +131,81 @@ function addComment() {
     })
 }
 
+function up() {
+    videoId.value--
+    router.push('video?videoId='+(videoId.value))
+    initVideo()
+    updateVideoComments()
+}
+function down() {
+    videoId.value++
+    router.push('video?videoId='+(videoId.value))
+    initVideo()
+    updateVideoComments()
+}
+
 // TODO 滚轮翻页
-// 每0.6秒可触发一次鼠标滚轮事件
+// 每0.5秒可触发一次鼠标滚轮事件
 function onWheel(event: any) {
     if(cooldown) return
     cooldown = true
-    setTimeout(()=>cooldown = false,600)
+    setTimeout(()=>cooldown = false,500)
     if (event.deltaY < 0) {
-        console.log('up');
+        up()
     } else {
-        console.log('down');
+        down()
     }
 }
+function onKeydown(event: any) {
+    if(cooldown) return
+    cooldown = true
+    setTimeout(()=>cooldown = false,500)
+    let e1 = event || window.event || arguments.callee.caller.arguments[0]
+    //键盘按键判断:左箭头-37;上箭头-38；右箭头-39;下箭头-40
+    if (e1 && e1.keyCode == 38) {
+        up()
+    } else if (e1 && e1.keyCode == 40) {
+        down()
+    }
+}
+const hasFavorite = ref(false)
+const hasBookmark = ref(false)
+userService.hasFavorite(videoId.value).then(pack => hasFavorite.value = pack.data)
+userService.hasBookmark(videoId.value).then(pack => hasBookmark.value = pack.data)
+function btnFavorite() {
+    let promise = null
+    if(hasFavorite.value) {
+        promise = userService.undoFavorite(videoId.value)
+    } else promise = userService.favorite(videoId.value)
+    promise.then(pack => {
+        if(pack.code === 0) {
+            hasFavorite.value = !hasFavorite.value
+            if(hasFavorite.value) video.value.favoriteCount++
+            else video.value.favoriteCount--
+        }
+    })
+}
+function btnBookmark() {
+    let promise = null
+    if(hasBookmark.value) {
+        promise = userService.undoBookmark(videoId.value)
+    } else promise = userService.bookmark(videoId.value)
+    promise.then(pack => {
+        if(pack.code === 0) {
+            hasBookmark.value = !hasBookmark.value
+            if(hasBookmark.value) video.value.bookmarkCount++
+            else video.value.bookmarkCount--
+        }
+    })
+}
+document.addEventListener('keydown',onKeydown)
 </script>
 
 <style scoped>
 #title {
     font-size: 1.8rem;
     font-family: SHS-Medium,serif;
-    width: 60rem;
+    width: 60vw;
 }
 #subTitle {
     display: flex;
@@ -155,7 +223,7 @@ function onWheel(event: any) {
 #videoActions {
     background: #555D8B;
     border-radius: 0 0 1rem 1rem;
-    width: 72rem;
+    width: 60vw;
     height: 4rem;
     display: flex;
     align-items: center;
@@ -165,7 +233,7 @@ function onWheel(event: any) {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 72rem;
+    width: 60vw;
     height: 4rem;
 //background: #555D8B;
     border-radius: 1rem 1rem 0 0;

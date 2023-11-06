@@ -72,6 +72,18 @@ export class UserService {
             password: this.getPassword()
         }))
     }
+    async hasFavorite(videoId: number) {
+        return pack(httpClient.post("/users/favorite/"+videoId+"/status",{
+            account: this.getAccount(),
+            password: this.getPassword()
+        }))
+    }
+    async hasBookmark(videoId: number) {
+        return pack(httpClient.post("/users/bookmark/"+videoId+"/status",{
+            account: this.getAccount(),
+            password: this.getPassword()
+        }))
+    }
     async undoFavorite(videoId: number) {
         return pack(httpClient.delete("/users/favorite/"+videoId,{
             data: {
@@ -128,6 +140,22 @@ export class UserService {
                 password: this.getPassword()
             }
         }))
+    }
+    parseUserVO(userVO: any): User {
+        const user = new User()
+        user.id = userVO.id
+        user.nickname = userVO.nickname
+        user.avatar = userVO.avatar
+        user.content = userVO.content
+        user.followedCount = userVO.followedCount
+        user.followingCount = userVO.followingCount
+        user.favoriteCount = userVO.favoriteCount
+        user.bookmarkCount = userVO.bookmarkCount
+        user.beenFavoriteCount = userVO.beenFavoriteCount
+        user.beenViewCount = userVO.beenViewCount
+        user.createTime = userVO.createTime
+        user.updateTime = userVO.updateTime
+        return user
     }
 }
 export const userService = new UserService()

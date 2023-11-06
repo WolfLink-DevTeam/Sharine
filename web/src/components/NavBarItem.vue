@@ -25,7 +25,7 @@ defineEmits(['click'])
 <template>
     <!--启用-->
     <button class="enabled" v-if="enabled">
-        <img :src="getImageUrl(img)" alt="">
+        <img :src="img" alt="">
         <span class="title">
             {{ title }}
         </span>
@@ -35,7 +35,7 @@ defineEmits(['click'])
     </button>
     <!--禁用-->
     <button v-else class="disabled" @click="$emit('click')">
-        <img :src="getImageUrl(img)" alt="">
+        <img :src="img" alt="">
     </button>
 </template>
 

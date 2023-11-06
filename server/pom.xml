@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>org.tcpx.sharine</groupId>
 	<artifactId>server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>SharineBackend</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Sharine , Web Platform of Short Videos</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

@@ -17,7 +17,7 @@ export class QiniuService {
     }
     getVideoFrameUrl(videoUrl: string,frameId: number) {
         const name = videoUrl.substring(0,videoUrl.lastIndexOf('.'))
-        return name+"frame"+frameId+".jpg"
+        return name+"frame00000"+frameId+".jpg"
     }
 }
 export const qiniuService = new QiniuService()

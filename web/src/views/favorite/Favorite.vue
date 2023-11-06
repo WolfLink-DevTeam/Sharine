@@ -5,12 +5,13 @@ import {Video} from "@/models/Video";
 import {videoService} from "@/services/VideoService";
 import {userService} from "@/services/UserService";
 import {useSystemStore} from "@/store/system";
-const videos = new Array<Video>()
+import {ref} from "vue";
+const videos = ref(new Array<Video>())
 
 if(useSystemStore().isLogin) {
     userService.getSubscribeVideos().then(pack => {
         pack.data?.forEach((it:any)=>{
-            videos.push(videoService.parseVideoVO(it))
+            videos.value.push(videoService.parseVideoVO(it))
         })
     })
 }
@@ -18,15 +19,19 @@ if(useSystemStore().isLogin) {
 
 <template>
     <div class="favorite" v-if="useSystemStore().isLogin">
-        <div class="search">
-            <SearchBar></SearchBar>
-        </div>
-        <div class="favorite-page">
+<!--        <div class="search">-->
+<!--            <SearchBar></SearchBar>-->
+<!--        </div>-->
+        <div class="favorite-page" v-if="videos.length > 0">
             <div class="favorite-list">
                 <template v-for="(video,index) in videos" :key="video">
-                    <DetailVideoCard :direction="index%2===0 ? 'left' : 'right'"/>
+                    <DetailVideoCard :video="video" :direction="index%2===0 ? 'left' : 'right'"/>
                 </template>
             </div>
+        </div>
+        <div v-else style="display: flex;flex-direction: column;font-size: 2rem;width: 100%;height: 100%;justify-content: center;align-items: center;font-family: SHS-Bold,serif">
+            <img src="@/assets/no-data.png" alt="">
+            <span>暂时还没有关注的UP主投稿视频哦~</span>
         </div>
     </div>
     <div v-else style="width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;flex-direction: column">

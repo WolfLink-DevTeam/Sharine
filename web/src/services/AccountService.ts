@@ -17,24 +17,14 @@ export class AccountService {
         return userService.login().then(pack => {
             if(pack.code === 0) {
                 const userSimpleVO = pack.data.userSimpleVO
-                const user = new User()
-                user.id = userSimpleVO.id
-                user.nickname = userSimpleVO.nickname
-                user.avatar = userSimpleVO.avatar
-                user.content = userSimpleVO.content
-                user.followedCount = userSimpleVO.followedCount
-                user.followingCount = userSimpleVO.followingCount
-                user.favoriteCount = userSimpleVO.favoriteCount
-                user.bookmarkCount = userSimpleVO.bookmarkCount
-                user.createTime = userSimpleVO.createTime
-                user.updateTime = userSimpleVO.updateTime
+                const user = userService.parseUserVO(userSimpleVO)
                 userService.saveLocalUser(user)
                 userService.saveToken(pack.data.token)
                 useSystemStore().login()
                 return true;
             }
             else {
-                alert(pack.msg)
+                if(pack.msg.length !== 0) alert(pack.msg)
                 return false;
             }
         }).catch(error => {

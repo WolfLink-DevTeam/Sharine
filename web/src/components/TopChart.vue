@@ -20,18 +20,18 @@ const props = defineProps({
         required:true
     }
 })
-props.fivePairs.sort((a,b)=>a['value'] - b['value'])
+props.fivePairs.sort((a,b)=>a['frequency'] - b['frequency'])
 const maxHeight = 10
 let totalValue = 0
 let maxValue = -1
 let subTitle = ref("")
 props.fivePairs.forEach((pair,i,a)=>{
-    const v = Number(pair['value'])
-    totalValue += v;
-    const k = pair['key']
+    const v = Number(pair['frequency'])
+    totalValue += v
+    const k = pair['category'].title
     if(v > maxValue) {
-        maxValue = v;
-        subTitle.value = k;
+        maxValue = v
+        subTitle.value = k
     }
 })
 </script>
@@ -41,7 +41,7 @@ props.fivePairs.forEach((pair,i,a)=>{
     <a-row class="row">
         <a-col class="title-part-1">{{title}}</a-col>
         <a-col style="width: 0.2rem;height: 1.8rem;background: #9589BF;border-radius: 0.5rem;margin: 1rem 1rem;"/>
-        <a-col><img src="@/assets/category-icon/live-category.png" alt="" style="width: 2rem;height: 2rem;margin-right: 0.6rem"></a-col>
+        <a-col><img :src="props.fivePairs[0]?.category.url" alt="" style="width: 2rem;height: 2rem;margin-right: 0.6rem"></a-col>
         <a-col class="title-part-2">
             {{subTitle}}
         </a-col>
@@ -54,16 +54,16 @@ props.fivePairs.forEach((pair,i,a)=>{
             5</a-col>
         <a-col :span="20" style="width: 100%;height: 100%">
             <a-row class="pillar-body">
-                <template v-for="item in fivePairs" :key="item['value']">
+                <template v-for="item in fivePairs" :key="item['frequency']">
                     <a-col :flex="1" class="pillar-col">
-                        <div :style="{height: item['value'] * maxHeight+'rem'}" class="pillar"/>
+                        <div :style="{height: item['frequency'] * maxHeight+'rem'}" class="pillar"/>
                     </a-col>
                 </template>
             </a-row>
             <a-row class="divider-line"/>
             <a-row class="text-body" justify="space-between">
-                <template v-for="item in fivePairs" :key="item['value']">
-                    <a-col :flex="1">{{item['key']}}</a-col>
+                <template v-for="item in fivePairs" :key="item['frequency']">
+                    <a-col :flex="1">{{item['category'].title}}</a-col>
                 </template>
             </a-row>
         </a-col>
@@ -103,8 +103,7 @@ props.fivePairs.forEach((pair,i,a)=>{
 .date {
     position: absolute;
     right: 1rem;
-    padding: 0.4rem;
-    width: 6rem;
+    padding: 0.4rem 0.5rem;
     text-align: center;
     border-radius: 1.2rem;
     background: rgba(0, 0, 0, 0.3);
