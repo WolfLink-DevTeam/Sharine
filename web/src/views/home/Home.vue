@@ -30,16 +30,22 @@ const categoryVideos = ref(new Array<Video>())
 // 实际展示的视频
 const displayVideos = ref(new Array<Video>())
 
-videoService.getVideos(0,30).then(pack => {
-    pack.data.forEach((it: any) => {
-        const video = videoService.parseVideoVO(it)
-        videos.value.push(video)
+const page = ref(0)
+function getVideosByPage() {
+    videoService.getVideos(page.value++,30).then(pack => {
+        pack.data.forEach((it: any) => {
+            const video = videoService.parseVideoVO(it)
+            videos.value.push(video)
+        })
+
     })
-    // 初始化分区视频列表
-    categoryVideos.value = videos.value
-    // 初始化实际展示视频列表
-    displayVideos.value = videos.value
-})
+}
+getVideosByPage()
+// 初始化分区视频列表
+categoryVideos.value = videos.value
+// 初始化实际展示视频列表
+displayVideos.value = videos.value
+
 
 const selectCategory: Ref<Category> = ref(new Category())
 setTimeout(()=>{
@@ -65,7 +71,7 @@ function changeCategory(category: Category) {
             <SearchBar @onSearch="onSearch"/>
         </div>
         <div class="home-body">
-            <HomeContent :videos="displayVideos"/>
+            <HomeContent :videos="displayVideos" @refresh="getVideosByPage"/>
 <!--            <HomeCategory v-show="!systemStore.homeContentToCategory"></HomeCategory>-->
             <div class="category-bar" style="z-index: 10">
                 <CategoryBar style="height: 27rem;width: 5rem;right: 0;" :category="selectCategory"/>
@@ -73,7 +79,7 @@ function changeCategory(category: Category) {
         </div>
     </div>
     <a-drawer :open="!systemStore.homeContentToCategory" :closable="false" width="65rem" @close="systemStore.homeContentToCategoryChange()">
-        <HomeCategory @selectCategory="changeCategory" />
+        <HomeCategory @selectCategory="changeCategory"/>
     </a-drawer>
 </template>
 
