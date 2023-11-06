@@ -31,13 +31,21 @@ const categoryVideos = ref(new Array<Video>())
 const displayVideos = ref(new Array<Video>())
 
 const page = ref(0)
+
+const isRetrying = ref(false)
+
 function getVideosByPage() {
     videoService.getVideos(page.value++,30).then(pack => {
-        pack.data.forEach((it: any) => {
-            const video = videoService.parseVideoVO(it)
-            videos.value.push(video)
-        })
-
+        try {
+            pack.data.forEach((it: any) => {
+                const video = videoService.parseVideoVO(it)
+                videos.value.push(video)
+            })
+            isRetrying.value = false
+        } catch (_) {
+            isRetrying.value = true
+            setTimeout(()=>getVideosByPage(),300)
+        }
     })
 }
 getVideosByPage()
@@ -70,12 +78,16 @@ function changeCategory(category: Category) {
         <div class="search">
             <SearchBar @onSearch="onSearch"/>
         </div>
-        <div class="home-body">
+        <div class="home-body" v-if="!isRetrying">
             <HomeContent :videos="displayVideos" @refresh="getVideosByPage"/>
 <!--            <HomeCategory v-show="!systemStore.homeContentToCategory"></HomeCategory>-->
             <div class="category-bar" style="z-index: 10">
                 <CategoryBar style="height: 27rem;width: 5rem;right: 0;" :category="selectCategory"/>
             </div>
+        </div>
+        <div v-else style="width: 100%;height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center">
+            <img src="@/assets/wait-img.png">
+            <span style="font-size: 2.5rem;font-family: SHS-Bold,serif">正在拉取数据 请耐心等待哦~</span>
         </div>
     </div>
     <a-drawer :open="!systemStore.homeContentToCategory" :closable="false" width="65rem" @close="systemStore.homeContentToCategoryChange()">
