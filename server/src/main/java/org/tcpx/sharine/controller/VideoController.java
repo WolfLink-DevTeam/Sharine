@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.*;
 import org.tcpx.sharine.dto.CommentDTO;
 import org.tcpx.sharine.dto.ConditionDTO;
 import org.tcpx.sharine.dto.UploadVideoDTO;
+import org.tcpx.sharine.dto.UserPass;
 import org.tcpx.sharine.entity.User;
 import org.tcpx.sharine.enums.StatusCodeEnum;
 import org.tcpx.sharine.exception.WarnException;
-import org.tcpx.sharine.service.CommentService;
-import org.tcpx.sharine.service.UserService;
-import org.tcpx.sharine.service.VideoService;
-import org.tcpx.sharine.service.ViewCountService;
+import org.tcpx.sharine.service.*;
 import org.tcpx.sharine.utils.IpUtils;
 import org.tcpx.sharine.utils.QiniuUtils;
+
+import java.util.List;
 
 /**
  * 视频信息控制器
@@ -32,6 +32,8 @@ public class VideoController extends BaseController {
     final UserService userService;
     final QiniuUtils qiniuUtils;
     final ViewCountService viewCountService;
+    final FavoriteService favoriteService;
+    final BookmarkService bookmarkService;
 
     @PostMapping("/verify")
     public Object verifyVideo(@RequestBody UploadVideoDTO uploadVideoDTO) {
@@ -49,15 +51,15 @@ public class VideoController extends BaseController {
         return ok(commentService.getComments(videoId));
     }
 
-    @PutMapping("/{videoId}/comments")
+    @PostMapping("/{videoId}/comments")
     public Object addVideoComments(@RequestBody CommentDTO commentDTO) {
-        User user = userService.verifyUserPass(commentDTO.getUserPass());
+        User user = userService.getSessionUser();
         if(commentDTO.getContent().isEmpty() || commentDTO.getContent().isBlank()) throw new WarnException(StatusCodeEnum.FAILED_PRECONDITION);
         if(!qiniuUtils.textSensor(commentDTO.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
         commentService.addComment(commentDTO);
         return ok();
     }
-    @GetMapping("/{videoId}/addViewCount")
+    @PostMapping("/{videoId}/addViewCount")
     public Object addViewCount(HttpServletRequest request, @PathVariable Long videoId) {
         String ip = IpUtils.getIpAddress(request);
         viewCountService.addViewCount(ip,videoId);
@@ -66,5 +68,46 @@ public class VideoController extends BaseController {
     @GetMapping
     public Object findVideos(ConditionDTO conditionDTO) {
         return ok(videoService.findVideos(conditionDTO));
+    }
+    /**
+     * 只允许查询用户自己的点赞视频列表数据
+     */
+    @GetMapping("/favorite")
+    public Object getUserFavoriteVideos() {
+        // 获取用户喜欢的视频ID列表
+        List<Long> favoriteVideoIds = favoriteService.findUserFavoriteVideoIds(userService.getSessionUserId());
+        // 转 VideoVO 列表
+        return ok(videoService.findVideos(favoriteVideoIds));
+    }
+
+    /**
+     * 只允许查询用户自己的收藏视频列表数据
+     */
+    @GetMapping("/bookmark")
+    public Object getUserBookmarkVideos() {
+        // 获取用户喜欢的视频ID列表
+        List<Long> bookmarkVideoIds = bookmarkService.findUserBookmarkVideoIds(userService.getSessionUserId());
+        // 转 VideoVO 列表
+        return ok(videoService.findVideos(bookmarkVideoIds));
+    }
+
+    /**
+     * 获取用户订阅视频列表(不可查看他人订阅频道)
+     * @return          订阅视频信息列表
+     */
+    @GetMapping("/subscribe")
+    public Object getUserSubscribeVideos() {
+        // 用户自己的订阅频道列表
+        return ok(videoService.getSubscribeVideos(userService.getSessionUserId()));
+    }
+
+    /**
+     * 获取用户投稿视频列表
+     * @param userId    用户ID
+     * @return          投稿视频信息列表
+     */
+    @GetMapping("/upload/{userId}")
+    public Object getUserUploadVideos(@PathVariable Long userId) {
+        return ok(videoService.findVideoVOsByUserId(userId));
     }
 }

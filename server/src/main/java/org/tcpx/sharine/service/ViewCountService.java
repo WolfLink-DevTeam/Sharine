@@ -34,7 +34,6 @@ public class ViewCountService {
         String key = "viewlist-"+userIp;
         List<Long> viewVideoIdList = getUserViewList(userIp);
         if(viewVideoIdList.size() > cacheSize) return;
-        System.out.println(viewVideoIdList);
         if(viewVideoIdList.contains(videoId)) return;
         redisService.lPush(key,videoId,60 * 60 * 24);
         videoRepository.incrementCount(videoId);

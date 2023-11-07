@@ -48,18 +48,34 @@ public class UserService {
     VideoService videoService;
 
 
+    /**
+     * 获取当前连接登录的用户ID(会检查用户登录状态)
+     * @return  用户ID
+     */
+    public Long getSessionUserId() {
+        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
+        return StpUtil.getLoginIdAsLong();
+    }
+    /**
+     * 获取当前连接登录的用户对象(会检查用户登录状态)
+     * @return  用户
+     */
+    public User getSessionUser() {
+        return userRepository.findById(getSessionUserId())
+                .orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+    }
     public UserSimpleVO login(UserPass userPass) {
         User user = verifyUserPass(userPass);
         StpUtil.login(user.getId());
         System.out.println("用户"+user.getId()+"登录成功");
         return buildUserSimpleVO(user);
     }
-
     /**
      * 验证用户通行证的账号密码是否正确
      * @param userPass  用户通行证
      * @return          用户信息
      */
+    @Deprecated
     public User verifyUserPass(UserPass userPass) {
         User user = userRepository.findByAccount(userPass.getAccount()).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
         if (!EncryptionUtil.match(userPass.getPassword(), user.getPassword())) {

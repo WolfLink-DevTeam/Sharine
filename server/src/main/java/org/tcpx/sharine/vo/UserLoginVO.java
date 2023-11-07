@@ -1,12 +1,11 @@
-package org.tcpx.sharine.dto;
+package org.tcpx.sharine.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.tcpx.sharine.vo.UserSimpleVO;
 
 @Data
 @AllArgsConstructor
-public class UserLoginDTO {
+public class UserLoginVO {
     UserSimpleVO userSimpleVO;
     String token;
 }

@@ -1,12 +1,8 @@
 package org.tcpx.sharine.service;
 
-import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.stereotype.Service;
 import org.tcpx.sharine.dto.CommentDTO;
 import org.tcpx.sharine.entity.Comment;
-import org.tcpx.sharine.entity.User;
-import org.tcpx.sharine.enums.StatusCodeEnum;
-import org.tcpx.sharine.exception.WarnException;
 import org.tcpx.sharine.repository.CommentRepository;
 import org.tcpx.sharine.vo.CommentVO;
 
@@ -28,12 +24,9 @@ public class CommentService {
     }
 
     public void addComment(CommentDTO commentDTO) {
-        // 请求方是否登录
-        StpUtil.checkLogin();
-        // 验证用户令牌
-        User user = userService.verifyUserPass(commentDTO.getUserPass());
+        Long userId = userService.getSessionUserId();
         Comment comment = Comment.of(commentDTO);
-        comment.setUserId(user.getId());
+        comment.setUserId(userId);
         commentRepository.save(comment);
     }
     public List<CommentVO> buildCommentVOs(List<Comment> comments) {

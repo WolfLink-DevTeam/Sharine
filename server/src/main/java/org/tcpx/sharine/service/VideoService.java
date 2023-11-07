@@ -55,9 +55,8 @@ public class VideoService {
      * @param uploadVideoDTO    投稿视频传输层数据对象
      */
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
-        StpUtil.checkLogin();
         // 用户数据查询
-        User user = userService.verifyUserPass(uploadVideoDTO.getUserPass());
+        User user = userService.getSessionUser();
         // 七牛云数据库查询
         FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileKey())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
