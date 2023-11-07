@@ -4,7 +4,7 @@ import {userService} from "@/services/UserService";
 
 export const httpClient = axios.create({
     baseURL: import.meta.env.VITE_SHARINE_SERVER_URL,
-    timeout: 1000
+    timeout: 10000
 });
 
 httpClient.interceptors.request.use(

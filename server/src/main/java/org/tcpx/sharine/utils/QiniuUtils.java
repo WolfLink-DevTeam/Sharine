@@ -213,6 +213,7 @@ public class QiniuUtils {
         Call call = qiniuCall("http://ai.qiniuapi.com/v3/text/censor", pack);
         try {
             JsonObject jo = JsonParser.parseString(call.execute().body().string()).getAsJsonObject();
+            if(jo == null || jo.get("code").getAsInt() == 401) return true;
             if (jo.getAsJsonObject("result").get("suggestion").getAsString().equals("pass")) {
                 return true;
             }
