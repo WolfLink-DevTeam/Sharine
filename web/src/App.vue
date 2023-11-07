@@ -25,7 +25,7 @@ router.afterEach((to, from) => {
         setTimeout(()=>{
             lastLoading = now
             loading.value = false;
-        },400)
+        },200)
     } else {
         lastLoading = now
         loading.value = false;

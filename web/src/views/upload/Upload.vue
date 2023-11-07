@@ -5,7 +5,7 @@ import CategoryDropdownButton from "@/components/CategoryDropdownButton.vue";
 import BasicButton from "@/components/BasicButton.vue";
 import "@/commons/global.css";
 import {useSystemStore} from "@/store/system";
-import {Ref, ref} from "vue";
+import {Ref, ref, watch} from "vue";
 import {qiniuService} from "@/services/QiniuService";
 import * as qiniu from 'qiniu-js'
 import {videoService} from "@/services/VideoService";
@@ -49,6 +49,11 @@ async function selectImageFile(){
 
 
 const coverUrl: Ref<string> = ref("")
+watch(coverUrl,(newValue,oldValue)=>{
+    const tempArray = videoFrames.value
+    videoFrames.value = new Array<string>()
+    videoFrames.value = tempArray
+})
 const videoFrames: Ref<Array<string>> = ref(["","",""])
 
 const categoryIndex = ref(0)

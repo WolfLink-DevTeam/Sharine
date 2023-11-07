@@ -39,8 +39,8 @@ function backgroundImgStyle() {
                 <a-row style="align-items: center;justify-content: center"><img src="@/assets/logo.png" class="info-avatar"></a-row>
                 <div style="height: 3rem"/>
                 <a-row><a-col :flex="7" class="info-text-title">粉丝</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">{{video.author.followedCount}}</a-col><a-col :flex="3"/></a-row>
-                <a-row><a-col :flex="7" class="info-text-title">获赞</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">21万</a-col><a-col :flex="3"/></a-row>
-                <a-row><a-col :flex="7" class="info-text-title">播放</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">114万</a-col><a-col :flex="3"/></a-row>
+                <a-row><a-col :flex="7" class="info-text-title">获赞</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">{{video.author.beenFavoriteCount}}</a-col><a-col :flex="3"/></a-row>
+                <a-row><a-col :flex="7" class="info-text-title">播放</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">{{video.author.beenViewCount}}</a-col><a-col :flex="3"/></a-row>
             </a-col>
             <a-col style="width: 0.2rem;height: 85%;background: #D8D8D8;margin-left: 1rem;margin-right: 1rem"/>
             <a-col style="width: 27rem;height: 80%">
@@ -59,8 +59,11 @@ function backgroundImgStyle() {
         <a-col class="cover" :style="backgroundImgStyle()">
             <div class="cover-span">
                 <img src="../../public/ui-icon/like-icon.png" style="width: 2.2rem;height: 2.2rem;margin-left: 1rem" alt="">
-                <span style="font-family: SHS-Bold,serif;color: white;font-size: 1.2rem;margin-left: 0.6rem">20.6万</span>
-                <span style="position: absolute;right: 1.5rem;color: white;font-size: 1.2rem;font-family: SHS-Bold,serif">04:05</span>
+                <span style="font-family: SHS-Bold,serif;color: white;font-size: 1.2rem;margin-left: 0.6rem">{{video.viewCount}}</span>
+                <span style="position: absolute;right: 1.5rem;color: white;font-size: 1.2rem;font-family: SHS-Bold,serif;justify-content: center;display: flex;align-items: center">
+                    {{video.bookmarkCount}}
+                <img src="@/assets/ui-icon/bookmark-icon.png" style="width: 2rem;height: 2rem;margin-left: 0.5rem">
+                </span>
             </div>
         </a-col>
         <a-row v-if="direction === 'left'" class="card-info" style="border-radius: 0 1rem 1rem 0">
@@ -81,8 +84,8 @@ function backgroundImgStyle() {
                 <a-row style="align-items: center;justify-content: center"><img src="@/assets/logo.png" class="info-avatar"></a-row>
                 <div style="height: 3rem"/>
                 <a-row><a-col :flex="7" class="info-text-title">粉丝</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">{{video.author.followedCount}}</a-col><a-col :flex="3"/></a-row>
-                <a-row><a-col :flex="7" class="info-text-title">获赞</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">21万</a-col><a-col :flex="3"/></a-row>
-                <a-row><a-col :flex="7" class="info-text-title">播放</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">114万</a-col><a-col :flex="3"/></a-row>
+                <a-row><a-col :flex="7" class="info-text-title">获赞</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">{{video.author.beenFavoriteCount}}</a-col><a-col :flex="3"/></a-row>
+                <a-row><a-col :flex="7" class="info-text-title">播放</a-col><a-col :flex="3"/><a-col :flex="10" class="info-text-value">{{video.author.beenViewCount}}</a-col><a-col :flex="3"/></a-row>
             </a-col>
         </a-row>
     </a-row>
