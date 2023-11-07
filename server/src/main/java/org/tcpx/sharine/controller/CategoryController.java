@@ -20,15 +20,10 @@ public class CategoryController extends BaseController {
     final CategoryService categoryService;
 
     /**
-     * 搜索分类信息
+     * 获取全部分类信息
      *
-     * @param conditionDTO 查询条件
      * @return 分区数据
      */
-    @GetMapping
-    public Object find(ConditionDTO conditionDTO) {
-        return ok(categoryService.find(conditionDTO));
-    }
     @GetMapping("/all")
     public Object findAll() {
         return ok(categoryService.findAll());

@@ -15,7 +15,7 @@ export class VideoService {
     videos = ref(new Array<Video>())
 
     async viewVideo(videoId: number) {
-        httpClient.get("/videos/"+videoId+"/addViewCount")
+        httpClient.post("/videos/"+videoId+"/addViewCount")
     }
     async uploadVideo(fileKey: string,hash: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,videoType: VideoType) {
         return pack(httpClient.post("/videos/verify",{

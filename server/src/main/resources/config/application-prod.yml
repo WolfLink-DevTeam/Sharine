@@ -53,3 +53,4 @@ qiniu:
 application:
   subscribe-channel-size: 128
   cache-view-video-size: 256
+  query-per-minute-limit: 1200
