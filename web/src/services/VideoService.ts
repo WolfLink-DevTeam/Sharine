@@ -19,10 +19,6 @@ export class VideoService {
     }
     async uploadVideo(fileKey: string,hash: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,videoType: VideoType) {
         return pack(httpClient.post("/videos/verify",{
-            userPass: {
-                account: userService.getAccount(),
-                password: userService.getPassword()
-            },
             fileKey: fileKey,
             hash: hash,
             categoryId: categoryId,
@@ -42,11 +38,7 @@ export class VideoService {
         }))
     }
     async addComment(comment: VideoComment) {
-        return pack(httpClient.put("/videos/"+comment.videoId+"/comments",{
-            userPass: {
-                account: userService.getAccount(),
-                password: userService.getPassword()
-            },
+        return pack(httpClient.post("/videos/"+comment.videoId+"/comments",{
             replyId: comment.replyId,
             videoId: comment.videoId,
             content: comment.content
@@ -59,7 +51,6 @@ export class VideoService {
         return pack(httpClient.get("videos/"+videoId+"/comments"))
     }
     parseCommentVO(commentVO: any):VideoComment {
-        console.log(commentVO)
 
         const comment = new VideoComment()
 

@@ -118,6 +118,9 @@ let cooldown = false
 
 function addComment() {
     if(!useSystemStore().isLogin) return
+    if(userCommentText.value.length === 0) {
+        return;
+    }
     const comment = new VideoComment()
     comment.content = userCommentText.value
     comment.author = userService.getLocalUser()!
@@ -125,6 +128,10 @@ function addComment() {
     comment.replyId = -1
     videoService.addComment(comment).then(pack => {
         if(pack.code === 0) {
+            userCommentText.value = ""
+            updateVideoComments()
+        } else {
+            alert("评论包含违规内容！请规范发言。")
             userCommentText.value = ""
             updateVideoComments()
         }
