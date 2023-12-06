@@ -13,7 +13,9 @@ import org.wolflink.sharine.utils.BeanCopyUtils;
 @AllArgsConstructor
 public class CommentVO {
     Long id;
-    UserSimpleVO author;
+    // TODO 前端自行请求 UserService
+//    UserSimpleVO author;
+    Long authorId;
     Long replyId;
     Long videoId;
     String content;

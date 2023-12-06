@@ -7,6 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentDTO {
 
+    // TODO 新增项，前端需补充
+    Long userId;
+
     Long replyId;
 
     Long videoId;

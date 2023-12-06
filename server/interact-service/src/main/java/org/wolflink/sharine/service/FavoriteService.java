@@ -1,13 +1,13 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.dto.ConditionDTO;
-import org.tcpx.sharine.entity.Favorite;
-import org.tcpx.sharine.enums.StatusCodeEnum;
-import org.tcpx.sharine.exception.WarnException;
-import org.tcpx.sharine.repository.FavoriteRepository;
+import org.wolflink.sharine.dto.ConditionDTO;
+import org.wolflink.sharine.entity.Favorite;
+import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.WarnException;
+import org.wolflink.sharine.repository.FavoriteRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

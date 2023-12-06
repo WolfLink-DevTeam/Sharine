@@ -1,10 +1,10 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.entity.VideoCategoryRelation;
-import org.tcpx.sharine.exception.ErrorException;
-import org.tcpx.sharine.repository.VideoCategoryRepository;
-import org.tcpx.sharine.vo.CategoryVO;
+import org.wolflink.sharine.entity.VideoCategoryRelation;
+import org.wolflink.sharine.exception.ErrorException;
+import org.wolflink.sharine.repository.VideoCategoryRepository;
+import org.wolflink.sharine.vo.CategoryVO;
 
 import java.util.Optional;
 

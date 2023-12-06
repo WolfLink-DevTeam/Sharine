@@ -1,4 +1,4 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import com.qiniu.storage.model.FileInfo;
 import jakarta.annotation.Resource;
@@ -6,18 +6,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.dto.ConditionDTO;
-import org.tcpx.sharine.dto.UploadVideoDTO;
-import org.tcpx.sharine.entity.User;
-import org.tcpx.sharine.entity.Video;
-import org.tcpx.sharine.enums.StatusCodeEnum;
-import org.tcpx.sharine.exception.WarnException;
-import org.tcpx.sharine.repository.BookmarkRepository;
-import org.tcpx.sharine.repository.FavoriteRepository;
-import org.tcpx.sharine.repository.VideoRepository;
-import org.tcpx.sharine.utils.QiniuUtils;
-import org.tcpx.sharine.vo.UserDetailVO;
-import org.tcpx.sharine.vo.VideoVO;
+import org.wolflink.sharine.dto.ConditionDTO;
+import org.wolflink.sharine.dto.UploadVideoDTO;
+import org.wolflink.sharine.entity.User;
+import org.wolflink.sharine.entity.Video;
+import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.WarnException;
+import org.wolflink.sharine.repository.BookmarkRepository;
+import org.wolflink.sharine.repository.FavoriteRepository;
+import org.wolflink.sharine.repository.VideoRepository;
+import org.wolflink.sharine.utils.QiniuUtils;
+import org.wolflink.sharine.vo.UserDetailVO;
+import org.wolflink.sharine.vo.VideoVO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +34,6 @@ public class VideoService {
     @Resource
     private QiniuUtils qiniuUtils;
 
-    final UserService userService;
 
     final VideoCategoryService videoCategoryService;
 
@@ -42,8 +41,7 @@ public class VideoService {
 
     final RedisService redisService;
 
-    public VideoService(UserService userService, VideoCategoryService videoCategoryService, SubscribeChannelService subscribeChannelService,RedisService redisService) {
-        this.userService = userService;
+    public VideoService(VideoCategoryService videoCategoryService, SubscribeChannelService subscribeChannelService,RedisService redisService) {
         this.videoCategoryService = videoCategoryService;
         this.subscribeChannelService = subscribeChannelService;
         this.redisService = redisService;
@@ -54,21 +52,19 @@ public class VideoService {
      * @param uploadVideoDTO    投稿视频传输层数据对象
      */
     public void verifyAndSaveVideo(UploadVideoDTO uploadVideoDTO) {
-        // 用户数据查询
-        User user = userService.getSessionUser();
         // 七牛云数据库查询
-        FileInfo fileInfo = qiniuUtils.getFileInfo(user, uploadVideoDTO.getFileKey())
+        FileInfo fileInfo = qiniuUtils.getFileInfo(uploadVideoDTO.getUserId(), uploadVideoDTO.getFileKey())
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
         if (!fileInfo.hash.equals(uploadVideoDTO.getHash())) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);
         // 文本内容审核
         if(!qiniuUtils.textSensor(uploadVideoDTO.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
         Video video = Video.of(uploadVideoDTO);
-        video.setUserId(user.getId());
+        video.setUserId(uploadVideoDTO.getUserId());
         video.setViewCount(0L);
         videoRepository.save(video);
         videoCategoryService.saveVideoCategoryRelation(video.getId(), uploadVideoDTO.getCategoryId());
         // 异步更新视频队列
-        subscribeChannelService.notifyFans(user.getId(),video.getId());
+        subscribeChannelService.notifyFans(uploadVideoDTO.getUserId(), video.getId());
     }
 
     /**
@@ -129,8 +125,7 @@ public class VideoService {
     }
     public VideoVO buildVideoVO(Video video) {
         VideoVO videoVO = VideoVO.of(video);
-        UserDetailVO userDetailVO = userService.findUserDetailInfo(video.getUserId());
-        videoVO.setAuthor(userDetailVO);
+        videoVO.setUserId(video.getUserId());
         videoVO.setCategory(videoCategoryService.findVideoCategory(video.getId()));
         videoVO.setBookmarkCount(bookmarkRepository.countByVideoId(video.getId()));
         videoVO.setFavoriteCount(favoriteRepository.countByVideoId(video.getId()));

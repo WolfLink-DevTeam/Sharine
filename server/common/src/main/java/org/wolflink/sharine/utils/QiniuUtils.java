@@ -116,14 +116,14 @@ public class QiniuUtils {
 
     /**
      * 从七牛云中查询文件信息
-     * @param uploader  上传者
+     * @param userId    上传者用户ID
      * @param fileKey   文件Key
      * @return          FileInfo
      */
-    public Optional<FileInfo> getFileInfo(@Nullable User uploader, String fileKey) {
+    public Optional<FileInfo> getFileInfo(@Nullable Long userId, String fileKey) {
         try {
             long uniqueId = 0;
-            if (uploader != null) uniqueId = uploader.getId();
+            if (userId != null) uniqueId = userId;
             BucketManager bucketManager = new BucketManager(Auth.create(accessKey, secretKey), (Configuration) null);
             FileInfo fileInfo = bucketManager.stat(bucket, fileKey);
             return Optional.of(fileInfo);

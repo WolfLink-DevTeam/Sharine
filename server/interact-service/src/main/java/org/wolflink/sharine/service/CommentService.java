@@ -1,10 +1,10 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.dto.CommentDTO;
-import org.tcpx.sharine.entity.Comment;
-import org.tcpx.sharine.repository.CommentRepository;
-import org.tcpx.sharine.vo.CommentVO;
+import org.wolflink.sharine.dto.CommentDTO;
+import org.wolflink.sharine.entity.Comment;
+import org.wolflink.sharine.repository.CommentRepository;
+import org.wolflink.sharine.vo.CommentVO;
 
 import java.util.List;
 
@@ -12,11 +12,9 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserService userService;
 
-    public CommentService(CommentRepository commentRepository,UserService userService) {
+    public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-        this.userService = userService;
     }
 
     public List<CommentVO> getComments(Long videoId) {
@@ -24,9 +22,7 @@ public class CommentService {
     }
 
     public void addComment(CommentDTO commentDTO) {
-        Long userId = userService.getSessionUserId();
         Comment comment = Comment.of(commentDTO);
-        comment.setUserId(userId);
         commentRepository.save(comment);
     }
     public List<CommentVO> buildCommentVOs(List<Comment> comments) {
@@ -34,7 +30,7 @@ public class CommentService {
     }
     public CommentVO buildCommentVO(Comment comment) {
         CommentVO commentVO = CommentVO.of(comment);
-        commentVO.setAuthor(userService.findUserSimpleInfo(comment.getUserId()));
+        commentVO.setAuthorId(comment.getUserId());
         return commentVO;
     }
 }

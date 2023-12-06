@@ -1,13 +1,13 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.dto.ConditionDTO;
-import org.tcpx.sharine.entity.Bookmark;
-import org.tcpx.sharine.enums.StatusCodeEnum;
-import org.tcpx.sharine.exception.WarnException;
-import org.tcpx.sharine.repository.BookmarkRepository;
+import org.wolflink.sharine.dto.ConditionDTO;
+import org.wolflink.sharine.entity.Bookmark;
+import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.WarnException;
+import org.wolflink.sharine.repository.BookmarkRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +16,9 @@ import java.util.stream.Collectors;
 public class BookmarkService {
 
     final BookmarkRepository bookmarkRepository;
-    final UserRelationService userRelationService;
 
-    public BookmarkService(BookmarkRepository bookmarkRepository,UserRelationService userRelationService) {
+    public BookmarkService(BookmarkRepository bookmarkRepository) {
         this.bookmarkRepository = bookmarkRepository;
-        this.userRelationService = userRelationService;
     }
 
     /**
@@ -29,14 +27,15 @@ public class BookmarkService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
-    public void bookmarkVideo(Long userId, Long videoId) {
+    public void bookmarkVideo(Long userId, Long videoId, Long authorId) {
         // 已经收藏
         if (hasBookmarkVideo(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_EXIST);
         }
         Bookmark bookmark = Bookmark.builder().userId(userId).videoId(videoId).build();
         bookmarkRepository.save(bookmark);
-        userRelationService.followVideo(userId,videoId);
+        // TODO 不应该聚合到此处
+//        userRelationService.follow(userId,authorId);
     }
     public boolean hasBookmarkVideo(Long userId,Long videoId) {
         return bookmarkRepository.existsByUserIdAndVideoId(userId,videoId);
@@ -48,13 +47,14 @@ public class BookmarkService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
-    public void undoBookmarkVideo(Long userId, Long videoId) {
+    public void undoBookmarkVideo(Long userId, Long videoId,Long authorId) {
         // 数据不存在
         if (!bookmarkRepository.existsByUserIdAndVideoId(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
         }
         bookmarkRepository.deleteByUserIdAndVideoId(userId, videoId);
-        userRelationService.undoFollowVideo(userId,videoId);
+        // TODO 不应该聚合到此处
+//        userRelationService.undoFollow(userId,authorId);
     }
 
     public List<Long> findUserBookmarkVideoIds(Long userId) {

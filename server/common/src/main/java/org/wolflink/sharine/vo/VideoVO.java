@@ -13,8 +13,8 @@ import org.wolflink.sharine.utils.BeanCopyUtils;
 @AllArgsConstructor
 public class VideoVO {
     Long id;
-    // 不一致字段 userId -> author
-    UserDetailVO author;
+    // TODO 前端自己查详细数据
+    Long userId;
 
     String title;
 

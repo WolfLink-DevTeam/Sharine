@@ -1,30 +1,29 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.constants.RedisPrefixConst;
-import org.tcpx.sharine.constants.UserConst;
-import org.tcpx.sharine.dto.UserPass;
-import org.tcpx.sharine.entity.User;
-import org.tcpx.sharine.enums.StatusCodeEnum;
-import org.tcpx.sharine.exception.ErrorException;
-import org.tcpx.sharine.exception.WarnException;
-import org.tcpx.sharine.repository.BookmarkRepository;
-import org.tcpx.sharine.repository.FavoriteRepository;
-import org.tcpx.sharine.repository.UserRepository;
-import org.tcpx.sharine.utils.EncryptionUtil;
-import org.tcpx.sharine.utils.StringUtils;
-import org.tcpx.sharine.vo.UserDetailVO;
-import org.tcpx.sharine.vo.UserSimpleVO;
+import org.wolflink.sharine.constants.RedisPrefixConst;
+import org.wolflink.sharine.constants.UserConst;
+import org.wolflink.sharine.dto.UserPass;
+import org.wolflink.sharine.entity.User;
+import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.ErrorException;
+import org.wolflink.sharine.exception.WarnException;
+import org.wolflink.sharine.repository.BookmarkRepository;
+import org.wolflink.sharine.repository.FavoriteRepository;
+import org.wolflink.sharine.repository.UserRepository;
+import org.wolflink.sharine.utils.EncryptionUtil;
+import org.wolflink.sharine.utils.StringUtils;
+import org.wolflink.sharine.vo.UserDetailVO;
+import org.wolflink.sharine.vo.UserSimpleVO;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,16 +35,11 @@ public class UserService {
     @Resource
     FavoriteRepository favoriteRepository;
     @Resource
-    FavoriteService favoriteService;
-    @Resource
     UserRelationService userRelationService;
     @Resource
     RedisService redisService;
     @Resource
     EmailService emailService;
-    @Resource
-    @Lazy
-    VideoService videoService;
 
 
     /**
@@ -199,52 +193,52 @@ public class UserService {
     }
 
     /**
-     * 查询用户详细信息
+     * TODO 聚合查询 查询用户详细信息
      *
      * @param userId 用户ID
      * @return 用户详细信息
      */
-    public UserDetailVO findUserDetailInfo(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
-
-        UserDetailVO userDetailVO = UserDetailVO.of(user);
-        userDetailVO.setFavouriteCount(favoriteService.countUserFavorite(userId));
-        userDetailVO.setFollowingCount(userRelationService.countUserFollowing(userId));
-        userDetailVO.setFollowedCount(userRelationService.countUserFollowed(userId));
-        userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId).longValue());
-        AtomicReference<Long> beenFavoriteCount = new AtomicReference<>(0L);
-        AtomicReference<Long> beenViewCount = new AtomicReference<>(0L);
-        videoService.findVideosByUserId(userId).forEach(video -> {
-            beenFavoriteCount.updateAndGet(v -> v + favoriteRepository.countByVideoId(video.getId()));
-            beenViewCount.updateAndGet(v -> v + video.getViewCount());
-        });
-        userDetailVO.setBeenFavoriteCount(beenFavoriteCount.get());
-        userDetailVO.setBeenViewCount(beenViewCount.get());
-        return userDetailVO;
-    }
+//    public UserDetailVO findUserDetailInfo(Long userId) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+//
+//        UserDetailVO userDetailVO = UserDetailVO.of(user);
+//        userDetailVO.setFavouriteCount(favoriteService.countUserFavorite(userId));
+//        userDetailVO.setFollowingCount(userRelationService.countUserFollowing(userId));
+//        userDetailVO.setFollowedCount(userRelationService.countUserFollowed(userId));
+//        userDetailVO.setBookmarkCount(bookmarkRepository.countByUserId(userId).longValue());
+//        AtomicReference<Long> beenFavoriteCount = new AtomicReference<>(0L);
+//        AtomicReference<Long> beenViewCount = new AtomicReference<>(0L);
+//        videoService.findVideosByUserId(userId).forEach(video -> {
+//            beenFavoriteCount.updateAndGet(v -> v + favoriteRepository.countByVideoId(video.getId()));
+//            beenViewCount.updateAndGet(v -> v + video.getViewCount());
+//        });
+//        userDetailVO.setBeenFavoriteCount(beenFavoriteCount.get());
+//        userDetailVO.setBeenViewCount(beenViewCount.get());
+//        return userDetailVO;
+//    }
 
     /**
-     * 批量查询用户详细信息
+     * TODO 聚合查询 批量查询用户详细信息
      *
      * @param userIds 用户ID
      * @return 用户详细信息
      */
-    public Map<Long, UserDetailVO> findUserDetailInfo(List<Long> userIds) {
-        userIds = userIds.stream().distinct().collect(Collectors.toList());
-
-        List<User> users = userRepository.findAllById(userIds);
-
-        return users.stream().map(user -> {
-                    UserDetailVO result = buildUserDetailVO(user);
-                    result.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()).longValue());
-                    result.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
-                    result.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
-                    result.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
-                    return result;
-                })
-                .collect(
-                        Collectors.toMap(UserDetailVO::getId, person -> person)
-                );
-    }
+//    public Map<Long, UserDetailVO> findUserDetailInfo(List<Long> userIds) {
+//        userIds = userIds.stream().distinct().collect(Collectors.toList());
+//
+//        List<User> users = userRepository.findAllById(userIds);
+//
+//        return users.stream().map(user -> {
+//                    UserDetailVO result = buildUserDetailVO(user);
+//                    result.setBookmarkCount(bookmarkRepository.countByUserId(user.getId()).longValue());
+//                    result.setFollowedCount(userRelationService.countUserFollowed(user.getId()));
+//                    result.setFollowingCount(userRelationService.countUserFollowing(user.getId()));
+//                    result.setFavouriteCount(favoriteService.countUserFavorite(user.getId()));
+//                    return result;
+//                })
+//                .collect(
+//                        Collectors.toMap(UserDetailVO::getId, person -> person)
+//                );
+//    }
 }

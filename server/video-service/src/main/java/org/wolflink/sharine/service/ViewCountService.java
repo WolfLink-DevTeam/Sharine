@@ -1,9 +1,9 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.repository.VideoRepository;
+import org.wolflink.sharine.repository.VideoRepository;
 
 import java.util.ArrayList;
 import java.util.List;

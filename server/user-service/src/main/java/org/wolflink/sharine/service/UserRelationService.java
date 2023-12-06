@@ -1,23 +1,19 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.entity.UserRelation;
-import org.tcpx.sharine.enums.UserRelationEnum;
-import org.tcpx.sharine.repository.UserRelationRepository;
-import org.tcpx.sharine.vo.VideoVO;
+import org.wolflink.sharine.entity.UserRelation;
+import org.wolflink.sharine.enums.UserRelationEnum;
+import org.wolflink.sharine.repository.UserRelationRepository;
 
 import java.util.List;
 
 @Service
 public class UserRelationService {
     final UserRelationRepository userRelationRepository;
-    final VideoService videoService;
 
-    public UserRelationService(UserRelationRepository userRelationRepository,@Lazy VideoService videoService) {
+    public UserRelationService(UserRelationRepository userRelationRepository) {
         this.userRelationRepository = userRelationRepository;
-        this.videoService = videoService;
     }
 
     /**
@@ -29,14 +25,6 @@ public class UserRelationService {
         return userRelationRepository.countUserFollowing(userId).longValue();
     }
 
-    public void followVideo(Long followerId,Long videoId) {
-        VideoVO videoVO = videoService.findVideoInfo(videoId);
-        follow(followerId,videoVO.getAuthor().getId());
-    }
-    public void undoFollowVideo(Long followerId,Long videoId) {
-        VideoVO videoVO = videoService.findVideoInfo(videoId);
-        undoFollow(followerId,videoVO.getAuthor().getId());
-    }
     /**
      * userId1 关注用户 userId2
      * @param followerId   粉丝

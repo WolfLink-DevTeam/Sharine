@@ -1,13 +1,13 @@
-package org.tcpx.sharine.service;
+package org.wolflink.sharine.service;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.tcpx.sharine.dto.ConditionDTO;
-import org.tcpx.sharine.entity.Category;
-import org.tcpx.sharine.exception.ErrorException;
-import org.tcpx.sharine.repository.CategoryRepository;
-import org.tcpx.sharine.vo.CategoryVO;
-import org.tcpx.sharine.vo.PageVO;
+import org.wolflink.sharine.dto.ConditionDTO;
+import org.wolflink.sharine.entity.Category;
+import org.wolflink.sharine.exception.ErrorException;
+import org.wolflink.sharine.repository.CategoryRepository;
+import org.wolflink.sharine.vo.CategoryVO;
+import org.wolflink.sharine.vo.PageVO;
 
 import java.util.List;
 import java.util.Optional;
