@@ -1,0 +1,19 @@
+server:
+  port: 23301
+spring:
+  application:
+    name: userservice
+    id: 1
+  profiles:
+    active: dev
+  config:
+    import: consul:localhost:8500/config
+  cloud:
+    consul:
+      config:
+        format: yaml
+        data-key: ${spring.application.name}-${spring.profiles.active}
+      discovery:
+        instance-id: ${spring.application.name}-${spring.application.id}
+        health-check-timeout: 1s
+        prefer-ip-address: true
