@@ -1,8 +1,8 @@
 server:
-  port: 23301
+  port: 23601
 spring:
   application:
-    name: ?????
+    name: oss-service
     id: 1
   profiles:
     active: dev
