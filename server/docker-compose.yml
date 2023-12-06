@@ -1,0 +1,33 @@
+services:
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube
+    restart: always
+    ports:
+      - "9000:9000"
+  consul:
+    container_name: consul
+    image: "consul:1.15.4"
+    restart: always
+    command: ["agent", "-server","-client", "0.0.0.0","-bootstrap-expect","1","-ui"]
+    ports:
+      - "8500:8500"
+      - "8502:8502"
+      - "8503:8503"
+      - "8600:8600"
+      - "8301:8301"
+      - "8302:8302"
