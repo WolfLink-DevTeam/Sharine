@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wolflink.sharine.entity.User;
-import org.wolflink.sharine.utils.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyUtils;
 
 /**
  * 用户档案信息

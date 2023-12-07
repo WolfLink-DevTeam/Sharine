@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.wolflink.sharine.constants.DatabaseConst;
+import org.wolflink.sharine.constant.DatabaseConst;
 
 @Data
 @Builder

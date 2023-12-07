@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wolflink.sharine.entity.Video;
-import org.wolflink.sharine.utils.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyUtils;
 
 @Data
 @Builder

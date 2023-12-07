@@ -6,17 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.wolflink.sharine.action.RedisService;
+import org.wolflink.sharine.action.SubscribeChannelService;
 import org.wolflink.sharine.dto.ConditionDTO;
 import org.wolflink.sharine.dto.UploadVideoDTO;
-import org.wolflink.sharine.entity.User;
 import org.wolflink.sharine.entity.Video;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.BookmarkRepository;
 import org.wolflink.sharine.repository.FavoriteRepository;
 import org.wolflink.sharine.repository.VideoRepository;
-import org.wolflink.sharine.utils.QiniuUtils;
-import org.wolflink.sharine.vo.UserDetailVO;
+import org.wolflink.sharine.action.QiniuUtils;
 import org.wolflink.sharine.vo.VideoVO;
 
 import java.util.List;
@@ -132,12 +132,12 @@ public class VideoService {
         return videoVO;
     }
     /**
-     * 查询用户订阅频道
+     * TODO 查询用户订阅频道
      * @param userId    用户ID
      * @return          视频列表
      */
-    public List<VideoVO> getSubscribeVideos(Long userId) {
-        List<Long> videoIds = subscribeChannelService.getSubscribeVideoIds(userId);
-        return findVideos(videoIds);
-    }
+//    public List<VideoVO> getSubscribeVideos(Long userId) {
+//        List<Long> videoIds = subscribeChannelService.getSubscribeVideoIds(userId);
+//        return findVideos(videoIds);
+//    }
 }

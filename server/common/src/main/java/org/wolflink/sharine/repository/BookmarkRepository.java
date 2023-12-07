@@ -7,14 +7,14 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
-import org.wolflink.sharine.constants.DatabaseConst;
+import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.entity.Bookmark;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CacheConfig(cacheNames = DatabaseConst.BOOKMARK)
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-
     @NotNull
     @CachePut(unless = "#result==null")
     <S extends Bookmark> S save(@NotNull S entity);
@@ -27,13 +27,13 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     @Transactional
     void deleteByUserIdAndVideoId(Long userId, Long videoId);
 
-//    @Cacheable(unless = "#result==null")
+    //    @Cacheable(unless = "#result==null")
     Integer countByUserId(Long userId);
 
-//    @Cacheable(unless = "#result==null")
+    //    @Cacheable(unless = "#result==null")
     Integer countByVideoId(Long videoId);
 
-
     List<Bookmark> findByUserId(Long userId, Pageable pageable);
+
     List<Bookmark> findByUserId(Long userId);
 }

@@ -3,6 +3,7 @@ package org.wolflink.sharine.service;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.wolflink.sharine.action.RedisService;
 import org.wolflink.sharine.repository.VideoRepository;
 
 import java.util.ArrayList;

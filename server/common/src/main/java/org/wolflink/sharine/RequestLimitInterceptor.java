@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.wolflink.sharine.utils.IpUtils;
+import org.wolflink.sharine.action.IpUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

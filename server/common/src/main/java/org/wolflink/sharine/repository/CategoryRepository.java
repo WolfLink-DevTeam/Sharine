@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.wolflink.sharine.constants.DatabaseConst;
+import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.entity.Category;
 
 import java.util.List;

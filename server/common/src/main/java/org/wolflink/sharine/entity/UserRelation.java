@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.wolflink.sharine.constants.DatabaseConst;
+import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.enums.UserRelationEnum;
 
 /**

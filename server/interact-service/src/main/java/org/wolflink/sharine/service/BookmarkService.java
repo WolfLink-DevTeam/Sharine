@@ -27,7 +27,7 @@ public class BookmarkService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
-    public void bookmarkVideo(Long userId, Long videoId, Long authorId) {
+    public void bookmarkVideo(Long userId, Long videoId) {
         // 已经收藏
         if (hasBookmarkVideo(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_EXIST);
@@ -47,7 +47,7 @@ public class BookmarkService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
-    public void undoBookmarkVideo(Long userId, Long videoId,Long authorId) {
+    public void undoBookmarkVideo(Long userId, Long videoId) {
         // 数据不存在
         if (!bookmarkRepository.existsByUserIdAndVideoId(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);

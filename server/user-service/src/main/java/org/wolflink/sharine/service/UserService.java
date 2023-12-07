@@ -3,10 +3,11 @@ package org.wolflink.sharine.service;
 import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.wolflink.sharine.constants.RedisPrefixConst;
-import org.wolflink.sharine.constants.UserConst;
+import org.wolflink.sharine.action.EmailService;
+import org.wolflink.sharine.action.RedisService;
+import org.wolflink.sharine.constant.RedisPrefixConst;
+import org.wolflink.sharine.constant.UserConst;
 import org.wolflink.sharine.dto.UserPass;
 import org.wolflink.sharine.entity.User;
 import org.wolflink.sharine.enums.StatusCodeEnum;
@@ -15,8 +16,8 @@ import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.BookmarkRepository;
 import org.wolflink.sharine.repository.FavoriteRepository;
 import org.wolflink.sharine.repository.UserRepository;
-import org.wolflink.sharine.utils.EncryptionUtil;
-import org.wolflink.sharine.utils.StringUtils;
+import org.wolflink.sharine.action.EncryptionUtil;
+import org.wolflink.sharine.action.StringUtils;
 import org.wolflink.sharine.vo.UserDetailVO;
 import org.wolflink.sharine.vo.UserSimpleVO;
 
@@ -42,22 +43,7 @@ public class UserService {
     EmailService emailService;
 
 
-    /**
-     * 获取当前连接登录的用户ID(会检查用户登录状态)
-     * @return  用户ID
-     */
-    public Long getSessionUserId() {
-        if(!StpUtil.isLogin()) throw new WarnException(StatusCodeEnum.NOT_LOGIN);
-        return StpUtil.getLoginIdAsLong();
-    }
-    /**
-     * 获取当前连接登录的用户对象(会检查用户登录状态)
-     * @return  用户
-     */
-    public User getSessionUser() {
-        return userRepository.findById(getSessionUserId())
-                .orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
-    }
+
     public UserSimpleVO login(UserPass userPass) {
         User user = verifyUserPass(userPass);
         StpUtil.login(user.getId());

@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.wolflink.sharine.constants.DatabaseConst;
+import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.dto.CommentDTO;
-import org.wolflink.sharine.utils.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyUtils;
 
 /**
  * 评论
