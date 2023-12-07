@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.wolflink.sharine.action.IpUtils;
+import org.wolflink.sharine.action.IpAction;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,9 +15,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class RequestLimitInterceptor implements HandlerInterceptor {
 
+    private final IpAction ipAction;
+
     @Value("${application.query-per-minute-limit}")
-    Integer queryPerMinuteLimit;
+    private Integer queryPerMinuteLimit;
+
     final Map<String,Integer> limitMap = new ConcurrentHashMap<>();
+
+    public RequestLimitInterceptor(IpAction ipAction) {
+        this.ipAction = ipAction;
+    }
 
     @Scheduled(fixedRate = 60000)
     public void startRefreshTimer() {
@@ -27,7 +34,7 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String ip = IpUtils.getIpAddress(request);
+        String ip = ipAction.getIpAddress(request);
         limitMap.put(ip,limitMap.getOrDefault(ip,0) + 1);
         if(limitMap.get(ip) > queryPerMinuteLimit) {
             System.out.println("IP:"+ip+" 用户达到QPM限制，暂时拦截其请求。");

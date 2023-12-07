@@ -2,7 +2,7 @@ package org.wolflink.sharine.action;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.wolflink.sharine.repository.UserRelationRepository;
 
 import java.util.ArrayList;
@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
  * 查询用户订阅频道数据
  * 插入数据到用户订阅频道
  */
-@Service
-public class SubscribeChannelService {
+@Component
+public class SubscribeChannelAction {
 
     @Value("${application.subscribe-channel-size}")
     Integer channelSize;
-    RedisService redisService;
+    RedisAction redisAction;
     UserRelationRepository userRelationRepository;
 
-    public SubscribeChannelService(RedisService redisService,UserRelationRepository userRelationRepository) {
-        this.redisService = redisService;
+    public SubscribeChannelAction(RedisAction redisAction, UserRelationRepository userRelationRepository) {
+        this.redisAction = redisAction;
         this.userRelationRepository = userRelationRepository;
     }
 
@@ -35,8 +35,8 @@ public class SubscribeChannelService {
      */
     private void insertVideoId(Long userId, Long videoId) {
         String key = String.valueOf(userId);
-        if(redisService.lSize(key) >= channelSize) redisService.lRightPop(key);
-        redisService.lLeftPush(key,videoId);
+        if(redisAction.lSize(key) >= channelSize) redisAction.lRightPop(key);
+        redisAction.lLeftPush(key,videoId);
     }
 
     /**
@@ -46,7 +46,7 @@ public class SubscribeChannelService {
      */
     List<Long> getSubscribeVideoIds(Long userId) {
         try {
-            return Objects.requireNonNull(redisService.lRange(String.valueOf(userId), 0, channelSize-1))
+            return Objects.requireNonNull(redisAction.lRange(String.valueOf(userId), 0, channelSize-1))
                     .stream().map(it -> Long.parseLong(String.valueOf(it))).collect(Collectors.toList());
         } catch (Exception ignore) {
             return new ArrayList<>();

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wolflink.sharine.entity.Video;
-import org.wolflink.sharine.action.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyAction;
 
 @Data
 @Builder
@@ -36,8 +36,5 @@ public class VideoVO {
 
     Long createTime;
 
-    @SuppressWarnings("请使用相关 Service 类的 build 方法进行构造，否则会缺失参数")
-    public static VideoVO of(Video video) {
-        return BeanCopyUtils.copyObject(video, VideoVO.class);
-    }
+
 }

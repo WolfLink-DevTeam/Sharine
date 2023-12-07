@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wolflink.sharine.entity.User;
-import org.wolflink.sharine.action.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyAction;
 
 /**
  * 用户档案信息
@@ -27,8 +27,4 @@ public class UserSimpleVO {
     Long createTime;
 
     Long updateTime;
-
-    public static UserSimpleVO of(User user) {
-        return BeanCopyUtils.copyObject(user, UserSimpleVO.class);
-    }
 }

@@ -6,12 +6,12 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.ErrorException;
 
-@Service
-public class EmailService {
+@Component
+public class EmailAction {
 
     /**
      * 邮箱号
@@ -20,9 +20,11 @@ public class EmailService {
     private String email;
 
     @Resource
-    private RedisService redisService;
+    private RedisAction redisAction;
     @Resource
     private JavaMailSender javaMailSender;
+    @Resource
+    private StringAction stringAction;
 
     /**
      * 发送验证码
@@ -51,11 +53,11 @@ public class EmailService {
         javaMailSender.send(message);
     }
     public void mailVerify(String ipAddress,String mail,String verificationCode) {
-        boolean checkResult = StringUtils.checkEmail(mail);
+        boolean checkResult = stringAction.checkEmail(mail);
         if (!checkResult) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
-        String code = (String) redisService.get("email-cache:"+ipAddress);
+        String code = (String) redisAction.get("email-cache:"+ipAddress);
         // 验证码错误
         if (code == null || !code.equals(verificationCode)) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);

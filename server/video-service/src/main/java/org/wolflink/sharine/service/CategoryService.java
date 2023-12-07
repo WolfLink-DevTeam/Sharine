@@ -1,7 +1,9 @@
 package org.wolflink.sharine.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.wolflink.sharine.action.ObjectParseAction;
 import org.wolflink.sharine.dto.ConditionDTO;
 import org.wolflink.sharine.entity.Category;
 import org.wolflink.sharine.exception.ErrorException;
@@ -13,20 +15,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class CategoryService {
 
-    final CategoryRepository categoryRepository;
-
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    private final CategoryRepository categoryRepository;
+    private final ObjectParseAction objectParseAction;
 
     public PageVO<CategoryVO> find(ConditionDTO conditionDTO) {
         String title = conditionDTO.getKeywords();
 
         PageRequest pageRequest = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
         List<Category> categories = categoryRepository.findAllByTitleRegex(title, pageRequest);
-        List<CategoryVO> list = categories.stream().map(CategoryVO::of).toList();
+        List<CategoryVO> list = categories.stream().map(objectParseAction::parse).toList();
 
         Long count = categoryRepository.countByTitleRegex(title).longValue();
 
@@ -38,9 +38,9 @@ public class CategoryService {
         if (byId.isEmpty()) {
             throw new ErrorException("数据错误");
         }
-        return CategoryVO.of(byId.get());
+        return objectParseAction.parse(byId.get());
     }
     public List<CategoryVO> findAll() {
-        return categoryRepository.findAll().stream().map(CategoryVO::of).toList();
+        return categoryRepository.findAll().stream().map(objectParseAction::parse).toList();
     }
 }

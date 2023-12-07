@@ -10,7 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.dto.UploadVideoDTO;
-import org.wolflink.sharine.action.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyAction;
 
 /**
  * 视频
@@ -22,10 +22,6 @@ import org.wolflink.sharine.action.BeanCopyUtils;
 @AllArgsConstructor
 @Table(name = DatabaseConst.VIDEO)
 public class Video {
-
-    public static Video of(UploadVideoDTO uploadVideoDTO) {
-        return BeanCopyUtils.copyObject(uploadVideoDTO, Video.class);
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

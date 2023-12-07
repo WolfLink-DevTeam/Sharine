@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wolflink.sharine.entity.Category;
-import org.wolflink.sharine.action.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyAction;
 
 @Data
 @Builder
@@ -23,7 +23,4 @@ public class CategoryVO {
 
     Long updateTime;
 
-    public static CategoryVO of(Category category) {
-        return BeanCopyUtils.copyObject(category, CategoryVO.class);
-    }
 }

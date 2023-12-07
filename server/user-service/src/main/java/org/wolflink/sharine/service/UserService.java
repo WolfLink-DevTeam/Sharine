@@ -1,11 +1,10 @@
 package org.wolflink.sharine.service;
 
 import cn.dev33.satoken.stp.StpUtil;
-import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.wolflink.sharine.action.EmailService;
-import org.wolflink.sharine.action.RedisService;
+import org.wolflink.sharine.action.*;
 import org.wolflink.sharine.constant.RedisPrefixConst;
 import org.wolflink.sharine.constant.UserConst;
 import org.wolflink.sharine.dto.UserPass;
@@ -16,9 +15,6 @@ import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.BookmarkRepository;
 import org.wolflink.sharine.repository.FavoriteRepository;
 import org.wolflink.sharine.repository.UserRepository;
-import org.wolflink.sharine.action.EncryptionUtil;
-import org.wolflink.sharine.action.StringUtils;
-import org.wolflink.sharine.vo.UserDetailVO;
 import org.wolflink.sharine.vo.UserSimpleVO;
 
 import java.util.List;
@@ -28,23 +24,22 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class UserService {
-    @Resource
-    UserRepository userRepository;
-    @Resource
-    BookmarkRepository bookmarkRepository;
-    @Resource
-    FavoriteRepository favoriteRepository;
-    @Resource
-    RedisService redisService;
-    @Resource
-    EmailService emailService;
+    private final UserRepository userRepository;
+    private final BookmarkRepository bookmarkRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final RedisAction redisAction;
+    private final EmailAction emailAction;
+    private final ObjectParseAction objectParseAction;
+    private final EncryptAction encryptAction;
+    private final StringAction stringAction;
 
     public UserSimpleVO login(UserPass userPass) {
         User user = verifyUserPass(userPass);
         StpUtil.login(user.getId());
         System.out.println("用户"+user.getId()+"登录成功");
-        return buildUserSimpleVO(user);
+        return objectParseAction.parse(user);
     }
     /**
      * 验证用户通行证的账号密码是否正确
@@ -54,7 +49,7 @@ public class UserService {
     @Deprecated
     public User verifyUserPass(UserPass userPass) {
         User user = userRepository.findByAccount(userPass.getAccount()).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
-        if (!EncryptionUtil.match(userPass.getPassword(), user.getPassword())) {
+        if (!encryptAction.match(userPass.getPassword(), user.getPassword())) {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
         return user;
@@ -62,7 +57,7 @@ public class UserService {
 
     public UserSimpleVO register(String ipAddress,UserPass userPass) {
         String account = userPass.getAccount();
-        emailService.mailVerify(ipAddress,account, userPass.getVerificationCode());
+        emailAction.mailVerify(ipAddress,account, userPass.getVerificationCode());
 
         // 用户已存在
         if (userRepository.existsByAccount(account).equals(true)) {
@@ -71,25 +66,25 @@ public class UserService {
 
         User user = User.builder()
                 .account(account)
-                .password(EncryptionUtil.encode(userPass.getPassword()))
+                .password(encryptAction.encode(userPass.getPassword()))
                 .nickname("用户"+UUID.randomUUID().toString().substring(0,8))
                 .avatar(UserConst.DEFAULT_AVATAR)
                 .content(UserConst.DEFAULT_CONTENT)
                 .build();
 
         user = userRepository.save(user);
-        return buildUserSimpleVO(user);
+        return objectParseAction.parse(user);
     }
 
     public UserSimpleVO changePassword(UserPass userPass) {
         String account = userPass.getAccount();
-        boolean checked = StringUtils.checkEmail(account);
+        boolean checked = stringAction.checkEmail(account);
         // 非邮箱
         if (!checked) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
 
-        String code = (String) redisService.get(RedisPrefixConst.TOKEN + account);
+        String code = (String) redisAction.get(RedisPrefixConst.TOKEN + account);
         // 验证码错误
         if (code == null || !code.equals(userPass.getVerificationCode())) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
@@ -103,41 +98,33 @@ public class UserService {
 
         // 修改数据
         User user = byUsername.get();
-        user.setPassword(EncryptionUtil.encode(userPass.getPassword()));
+        user.setPassword(encryptAction.encode(userPass.getPassword()));
         user = userRepository.save(user);
 
-        return buildUserSimpleVO(user);
+        return objectParseAction.parse(user);
     }
 
     public void requestForCode(String ipAddress,UserPass userPass) {
         String username = userPass.getAccount();
-        boolean checked = StringUtils.checkEmail(username);
+        boolean checked = stringAction.checkEmail(username);
         // 非邮箱
         if (!checked) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
         String cacheKey = "email-cache:"+ipAddress;
-        if (redisService.get(cacheKey) != null) {
-            throw new WarnException(StatusCodeEnum.FAIL.getCode(), "请在" + redisService.getExpire(cacheKey) + "秒后重新发送");
+        if (redisAction.get(cacheKey) != null) {
+            throw new WarnException(StatusCodeEnum.FAIL.getCode(), "请在" + redisAction.getExpire(cacheKey) + "秒后重新发送");
         }
 
         // 五分钟过期
-        String code = StringUtils.getRandomCode(6);
-        redisService.set(cacheKey, code, 5 * 60);
+        String code = stringAction.getRandomCode(6);
+        redisAction.set(cacheKey, code, 5 * 60);
 
         try {
-            emailService.sendCode(username, code, 5L);
+            emailAction.sendCode(username, code, 5L);
         } catch (MessagingException e) {
             throw new ErrorException("邮件发送失败");
         }
-    }
-
-    public UserSimpleVO buildUserSimpleVO(User user) {
-        return UserSimpleVO.of(user);
-    }
-
-    public UserDetailVO buildUserDetailVO(User user) {
-        return UserDetailVO.of(user);
     }
 
     /**
@@ -149,12 +136,12 @@ public class UserService {
     public UserSimpleVO findUserSimpleInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
-        return buildUserSimpleVO(user);
+        return objectParseAction.parse(user);
     }
     public UserSimpleVO findUserSimpleInfo(String account) {
         User user = userRepository.findByAccount(account)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
-        return buildUserSimpleVO(user);
+        return objectParseAction.parse(user);
     }
 
     /**
@@ -168,7 +155,7 @@ public class UserService {
 
         List<User> allByIdIn = userRepository.findAllById(userIds);
 
-        return allByIdIn.stream().map(this::buildUserSimpleVO)
+        return allByIdIn.stream().map(objectParseAction::parse)
                 .collect(
                         Collectors.toMap(UserSimpleVO::getId, person -> person)
                 );

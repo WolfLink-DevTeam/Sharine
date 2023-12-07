@@ -2,6 +2,7 @@ package org.wolflink.sharine.action;
 
 
 import cn.dev33.satoken.secure.BCrypt;
+import org.springframework.stereotype.Component;
 
 /**
  * 加密工具
@@ -9,7 +10,8 @@ import cn.dev33.satoken.secure.BCrypt;
  * @author march
  * @since 2023/6/2 下午5:37
  */
-public class EncryptionUtil {
+@Component
+public class EncryptAction {
 
     /**
      * 加密
@@ -17,7 +19,7 @@ public class EncryptionUtil {
      * @param str 明文
      * @return 密文
      */
-    public static String encode(String str) {
+    public String encode(String str) {
         return BCrypt.hashpw(str, BCrypt.gensalt());
     }
 
@@ -28,7 +30,7 @@ public class EncryptionUtil {
      * @param pass 密文
      * @return 是否匹配
      */
-    public static boolean match(String str, String pass) {
+    public boolean match(String str, String pass) {
         return BCrypt.checkpw(str, pass);
     }
 }

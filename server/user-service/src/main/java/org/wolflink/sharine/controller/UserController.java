@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.dto.UserPass;
 import org.wolflink.sharine.service.UserService;
-import org.wolflink.sharine.action.IpUtils;
+import org.wolflink.sharine.action.IpAction;
 import org.wolflink.sharine.vo.UserLoginVO;
 import org.wolflink.sharine.vo.UserSimpleVO;
 
@@ -20,7 +20,8 @@ import org.wolflink.sharine.vo.UserSimpleVO;
 @RequestMapping("/users")
 public class UserController extends BaseController {
 
-    final UserService userService;
+    private final UserService userService;
+    private final IpAction ipAction;
 
     /**
      * 用户登录接口
@@ -42,7 +43,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/register")
     public Object register(HttpServletRequest request, @RequestBody UserPass userPass) {
-        return ok(userService.register(IpUtils.getIpAddress(request),userPass));
+        return ok(userService.register(ipAction.getIpAddress(request),userPass));
     }
 
     /**
@@ -64,7 +65,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/sendCode")
     public Object requestForCode(HttpServletRequest request, @RequestBody UserPass userPass) {
-        userService.requestForCode(IpUtils.getIpAddress(request),userPass);
+        userService.requestForCode(ipAction.getIpAddress(request),userPass);
         return ok();
     }
 

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wolflink.sharine.entity.Comment;
-import org.wolflink.sharine.action.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyAction;
 
 @Data
 @Builder
@@ -21,8 +21,5 @@ public class CommentVO {
     String content;
     Long createTime;
     Long updateTime;
-    @SuppressWarnings("请使用相关 Service 类的 build 方法进行构造，否则会缺失参数")
-    public static CommentVO of(Comment comment) {
-        return BeanCopyUtils.copyObject(comment, CommentVO.class);
-    }
+
 }

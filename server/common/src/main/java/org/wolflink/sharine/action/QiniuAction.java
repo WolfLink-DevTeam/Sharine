@@ -30,7 +30,7 @@ import java.util.Optional;
  * 七牛云相关服务封装
  */
 @Component
-public class QiniuUtils {
+public class QiniuAction {
     @Value("${qiniu.access-key}")
     String accessKey;
     @Value("${qiniu.secret-key}")

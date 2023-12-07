@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wolflink.sharine.entity.User;
-import org.wolflink.sharine.action.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyAction;
 
 /**
  * 完整用户档案信息
@@ -45,8 +45,5 @@ public class UserDetailVO {
     Long createTime;
 
     Long updateTime;
-    @SuppressWarnings("请使用相关 Service 类的 build 方法进行构造，否则会缺失参数")
-    public static UserDetailVO of(User user) {
-        return BeanCopyUtils.copyObject(user, UserDetailVO.class);
-    }
+
 }

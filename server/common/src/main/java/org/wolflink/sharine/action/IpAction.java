@@ -3,6 +3,7 @@ package org.wolflink.sharine.action;
 
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,7 +19,8 @@ import java.util.Map;
  * @author 11921
  */
 @SuppressWarnings("all")
-public class IpUtils {
+@Component
+public class IpAction {
 
     /**
      * 解析ip地址
@@ -26,7 +28,7 @@ public class IpUtils {
      * @param ipAddress ip地址
      * @return 解析后的ip地址
      */
-    public static String getIpSource(String ipAddress) {
+    public String getIpSource(String ipAddress) {
         try {
             URL url = new URL("http://opendata.baidu.com/api.php?query=" + ipAddress + "&co=&resource_id=6006&oe=utf8");
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream(), "utf-8"));
@@ -44,7 +46,7 @@ public class IpUtils {
         }
     }
 
-    public static String getIpAddress(HttpServletRequest request) {
+    public String getIpAddress(HttpServletRequest request) {
         String ipAddress = null;
         try {
             ipAddress = request.getHeader("x-forwarded-for");

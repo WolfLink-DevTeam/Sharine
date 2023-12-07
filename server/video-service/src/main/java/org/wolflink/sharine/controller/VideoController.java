@@ -3,8 +3,8 @@ package org.wolflink.sharine.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.wolflink.sharine.action.IpUtils;
-import org.wolflink.sharine.action.QiniuUtils;
+import org.wolflink.sharine.action.IpAction;
+import org.wolflink.sharine.action.QiniuAction;
 import org.wolflink.sharine.action.SessionAction;
 import org.wolflink.sharine.dto.ConditionDTO;
 import org.wolflink.sharine.dto.UploadVideoDTO;
@@ -22,11 +22,12 @@ import org.wolflink.sharine.service.ViewCountService;
 @RequestMapping("/videos")
 public class VideoController extends BaseController {
 
-    final VideoService videoService;
-    final QiniuUtils qiniuUtils;
-    final ViewCountService viewCountService;
-    final BookmarkRepository bookmarkRepository;
-    final SessionAction sessionAction;
+    private final VideoService videoService;
+    private final QiniuAction qiniuAction;
+    private final ViewCountService viewCountService;
+    private final BookmarkRepository bookmarkRepository;
+    private final SessionAction sessionAction;
+    private final IpAction ipAction;
 
     @PostMapping("/verify")
     public Object verifyVideo(@RequestBody UploadVideoDTO uploadVideoDTO) {
@@ -41,7 +42,7 @@ public class VideoController extends BaseController {
 
     @PostMapping("/{videoId}/addViewCount")
     public Object addViewCount(HttpServletRequest request, @PathVariable Long videoId) {
-        String ip = IpUtils.getIpAddress(request);
+        String ip = ipAction.getIpAddress(request);
         viewCountService.addViewCount(ip,videoId);
         return ok();
     }

@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.dto.CommentDTO;
-import org.wolflink.sharine.action.BeanCopyUtils;
+import org.wolflink.sharine.action.BeanCopyAction;
 
 /**
  * 评论
@@ -36,9 +36,4 @@ public class Comment {
 
     @UpdateTimestamp
     Long updateTime;
-
-    @SuppressWarnings("请使用相关 Service 类的 build 方法进行构造，否则会缺失参数")
-    public static Comment of(CommentDTO commentDTO) {
-        return BeanCopyUtils.copyObject(commentDTO, Comment.class);
-    }
 }
