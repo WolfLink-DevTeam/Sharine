@@ -3,19 +3,14 @@ package org.wolflink.sharine.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.wolflink.sharine.action.SessionAction;
-import org.wolflink.sharine.dto.CommentDTO;
-import org.wolflink.sharine.dto.ConditionDTO;
-import org.wolflink.sharine.dto.UploadVideoDTO;
-import org.wolflink.sharine.entity.User;
-import org.wolflink.sharine.enums.StatusCodeEnum;
-import org.wolflink.sharine.exception.WarnException;
-import org.wolflink.sharine.repository.BookmarkRepository;
-import org.wolflink.sharine.service.*;
 import org.wolflink.sharine.action.IpUtils;
 import org.wolflink.sharine.action.QiniuUtils;
-
-import java.util.List;
+import org.wolflink.sharine.action.SessionAction;
+import org.wolflink.sharine.dto.ConditionDTO;
+import org.wolflink.sharine.dto.UploadVideoDTO;
+import org.wolflink.sharine.repository.BookmarkRepository;
+import org.wolflink.sharine.service.VideoService;
+import org.wolflink.sharine.service.ViewCountService;
 
 /**
  * 视频信息控制器
@@ -67,12 +62,12 @@ public class VideoController extends BaseController {
 //    }
 
     /**
-     * 获取用户投稿视频列表
+     * 获取用户投稿视频ID列表
      * @param userId    用户ID
      * @return          投稿视频信息列表
      */
     @GetMapping("/upload/{userId}")
-    public Object getUserUploadVideos(@PathVariable Long userId) {
+    public Object getUserUploadVideoIds(@PathVariable Long userId) {
         return ok(videoService.findVideoVOsByUserId(userId));
     }
 }

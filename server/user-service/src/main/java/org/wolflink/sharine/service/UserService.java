@@ -36,13 +36,9 @@ public class UserService {
     @Resource
     FavoriteRepository favoriteRepository;
     @Resource
-    UserRelationService userRelationService;
-    @Resource
     RedisService redisService;
     @Resource
     EmailService emailService;
-
-
 
     public UserSimpleVO login(UserPass userPass) {
         User user = verifyUserPass(userPass);

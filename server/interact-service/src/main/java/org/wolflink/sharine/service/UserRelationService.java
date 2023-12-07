@@ -46,6 +46,21 @@ public class UserRelationService {
         if(userRelationRepository.exists(example)) return;
         userRelationRepository.save(userRelation);
     }
+
+    /**
+     * userId1 是否关注了 userId2
+     * @param userId1       粉丝
+     * @param userId2       被关注者
+     * @return              粉丝是否关注被关注者
+     */
+    public boolean hasFollow(Long userId1,Long userId2) {
+        if(userId1.equals(userId2)) return false;
+        UserRelation userRelation;
+        if(userId1 < userId2) {
+            userRelation = userRelationRepository.findUserRelationByUserId1AndUserId2(userId1,userId2);
+        } else userRelation = userRelationRepository.findUserRelationByUserId1AndUserId2(userId2,userId1);
+        return userRelation.getStatus().equals(UserRelationEnum.FOLLOW);
+    }
     public void undoFollow(Long followerId,Long followedId) {
         if(followerId.equals(followedId)) return;
         if(followerId < followedId) {

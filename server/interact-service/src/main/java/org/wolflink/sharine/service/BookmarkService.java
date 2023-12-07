@@ -34,8 +34,6 @@ public class BookmarkService {
         }
         Bookmark bookmark = Bookmark.builder().userId(userId).videoId(videoId).build();
         bookmarkRepository.save(bookmark);
-        // TODO 不应该聚合到此处
-//        userRelationService.follow(userId,authorId);
     }
     public boolean hasBookmarkVideo(Long userId,Long videoId) {
         return bookmarkRepository.existsByUserIdAndVideoId(userId,videoId);
@@ -53,8 +51,6 @@ public class BookmarkService {
             throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
         }
         bookmarkRepository.deleteByUserIdAndVideoId(userId, videoId);
-        // TODO 不应该聚合到此处
-//        userRelationService.undoFollow(userId,authorId);
     }
 
     public List<Long> findUserBookmarkVideoIds(Long userId) {

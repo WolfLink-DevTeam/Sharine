@@ -14,6 +14,7 @@ import java.util.List;
 @CacheConfig(cacheNames = DatabaseConst.USER_RELATION)
 public interface UserRelationRepository extends JpaRepository<UserRelation, Long> {
 
+    UserRelation findUserRelationByUserId1AndUserId2(Long userId1,Long userId2);
     @Modifying
     @Transactional
     void deleteByUserId1AndUserId2(Long userId1,Long userId2);

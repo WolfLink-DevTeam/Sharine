@@ -26,7 +26,7 @@ public class BookmarkController extends BaseController {
     }
 
     /**
-     * 是否已经订阅了视频
+     * 是否已经收藏了视频
      * @param videoId   视频ID
      * @return          订阅状态
      */
