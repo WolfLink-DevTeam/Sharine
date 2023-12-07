@@ -1,49 +1,82 @@
-# 项目简介
-闪灵 Sharine 是一款主要由个人开发并维护的基于 Web 的前后端分离架构短视频平台。用户可在平台自由浏览视频，根据兴趣选择分区，查看分区热度以及用户个人最常浏览分区排行榜。用户也可以与视频进行点赞，收藏，评论等交互动作。用户注册后可以拥有专属的订阅频道，在关注的 UP 主更新时订阅频道也会第一时间收到更新消息，登录后的用户也可以自由进行视频投稿。
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/MikkoAyaka/Sharine)
+![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/MikkoAyaka/Sharine)
+![GitHub Repo stars](https://img.shields.io/github/stars/MikkoAyaka/Sharine)
+[![Star History Chart](https://api.star-history.com/svg?repos=MikkoAyaka/Sharine&type=Date)](https://star-history.com/#MikkoAyaka/Sharine&Date)
 
-建议前往 **docs** 查看完整文档  
+# 项目简介
+
+闪灵 Sharine 是一款 Web 短视频平台应用，基于 SpringCloud + Consul 微服务架构，配合 Docker & Kubernetes 实现容器化集群管理。数据库则采用 MySQL + Redis 主缓一体化设计，通过缓存管理器配合 Spring Data 实现自动化缓存管理。本项目开发代码较为规范，可供学习参考。
+
+建议前往 **docs** 查看完整文档
 Demo 视频地址：http://s3nb7l0x2.hn-bkt.clouddn.com/demo.mp4
+
 # 线上体验
 
->线路屏蔽海外，且测试服务器网络环境复杂，建议优先考虑本地部署进行体验  
-部分视频无法浏览属正常现象，测试数据中的链接来源于互联网，并不保证其链接有效性
-> 
-http://ipv4.rinkore.com:15001  
-测试账号 3401286177@qq.com  
-测试密码 mikkoayaka  
-当然您也可以选择注册一个账号体验一下  
+> 线路屏蔽海外，且测试服务器网络环境复杂，建议优先考虑本地部署进行体验
+> 部分视频无法浏览属正常现象，测试数据中的链接来源于互联网，并不保证其链接有效性
+
+http://ipv4.rinkore.com:15001
+测试账号 3401286177@qq.com
+测试密码 mikkoayaka
+当然您也可以选择注册一个账号体验一下
+
 # 自行部署
+
 ## 环境准备
+
 > 本项目提供了测试用数据集，请访问 Github 仓库路径 **Sharine/server/src/main/resources/Sharine.sql** 进行下载
+
 - JDK 17 及以上(测试版本：Oracle JDK 17)
 - 支持 JDBC 的 SQL 数据库环境(测试版本：MySQL 5.7.26)
 - Redis 数据库环境(测试版本：Redis for Windows 5.0.14)
+- Docker 相关环境(测试版本：Docker Desktop 4.21.1)
+
 ## 开始对接
+
 ### 后端部署
-  请修改后端相关配置文件，完成以下对接：
+
+请修改后端相关配置文件，完成以下对接：
+
 - SQL 数据库
 - Redis 数据库
+- Consul 服务中心
 - SMTP 邮箱服务
-- 七牛云 API  
+- 七牛云 API
 
-
-  首先请前往 Github 自动构建页面 下载最新的服务端 jar 包。
+  首先请前往 Github 自动构建页面 下载最新的微服务端 jar 包。
   配置文件修改方式有以下两种：
-1. 直接使用压缩软件打开服务端 jar 包，前往 BOOT-INF/classes/ 路径下修改 application.yml 以及该路径下 config 文件夹中的线上环境配置，修改完毕后保存。
-2. 在服务端 jar 包同目录下创建 config 文件夹，再自行创建 application.yml 以及 application-prod.yml 配置文件
-   下面是配置文件参考示例：
+
+1. 直接使用压缩软件打开微服务端 jar 包，前往 BOOT-INF/classes/ 路径下修改 bootstrap.yml 以及该路径下 config 文件夹中的线上环境配置，修改完毕后保存。
+2. 在微服务端 jar 包同目录下创建 config 文件夹，再自行创建 bootstrap.yml 配置文件
+   下面是 video-service 视频微服务端配置文件参考示例：
+
 ```yaml
-# application.yml
+# bootstrap.yml
 server:
-# 后端 HTTP 端口，修改端口以后需要自行修改前端相关配置，详见 前端部署
-  port: 15000
+  port: 23401
 spring:
+  application:
+    name: video-service
+    id: 1
   profiles:
-# 指定应用环境配置文件，例如 prod 则指定使用 config/application-prod.yml
     active: prod
+  config:
+    import: consul:localhost:8500/config
+  cloud:
+    consul:
+      config:
+        format: yaml
+        data-key: ${spring.application.name}-${spring.profiles.active}
+      discovery:
+        instance-id: ${spring.application.name}-${spring.application.id}
+        health-check-timeout: 1s
+        prefer-ip-address: true
 ```
+
+创建完毕后，前往 Consul 管理页面，进入 K/V 存储中心，添加相应的配置：
+
 ```yaml
-# application-prod.yml
+# config/video-service-prod.yml
 spring:
   # 数据库配置，请按实际环境修改
   datasource:
@@ -110,21 +143,28 @@ application:
   query-per-minute-limit: 1200
 ```
 
-
 修改完毕配置文件以后，在服务端同目录下创建服务端启动脚本，可参考以下内容：
+
 ```shell
 # start.bat
 # 如果没有配置 Java 环境变量，请修改 Java 为 java.exe 的具体路径
 Java -Xms8G -Xmx8G -jar server.jar
 pause
 ```
-编写完成后即可双击启动后端服务器。  
+
+编写完成后即可双击启动后端服务器。
+
 ### 前端部署
+
 请首先前往 https://nodejs.org/en 安装 Node.js 环境，并从 项目仓库 拉取 Sharine/web 前端项目文件，修改项目根目录 .env 文件中的环境变量，改为后端服务器 URL。
+
 #### 测试环境
+
 1. 运行 npm install 补全缺失依赖
 2. 运行 npm run dev 运行前端
+
 #### 生产环境
+
 1. 运行 npm install 补全缺失依赖
 2. 运行 npm run build 打包前端项目文件为 dist 文件夹
 3. 下载 nginx 后自行修改相关配置，将前端打包后得到的 dist 文件夹解压到 nginx 配置文件 http.server.location.root 指定的目录下，并运行 nginx
