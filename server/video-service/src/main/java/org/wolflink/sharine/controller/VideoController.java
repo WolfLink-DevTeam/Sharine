@@ -1,16 +1,13 @@
 package org.wolflink.sharine.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.wolflink.sharine.action.IpAction;
-import org.wolflink.sharine.action.QiniuAction;
-import org.wolflink.sharine.action.SessionAction;
-import org.wolflink.sharine.dto.ConditionDTO;
-import org.wolflink.sharine.dto.UploadVideoDTO;
-import org.wolflink.sharine.repository.BookmarkRepository;
+import org.wolflink.sharine.dto.ResultPack;
+import org.wolflink.sharine.entity.Video;
+import org.wolflink.sharine.rpc.VideoServiceClient;
 import org.wolflink.sharine.service.VideoService;
-import org.wolflink.sharine.service.ViewCountService;
+
+import java.util.List;
 
 /**
  * 视频信息控制器
@@ -20,41 +17,44 @@ import org.wolflink.sharine.service.ViewCountService;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/videos")
-public class VideoController extends BaseController {
+public class VideoController extends BaseController implements VideoServiceClient {
 
     private final VideoService videoService;
-    private final QiniuAction qiniuAction;
-    private final ViewCountService viewCountService;
-    private final BookmarkRepository bookmarkRepository;
-    private final SessionAction sessionAction;
-    private final IpAction ipAction;
 
+    @Override
     @PostMapping("/verify")
-    public Object verifyVideo(@RequestBody UploadVideoDTO uploadVideoDTO) {
-        videoService.verifyAndSaveVideo(uploadVideoDTO);
+    public ResultPack verifyVideo(
+            @RequestBody Video video,
+            @RequestParam String fileKey,
+            @RequestParam String hash,
+            @RequestParam Long categoryId
+    ) {
+        videoService.verifyAndSaveVideo(video, fileKey, hash, categoryId);
         return ok();
     }
 
+    @Override
     @GetMapping("/{videoId}")
-    public Object getVideoInfo(@PathVariable Long videoId) {
-        return ok(videoService.findVideoInfo(videoId));
+    public ResultPack getVideo(@PathVariable Long videoId) {
+        return ok(videoService.findVideo(videoId));
+    }
+    @Override
+    @GetMapping
+    public ResultPack getVideos(@ModelAttribute List<Long> videoIds) {
+        return ok(videoService.findVideos(videoIds));
     }
 
-    @PostMapping("/{videoId}/addViewCount")
-    public Object addViewCount(HttpServletRequest request, @PathVariable Long videoId) {
-        String ip = ipAction.getIpAddress(request);
-        viewCountService.addViewCount(ip,videoId);
-        return ok();
+    @Override
+    @GetMapping("/page/{current}/{size}")
+    public ResultPack findVideos(@PathVariable Integer current, @PathVariable Integer size) {
+        return ok(videoService.findVideos(current, size));
     }
-    @GetMapping
-    public Object findVideos(ConditionDTO conditionDTO) {
-        return ok(videoService.findVideos(conditionDTO));
-    }
+
 
 
     /**
      * TODO 获取用户订阅视频列表(不可查看他人订阅频道)
-     * @return          订阅视频信息列表
+     * @return 订阅视频信息列表
      */
 //    @GetMapping("/subscribe")
 //    public Object getUserSubscribeVideos() {
@@ -64,11 +64,13 @@ public class VideoController extends BaseController {
 
     /**
      * 获取用户投稿视频ID列表
-     * @param userId    用户ID
-     * @return          投稿视频信息列表
+     *
+     * @param userId 用户ID
+     * @return 投稿视频信息列表
      */
+    @Override
     @GetMapping("/upload/{userId}")
-    public Object getUserUploadVideoIds(@PathVariable Long userId) {
-        return ok(videoService.findVideoVOsByUserId(userId));
+    public ResultPack getUserUploadVideos(@PathVariable Long userId) {
+        return ok(videoService.findVideosByUserId(userId));
     }
 }

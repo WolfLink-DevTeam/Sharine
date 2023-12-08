@@ -17,3 +17,5 @@ spring:
         instance-id: ${spring.application.name}-${spring.application.id}
         health-check-timeout: 1s
         prefer-ip-address: true
+    bus:
+      destination: sharine-event-bus

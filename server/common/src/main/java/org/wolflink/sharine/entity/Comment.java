@@ -5,8 +5,6 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
-import org.wolflink.sharine.dto.CommentDTO;
-import org.wolflink.sharine.action.BeanCopyAction;
 
 /**
  * 评论

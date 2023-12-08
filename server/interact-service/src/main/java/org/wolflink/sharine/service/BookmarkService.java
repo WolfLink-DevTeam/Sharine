@@ -3,7 +3,6 @@ package org.wolflink.sharine.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.wolflink.sharine.dto.ConditionDTO;
 import org.wolflink.sharine.entity.Bookmark;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.WarnException;
@@ -57,11 +56,8 @@ public class BookmarkService {
         List<Bookmark> byUserId = bookmarkRepository.findByUserId(userId);
         return byUserId.stream().map(Bookmark::getVideoId).collect(Collectors.toList());
     }
-    public List<Long> findUserBookmarkVideoIds(Long userId, ConditionDTO conditionDTO) {
-        Pageable pageable = PageRequest.of(
-                conditionDTO.getCurrent(),
-                conditionDTO.getSize()
-        );
+    public List<Long> findUserBookmarkVideoIds(Long userId, Integer current, Integer size) {
+        Pageable pageable = PageRequest.of(current, size);
 
         List<Bookmark> byUserId = bookmarkRepository.findByUserId(userId, pageable);
 

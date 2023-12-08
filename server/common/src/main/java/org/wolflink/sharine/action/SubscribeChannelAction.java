@@ -44,7 +44,7 @@ public class SubscribeChannelAction {
      * @param userId    用户ID
      * @return          视频ID列表(索引越大视频越早发布，索引越小视频越新发布)
      */
-    List<Long> getSubscribeVideoIds(Long userId) {
+    public List<Long> getSubscribeVideoIds(Long userId) {
         try {
             return Objects.requireNonNull(redisAction.lRange(String.valueOf(userId), 0, channelSize-1))
                     .stream().map(it -> Long.parseLong(String.valueOf(it))).collect(Collectors.toList());

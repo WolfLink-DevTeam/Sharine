@@ -2,6 +2,7 @@ package org.wolflink.sharine.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.service.FavoriteService;
 import org.wolflink.sharine.action.SessionAction;
 
@@ -16,16 +17,16 @@ public class FavoriteController extends BaseController {
     final SessionAction sessionAction;
 
     @PostMapping("/{videoId}")
-    public Object favorite(@PathVariable Long videoId) {
+    public ResultPack favorite(@PathVariable Long videoId) {
         favoriteService.favoriteVideo(sessionAction.getSessionUserId(), videoId);
         return ok();
     }
     @GetMapping("/{videoId}")
-    public Object hasFavorite(@PathVariable Long videoId) {
+    public ResultPack hasFavorite(@PathVariable Long videoId) {
         return ok(favoriteService.hasFavoriteVideo(sessionAction.getSessionUserId(), videoId));
     }
     @DeleteMapping("/{videoId}")
-    public Object undoFavorite(@PathVariable Long videoId) {
+    public ResultPack undoFavorite(@PathVariable Long videoId) {
         favoriteService.undoFavoriteVideo(sessionAction.getSessionUserId(), videoId);
         return ok();
     }
@@ -33,7 +34,7 @@ public class FavoriteController extends BaseController {
      * 只允许查询用户自己的点赞视频列表数据
      */
     @GetMapping
-    public Object getUserFavoriteVideoIds() {
+    public ResultPack getUserFavoriteVideoIds() {
         // 获取用户喜欢的视频ID列表
         List<Long> favoriteVideoIds = favoriteService.findUserFavoriteVideoIds(sessionAction.getSessionUserId());
         // 转 VideoVO 列表

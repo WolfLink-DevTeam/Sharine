@@ -3,7 +3,6 @@ package org.wolflink.sharine.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.wolflink.sharine.dto.ConditionDTO;
 import org.wolflink.sharine.entity.Favorite;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.WarnException;
@@ -19,16 +18,6 @@ public class FavoriteService {
 
     public FavoriteService(FavoriteRepository favoriteRepository) {
         this.favoriteRepository = favoriteRepository;
-    }
-
-    /**
-     * 计算用户关注数
-     *
-     * @param userId 用户ID
-     * @return 关注数
-     */
-    public Long countUserFavorite(Long userId) {
-        return favoriteRepository.countByUserId(userId).longValue();
     }
 
     /**
@@ -72,8 +61,8 @@ public class FavoriteService {
         System.out.println(byUserId);
         return byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList());
     }
-    public List<Long> findUserFavoriteVideoIds(Long userId, ConditionDTO conditionDTO) {
-        Pageable pageable = PageRequest.of(conditionDTO.getCurrent(), conditionDTO.getSize());
+    public List<Long> findUserFavoriteVideoIds(Long userId, Integer current,Integer size) {
+        Pageable pageable = PageRequest.of(current, size);
 
         List<Favorite> byUserId = favoriteRepository.findAllByUserId(userId, pageable);
 

@@ -3,6 +3,7 @@ package org.wolflink.sharine.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.action.SessionAction;
+import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.service.BookmarkService;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class BookmarkController extends BaseController {
      * @param videoId   视频ID
      */
     @PostMapping("/{videoId}")
-    public Object bookmark(@PathVariable Long videoId) {
+    public ResultPack bookmark(@PathVariable Long videoId) {
         bookmarkService.bookmarkVideo(sessionAction.getSessionUserId(), videoId);
         return ok();
     }
@@ -31,7 +32,7 @@ public class BookmarkController extends BaseController {
      * @return          订阅状态
      */
     @GetMapping("/{videoId}")
-    public Object hasBookmark(@PathVariable Long videoId) {
+    public ResultPack hasBookmark(@PathVariable Long videoId) {
         return ok(bookmarkService.hasBookmarkVideo(sessionAction.getSessionUserId(), videoId));
     }
     /**
@@ -39,7 +40,7 @@ public class BookmarkController extends BaseController {
      * @param videoId   视频ID
      */
     @DeleteMapping("/{videoId}")
-    public Object undoBookmark(@PathVariable Long videoId) {
+    public ResultPack undoBookmark(@PathVariable Long videoId) {
         bookmarkService.undoBookmarkVideo(sessionAction.getSessionUserId(), videoId);
         return ok();
     }
@@ -47,7 +48,7 @@ public class BookmarkController extends BaseController {
      * 只允许查询用户自己的收藏视频列表Id数据
      */
     @GetMapping
-    public Object getUserBookmarkVideoIds() {
+    public ResultPack getUserBookmarkVideoIds() {
         // 获取用户喜欢的视频ID列表
         List<Long> bookmarkVideoIds = bookmarkService.findUserBookmarkVideoIds(sessionAction.getSessionUserId());
         // 转 VideoVO 列表

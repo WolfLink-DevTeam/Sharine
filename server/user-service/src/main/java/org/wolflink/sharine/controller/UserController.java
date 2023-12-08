@@ -4,11 +4,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.wolflink.sharine.dto.UserPass;
+import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.service.UserService;
 import org.wolflink.sharine.action.IpAction;
-import org.wolflink.sharine.vo.UserLoginVO;
-import org.wolflink.sharine.vo.UserSimpleVO;
 
 /**
  * 用户信息控制器
@@ -25,47 +23,40 @@ public class UserController extends BaseController {
 
     /**
      * 用户登录接口
-     *
-     * @param userPass 登录通行证信息
-     * @return 登录结果
      */
     @PostMapping("/login")
-    public Object login(@RequestBody UserPass userPass) {
-        UserSimpleVO userSimpleVO = userService.login(userPass);
-        return ok(new UserLoginVO(userSimpleVO,StpUtil.getTokenValue()));
+    public ResultPack login(@RequestParam String account, @RequestParam String password) {
+        userService.login(account,password);
+//        return ok(new UserLoginVO(userSimpleVO,StpUtil.getTokenValue()));
+        return ok();
     }
 
     /**
      * 用户注册接口
-     *
-     * @param userPass 登录通行证信息
-     * @return 注册结果
      */
     @PostMapping("/register")
-    public Object register(HttpServletRequest request, @RequestBody UserPass userPass) {
-        return ok(userService.register(ipAction.getIpAddress(request),userPass));
+    public ResultPack register(HttpServletRequest request, @RequestParam String account,@RequestParam String password,@RequestParam String verificationCode) {
+        userService.register(ipAction.getIpAddress(request),account,password,verificationCode);
+        return ok();
     }
 
     /**
      * 用户修改密码接口
-     *
-     * @param userPass 新的登录通行证信息
-     * @return 密码修改结果
      */
     @PostMapping("/changePassword")
-    public Object changePassword(@RequestBody UserPass userPass) {
-        return ok(userService.changePassword(userPass));
+    public ResultPack changePassword(@RequestBody String account,@RequestBody String password,@RequestBody String verificationCode) {
+        userService.changePassword(account,password,verificationCode);
+        return ok();
     }
 
     /**
      * 用户请求验证码接口
      *
-     * @param userPass 登录通行证信息(可能还未注册)
      * @return 请求结果
      */
     @PostMapping("/sendCode")
-    public Object requestForCode(HttpServletRequest request, @RequestBody UserPass userPass) {
-        userService.requestForCode(ipAction.getIpAddress(request),userPass);
+    public ResultPack requestForCode(HttpServletRequest request, @RequestParam String account) {
+        userService.requestForCode(ipAction.getIpAddress(request),account);
         return ok();
     }
 

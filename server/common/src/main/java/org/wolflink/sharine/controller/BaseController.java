@@ -5,62 +5,50 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.enums.StatusCodeEnum;
-import org.wolflink.sharine.vo.PageVO;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class BaseController {
     @ExceptionHandler(Exception.class)
-    protected final Object exception(Exception ex) {
+    protected final ResultPack exception(Exception ex) {
         ex.printStackTrace();
         return error("程序内部错误: " + ex.getMessage());
     }
 
-    protected final Object error(String msg) {
+    protected final ResultPack error(String msg) {
         return createResult(StatusCodeEnum.SYSTEM_ERROR.getCode(), msg, null);
     }
 
-    protected final Object error(Integer code, String msg) {
+    protected final ResultPack error(Integer code, String msg) {
         return createResult(code, msg, null);
     }
 
-    protected final Object warn(String msg) {
+    protected final ResultPack warn(String msg) {
         return createResult(StatusCodeEnum.FAIL.getCode(), msg, null);
     }
 
-    protected final Object warn(Integer code, String msg) {
+    protected final ResultPack warn(Integer code, String msg) {
         return createResult(code, msg, null);
     }
 
-    protected final Object ok(Object data, Long total) {
-        Map<String, Object> map = new HashMap<>(2);
-        map.put("list", data);
-        map.put("total", total);
-        return createResult(StatusCodeEnum.SUCCESS.getCode(), null, map);
-    }
-    protected final Object ok(PageVO<?> data) {
-        return ok(data.getList(), data.getTotal());
-    }
-
-    protected final Object ok(Object data) {
+    protected final ResultPack ok(Object data) {
         return createResult(StatusCodeEnum.SUCCESS.getCode(), null, data);
     }
 
-    protected final Object ok() {
+    protected final ResultPack ok() {
         return createResult(StatusCodeEnum.SUCCESS.getCode(), null, null);
     }
 
-    protected final Object todo() { return createResult(StatusCodeEnum.TODO.getCode(),StatusCodeEnum.TODO.getDesc(),null); }
-    private Object createResult(int code, String msg, Object data) {
-        Map<String, Object> result = new HashMap<>(3);
-        result.put("code", code);
-        result.put("msg", msg);
-        result.put("data", data);
-        return result;
+    protected final ResultPack todo() { return createResult(StatusCodeEnum.TODO.getCode(),StatusCodeEnum.TODO.getDesc(),null); }
+    private ResultPack createResult(int code, String msg, Object data) {
+        ResultPack pack = new ResultPack();
+        pack.setCode(code);
+        pack.setMsg(msg);
+        pack.setData(data);
+        return pack;
     }
 
     @InitBinder

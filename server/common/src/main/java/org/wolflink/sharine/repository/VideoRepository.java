@@ -14,8 +14,4 @@ import java.util.List;
 public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findAllByUserId(Long userId);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Video v SET v.viewCount = v.viewCount + 1 WHERE v.id = :videoId")
-    void incrementCount(Long videoId);
 }

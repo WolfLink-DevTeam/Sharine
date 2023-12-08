@@ -5,12 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
-import org.wolflink.sharine.dto.UploadVideoDTO;
-import org.wolflink.sharine.action.BeanCopyAction;
 
 /**
  * 视频
@@ -28,6 +25,9 @@ public class Video {
     Long id;
 
     @Column(nullable = false)
+    Long categoryId;
+
+    @Column(nullable = false)
     Long userId;
 
     @Column(nullable = false)
@@ -42,13 +42,10 @@ public class Video {
     @Column(nullable = false)
     String coverUrl;
 
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    Long viewCount;
-
     @UpdateTimestamp
     Long updateTime;
 
     @CreationTimestamp
     Long createTime;
+
 }

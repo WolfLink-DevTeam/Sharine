@@ -1,5 +1,5 @@
 server:
-  port: 23501
+  port: 23401
 spring:
   application:
     name: interact-service
@@ -17,3 +17,5 @@ spring:
         instance-id: ${spring.application.name}-${spring.application.id}
         health-check-timeout: 1s
         prefer-ip-address: true
+    bus:
+      destination: sharine-event-bus

@@ -2,6 +2,7 @@ package org.wolflink.sharine.constant;
 
 public class DatabaseConst {
     public static final String VIDEO = "video";
+    public static final String VIDEO_METADATA = "video_metadata";
     public static final String COMMENT = "comment";
 
     public static final String FAVOURITE = "favourite";

@@ -27,7 +27,8 @@ public enum StatusCodeEnum {
     NOT_LOGIN(18, "未登录"),
     VERIFY_FAILED(19,"验证失败"),
     TODO(20,"计划开发中，暂未实现"),
-    JUDGE_FAILED(21,"信息审核不通过")
+    JUDGE_FAILED(21,"信息审核不通过"),
+    SERVICE_CALL_TIMEOUT(22,"微服务调用超时")
     ;
 
     /**
