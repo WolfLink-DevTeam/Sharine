@@ -28,8 +28,33 @@ services:
       - "8600:8600"
       - "8301:8301"
       - "8302:8302"
+  user-service:
+    container_name: "user-service"
+    build:
+      context: ./user-service
+    ports:
+      - "23301-23399:23301-23399"
+  interact-service:
+    container_name: "interact-service"
+    build:
+      context: ./interact-service
+    ports:
+      - "23401-23499:23401-23499"
+  video-service:
+    container_name: "video-service"
+    build:
+      context: ./video-service
+    ports:
+      - "23501-23599:23501-23599"
+  content-service:
+    container_name: "content-service"
+    build:
+      context: ./content-service
+    ports:
+      - "23601-23699:23601-23699"
   aggregated-service:
     container_name: "aggregated-service"
-    image: "aggregated-service:1.0.0"
+    build:
+      context: ./aggregated-service
     ports:
       - "23701-23799:23701-23799"
