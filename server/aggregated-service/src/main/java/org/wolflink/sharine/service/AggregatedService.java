@@ -10,10 +10,12 @@ import org.wolflink.sharine.action.SubscribeChannelAction;
 import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.entity.Video;
 import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.ErrorException;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.rpc.VideoServiceClient;
 import org.wolflink.sharine.vo.VideoVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,13 +31,16 @@ public class AggregatedService {
      * @param userId    用户ID
      * @return          视频列表
      */
-    public List<VideoVO> getSubscribeVideos(Long userId) throws JsonProcessingException {
+    public List<VideoVO> getSubscribeVideos(Long userId) {
         List<Long> videoIds = subscribeChannelAction.getSubscribeVideoIds(userId);
         ResultPack resultPack = videoServiceClient.getVideos(videoIds);
         if(resultPack == null) throw new WarnException(StatusCodeEnum.SERVICE_CALL_TIMEOUT);
         if(!StatusCodeEnum.SUCCESS.getCode().equals(resultPack.getCode())) throw new WarnException(resultPack.getCode(),resultPack.getMsg());
-        List<Video> videos = objectMapper.readValue((String) resultPack.getData(), new TypeReference<>() {});
-        return videos.stream().map(objectParseAction::parse).toList();
+        try {
+            List<Video> videos = objectMapper.readValue((String) resultPack.getData(), new TypeReference<>() {});
+            return videos.stream().map(objectParseAction::parse).toList();
+        } catch (Exception ignore) {
+            throw new ErrorException("Json 数据无法被转换为 List<Video> 数组类型");
+        }
     }
-
 }

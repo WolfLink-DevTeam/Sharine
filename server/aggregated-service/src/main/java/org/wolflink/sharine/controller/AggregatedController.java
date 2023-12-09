@@ -4,22 +4,25 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.action.IpAction;
 import org.wolflink.sharine.dto.ResultPack;
+import org.wolflink.sharine.service.AggregatedService;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/aggregated")
 public class AggregatedController extends BaseController {
 
-    private final IpAction ipAction;
+    private final AggregatedService aggregatedService;
 
     @GetMapping("/detail-video/{videoId}")
     public ResultPack getDetailVideo(@PathVariable Long videoId) {
         // TODO 未实现
         ResultPack resultPack = new ResultPack();
-        resultPack.setCode(0);
-        resultPack.setMsg("你好");
-        System.out.println("收到请求");
         return resultPack;
+    }
+
+    @GetMapping("/subscribe-videos/{userId}")
+    public ResultPack getSubscribeVideos(@PathVariable Long userId) {
+        return ok(aggregatedService.getSubscribeVideos(userId));
     }
 
 //    @PostMapping("/{videoId}/addViewCount")

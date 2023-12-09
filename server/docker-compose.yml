@@ -1,14 +1,13 @@
+name: "wolflink-containergroup"
 services:
   redis:
     container_name: redis
     image: redis
-    restart: always
     ports:
       - "6379:6379"
   mysql:
     container_name: mysql
     image: mysql
-    restart: always
     ports:
       - "3306:3306"
     environment:
@@ -16,14 +15,12 @@ services:
   sonarqube:
     container_name: sonarqube
     image: sonarqube
-    restart: always
     ports:
       - "9000:9000"
   consul:
     container_name: consul
-    image: "consul:1.15.4"
-    restart: always
-    command: ["agent", "-server","-client", "0.0.0.0","-bootstrap-expect","1","-ui"]
+    image: "hashicorp/consul"
+    command: ["agent", "-server","-client", "0.0.0.0","-bootstrap","-ui"]
     ports:
       - "8500:8500"
       - "8502:8502"
@@ -31,3 +28,8 @@ services:
       - "8600:8600"
       - "8301:8301"
       - "8302:8302"
+  aggregated-service:
+    container_name: "aggregated-service"
+    image: "aggregated-service:1.0.0"
+    ports:
+      - "23701-23799:23701-23799"

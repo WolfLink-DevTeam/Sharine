@@ -7,7 +7,7 @@ spring:
   profiles:
     active: dev
   config:
-    import: consul:localhost:8500/config
+    import: consul:consul:8500/config
   cloud:
     consul:
       config:
@@ -16,6 +16,5 @@ spring:
       discovery:
         instance-id: ${spring.application.name}-${spring.application.id}
         health-check-timeout: 1s
-        prefer-ip-address: true
     bus:
       destination: sharine-event-bus

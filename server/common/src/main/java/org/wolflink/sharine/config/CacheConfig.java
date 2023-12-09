@@ -26,11 +26,6 @@ import java.time.Duration;
 @Configuration
 @EnableCaching
 public class CacheConfig {
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("localhost", 6379);
-        return new LettuceConnectionFactory(config);
-    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
