@@ -1,3 +1,5 @@
+![image](https://github.com/MikkoAyaka/Sharine/blob/master/images/banner.png?raw=true)
+
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/MikkoAyaka/Sharine)
 ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/MikkoAyaka/Sharine)
 ![GitHub Repo stars](https://img.shields.io/github/stars/MikkoAyaka/Sharine)
@@ -7,7 +9,8 @@
 
 闪灵 Sharine 是一款 Web 短视频平台应用，基于 SpringCloud + Consul 微服务架构，配合 Docker & Kubernetes 实现容器化集群管理。数据库则采用 MySQL + Redis 主缓一体化设计，通过缓存管理器配合 Spring Data 实现自动化缓存管理。本项目开发代码较为规范，可供学习参考。
 
-建议前往 **docs** 查看完整文档
+近期正在重构，如需体验请选择 dev 分支  
+建议前往 **docs** 查看完整文档  
 Demo 视频地址：http://s3nb7l0x2.hn-bkt.clouddn.com/demo.mp4
 
 # 线上体验
