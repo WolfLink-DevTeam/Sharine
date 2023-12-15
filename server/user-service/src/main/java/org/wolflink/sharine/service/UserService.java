@@ -15,7 +15,7 @@ import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.ErrorException;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.BookmarkRepository;
-import org.wolflink.sharine.repository.FavoriteRepository;
+import org.wolflink.sharine.repository.UpvoteRepository;
 import org.wolflink.sharine.repository.UserRepository;
 
 import java.util.Optional;
@@ -26,7 +26,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final BookmarkRepository bookmarkRepository;
-    private final FavoriteRepository favoriteRepository;
+    private final UpvoteRepository upvoteRepository;
     private final RedisAction redisAction;
     private final EmailAction emailAction;
     private final EncryptAction encryptAction;
@@ -162,7 +162,7 @@ public class UserService {
 //        AtomicReference<Long> beenFavoriteCount = new AtomicReference<>(0L);
 //        AtomicReference<Long> beenViewCount = new AtomicReference<>(0L);
 //        videoService.findVideosByUserId(userId).forEach(video -> {
-//            beenFavoriteCount.updateAndGet(v -> v + favoriteRepository.countByVideoId(video.getId()));
+//            beenFavoriteCount.updateAndGet(v -> v + upvoteRepository.countByVideoId(video.getId()));
 //            beenViewCount.updateAndGet(v -> v + video.getViewCount());
 //        });
 //        userDetailVO.setBeenFavoriteCount(beenFavoriteCount.get());

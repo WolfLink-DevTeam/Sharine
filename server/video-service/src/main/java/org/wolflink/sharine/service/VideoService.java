@@ -8,14 +8,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.wolflink.sharine.action.SubscribeChannelAction;
-import org.wolflink.sharine.config.BusConfig;
 import org.wolflink.sharine.entity.Video;
 import org.wolflink.sharine.enums.MicroServiceEnum;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.event.VideoSaveEvent;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.BookmarkRepository;
-import org.wolflink.sharine.repository.FavoriteRepository;
+import org.wolflink.sharine.repository.UpvoteRepository;
 import org.wolflink.sharine.repository.VideoRepository;
 import org.wolflink.sharine.action.QiniuAction;
 
@@ -27,7 +26,7 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final BookmarkRepository bookmarkRepository;
-    private final FavoriteRepository favoriteRepository;
+    private final UpvoteRepository upvoteRepository;
     private final QiniuAction qiniuAction;
     private final SubscribeChannelAction subscribeChannelAction;
     private final ApplicationEventPublisher eventPublisher;
@@ -107,7 +106,7 @@ public class VideoService {
 //        videoVO.setUserId(video.getUserId());
 //        videoVO.setCategory(videoCategoryService.findVideoCategory(video.getId()));
 //        videoVO.setBookmarkCount(bookmarkRepository.countByVideoId(video.getId()));
-//        videoVO.setFavoriteCount(favoriteRepository.countByVideoId(video.getId()));
+//        videoVO.setFavoriteCount(upvoteRepository.countByVideoId(video.getId()));
 //        return videoVO;
 //    }
 }

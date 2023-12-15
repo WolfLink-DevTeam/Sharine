@@ -37,6 +37,10 @@ public class BookmarkService {
     public boolean hasBookmarkVideo(Long userId,Long videoId) {
         return bookmarkRepository.existsByUserIdAndVideoId(userId,videoId);
     }
+    public Bookmark getBookmark(Long userId,Long videoId) {
+        return bookmarkRepository.findByUserIdAndVideoId(userId,videoId)
+                .orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+    }
 
     /**
      * 用户撤销收藏视频

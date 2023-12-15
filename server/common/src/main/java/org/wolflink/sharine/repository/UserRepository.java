@@ -12,7 +12,6 @@ import java.util.Optional;
 @CacheConfig(cacheNames = DatabaseConst.USER)
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Cacheable(unless = "#result==null")
     @NotNull
     <S extends User> S save(@NotNull S entity);
 

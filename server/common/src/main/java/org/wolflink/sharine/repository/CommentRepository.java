@@ -14,5 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @CacheEvict
     void delete(@NotNull Comment entity);
 
+    void deleteAllByVideoId(Long videoId);
+
     List<Comment> findAllByVideoId(Long videoId);
 }

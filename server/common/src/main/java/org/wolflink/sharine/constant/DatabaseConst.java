@@ -5,7 +5,9 @@ public class DatabaseConst {
     public static final String VIDEO_METADATA = "video_metadata";
     public static final String COMMENT = "comment";
 
-    public static final String FAVOURITE = "favourite";
+    public static final String LIKE = "like";
+
+    public static final String SHARE = "share";
 
     public static final String FOLLOW = "follow";
 
@@ -17,6 +19,4 @@ public class DatabaseConst {
 
     public static final String USER = "user";
     public static final String USER_RELATION = "user_relation";
-    public static final String VIDEO_TAG = "video_tag";
-    public static final String VIDEO_CATEGORY_RELATION = "video_category_relation";
 }

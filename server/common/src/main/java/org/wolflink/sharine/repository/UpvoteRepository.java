@@ -6,12 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.wolflink.sharine.constant.DatabaseConst;
-import org.wolflink.sharine.entity.Favorite;
+import org.wolflink.sharine.entity.Upvote;
 
 import java.util.List;
 
-@CacheConfig(cacheNames = DatabaseConst.FAVOURITE)
-public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
+@CacheConfig(cacheNames = DatabaseConst.LIKE)
+public interface UpvoteRepository extends JpaRepository<Upvote, Long> {
 //    @Cacheable(unless = "#result==null")
     Integer countByUserId(Long userId);
 //    @Cacheable(unless = "#result==null")
@@ -22,6 +22,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     boolean existsByUserIdAndVideoId(Long userId, Long videoId);
 
-    List<Favorite> findAllByUserId(Long userId, Pageable pageable);
-    List<Favorite> findAllByUserId(Long userId);
+    List<Upvote> findAllByUserId(Long userId, Pageable pageable);
+    List<Upvote> findAllByUserId(Long userId);
 }

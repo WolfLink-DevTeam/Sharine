@@ -3,10 +3,10 @@ package org.wolflink.sharine.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.wolflink.sharine.entity.Favorite;
+import org.wolflink.sharine.entity.Upvote;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.WarnException;
-import org.wolflink.sharine.repository.FavoriteRepository;
+import org.wolflink.sharine.repository.UpvoteRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class FavoriteService {
 
-    final FavoriteRepository favoriteRepository;
+    final UpvoteRepository upvoteRepository;
 
-    public FavoriteService(FavoriteRepository favoriteRepository) {
-        this.favoriteRepository = favoriteRepository;
+    public FavoriteService(UpvoteRepository upvoteRepository) {
+        this.upvoteRepository = upvoteRepository;
     }
 
     /**
@@ -31,11 +31,11 @@ public class FavoriteService {
         if (hasFavoriteVideo(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_EXIST);
         }
-        Favorite favorite = Favorite.builder().videoId(videoId).userId(userId).build();
-        favoriteRepository.save(favorite);
+        Upvote upvote = Upvote.builder().videoId(videoId).userId(userId).build();
+        upvoteRepository.save(upvote);
     }
     public boolean hasFavoriteVideo(Long userId,Long videoId) {
-        return favoriteRepository.existsByUserIdAndVideoId(userId,videoId);
+        return upvoteRepository.existsByUserIdAndVideoId(userId,videoId);
     }
     /**
      * 用户撤销点赞视频
@@ -45,10 +45,10 @@ public class FavoriteService {
      */
     public void undoFavoriteVideo(Long userId, Long videoId) {
         // 数据不存在
-        if (!favoriteRepository.existsByUserIdAndVideoId(userId, videoId)) {
+        if (!upvoteRepository.existsByUserIdAndVideoId(userId, videoId)) {
             throw new WarnException(StatusCodeEnum.DATA_NOT_EXIST);
         }
-        favoriteRepository.deleteByUserIdAndVideoId(userId, videoId);
+        upvoteRepository.deleteByUserIdAndVideoId(userId, videoId);
     }
 
     /**
@@ -57,15 +57,15 @@ public class FavoriteService {
      * @return          用户关注视频ID列表
      */
     public List<Long> findUserFavoriteVideoIds(Long userId) {
-        List<Favorite> byUserId = favoriteRepository.findAllByUserId(userId);
+        List<Upvote> byUserId = upvoteRepository.findAllByUserId(userId);
         System.out.println(byUserId);
-        return byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList());
+        return byUserId.stream().map(Upvote::getVideoId).collect(Collectors.toList());
     }
     public List<Long> findUserFavoriteVideoIds(Long userId, Integer current,Integer size) {
         Pageable pageable = PageRequest.of(current, size);
 
-        List<Favorite> byUserId = favoriteRepository.findAllByUserId(userId, pageable);
+        List<Upvote> byUserId = upvoteRepository.findAllByUserId(userId, pageable);
 
-        return byUserId.stream().map(Favorite::getVideoId).collect(Collectors.toList());
+        return byUserId.stream().map(Upvote::getVideoId).collect(Collectors.toList());
     }
 }

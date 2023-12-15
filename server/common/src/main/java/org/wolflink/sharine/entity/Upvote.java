@@ -14,11 +14,11 @@ import org.wolflink.sharine.constant.DatabaseConst;
  */
 @Entity
 @Data
-@Table(name = DatabaseConst.FAVOURITE)
+@Table(name = DatabaseConst.LIKE)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Favorite {
+public class Upvote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

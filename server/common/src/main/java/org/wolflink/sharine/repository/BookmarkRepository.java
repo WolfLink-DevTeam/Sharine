@@ -11,6 +11,7 @@ import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.entity.Bookmark;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CacheConfig(cacheNames = DatabaseConst.BOOKMARK)
@@ -19,7 +20,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     @CachePut(unless = "#result==null")
     <S extends Bookmark> S save(@NotNull S entity);
 
-    Bookmark findByUserIdAndVideoId(Long userId, Long videoId);
+    Optional<Bookmark> findByUserIdAndVideoId(Long userId, Long videoId);
 
     boolean existsByUserIdAndVideoId(Long userId, Long videoId);
 
