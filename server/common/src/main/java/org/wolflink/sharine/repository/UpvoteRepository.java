@@ -10,7 +10,7 @@ import org.wolflink.sharine.entity.Upvote;
 
 import java.util.List;
 
-@CacheConfig(cacheNames = DatabaseConst.LIKE)
+@CacheConfig(cacheNames = DatabaseConst.UPVOTE)
 public interface UpvoteRepository extends JpaRepository<Upvote, Long> {
 //    @Cacheable(unless = "#result==null")
     Integer countByUserId(Long userId);

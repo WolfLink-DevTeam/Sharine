@@ -14,8 +14,6 @@ import org.wolflink.sharine.entity.User;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.ErrorException;
 import org.wolflink.sharine.exception.WarnException;
-import org.wolflink.sharine.repository.BookmarkRepository;
-import org.wolflink.sharine.repository.UpvoteRepository;
 import org.wolflink.sharine.repository.UserRepository;
 
 import java.util.Optional;
@@ -25,8 +23,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final BookmarkRepository bookmarkRepository;
-    private final UpvoteRepository upvoteRepository;
     private final RedisAction redisAction;
     private final EmailAction emailAction;
     private final EncryptAction encryptAction;

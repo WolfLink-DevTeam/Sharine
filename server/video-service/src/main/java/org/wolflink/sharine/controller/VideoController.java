@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.entity.Video;
-import org.wolflink.sharine.rpc.VideoServiceClient;
-import org.wolflink.sharine.service.VideoService;
+import org.wolflink.sharine.rpc.IVideoService;
 
 import java.util.List;
 
@@ -17,11 +16,10 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/videos")
-public class VideoController extends BaseController implements VideoServiceClient {
+public class VideoController extends BaseController {
 
-    private final VideoService videoService;
+    private final IVideoService videoService;
 
-    @Override
     @PostMapping("/verify")
     public ResultPack verifyVideo(
             @RequestBody Video video,
@@ -33,18 +31,15 @@ public class VideoController extends BaseController implements VideoServiceClien
         return ok();
     }
 
-    @Override
     @GetMapping("/{videoId}")
     public ResultPack getVideo(@PathVariable Long videoId) {
         return ok(videoService.findVideo(videoId));
     }
-    @Override
     @GetMapping
     public ResultPack getVideos(@ModelAttribute List<Long> videoIds) {
         return ok(videoService.findVideos(videoIds));
     }
 
-    @Override
     @GetMapping("/page/{current}/{size}")
     public ResultPack findVideos(@PathVariable Integer current, @PathVariable Integer size) {
         return ok(videoService.findVideos(current, size));
@@ -68,7 +63,6 @@ public class VideoController extends BaseController implements VideoServiceClien
      * @param userId 用户ID
      * @return 投稿视频信息列表
      */
-    @Override
     @GetMapping("/upload/{userId}")
     public ResultPack getUserUploadVideos(@PathVariable Long userId) {
         return ok(videoService.findVideosByUserId(userId));

@@ -18,3 +18,6 @@ spring:
         health-check-timeout: 1s
     bus:
       destination: sharine-event-bus
+dubbo:
+  registry:
+    address: consul://consul:8500

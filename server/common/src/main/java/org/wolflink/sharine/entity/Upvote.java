@@ -14,7 +14,7 @@ import org.wolflink.sharine.constant.DatabaseConst;
  */
 @Entity
 @Data
-@Table(name = DatabaseConst.LIKE)
+@Table(name = DatabaseConst.UPVOTE)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

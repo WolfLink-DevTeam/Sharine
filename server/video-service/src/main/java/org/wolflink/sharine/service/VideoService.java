@@ -2,6 +2,7 @@ package org.wolflink.sharine.service;
 
 import com.qiniu.storage.model.FileInfo;
 import lombok.AllArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,12 +18,14 @@ import org.wolflink.sharine.repository.BookmarkRepository;
 import org.wolflink.sharine.repository.UpvoteRepository;
 import org.wolflink.sharine.repository.VideoRepository;
 import org.wolflink.sharine.action.QiniuAction;
+import org.wolflink.sharine.rpc.IVideoService;
 
 import java.util.List;
 
+@DubboService
 @Service
 @AllArgsConstructor
-public class VideoService {
+public class VideoService implements IVideoService {
 
     private final VideoRepository videoRepository;
     private final BookmarkRepository bookmarkRepository;
@@ -38,7 +41,8 @@ public class VideoService {
      * @param hash          文件哈希
      * @param categoryId    分类Id
      */
-    public void verifyAndSaveVideo(Video video,String fileKey,String hash,Long categoryId) {
+    @Override
+    public void verifyAndSaveVideo(Video video, String fileKey, String hash, Long categoryId) {
         // 七牛云数据库查询
         FileInfo fileInfo = qiniuAction.getFileInfo(video.getUserId(), fileKey)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
@@ -58,6 +62,7 @@ public class VideoService {
      * @param userId    用户ID
      * @return          用户投稿视频信息列表
      */
+    @Override
     public List<Video> findVideosByUserId(Long userId) {
         return videoRepository.findAllByUserId(userId);
     }
@@ -67,6 +72,7 @@ public class VideoService {
      * @param videoId   视频ID
      * @return          视频信息
      */
+    @Override
     public Video findVideo(Long videoId) {
         return videoRepository.findById(videoId)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
@@ -78,7 +84,8 @@ public class VideoService {
      * @param size      请求分页大小
      * @return          对应页的视频列表
      */
-    public List<Video> findVideos(Integer current,Integer size) {
+    @Override
+    public List<Video> findVideos(Integer current, Integer size) {
         Pageable pageable = PageRequest.of(current, size);
         Page<Video> videos = videoRepository.findAll(pageable);
         return videos.toList();
@@ -89,6 +96,7 @@ public class VideoService {
      * @param videoIds  视频ID列表
      * @return          视频信息列表
      */
+    @Override
     public List<Video> findVideos(List<Long> videoIds) {
         return videoRepository.findAllById(videoIds);
     }
