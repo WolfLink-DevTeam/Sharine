@@ -30,6 +30,7 @@
         <spring.cloud.version>2023.0.0</spring.cloud.version>
         <dubbo.version>3.2.10</dubbo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <resilience4j.version>2.2.0</resilience4j.version>
     </properties>
 
     <build>
@@ -151,6 +152,11 @@
             <groupId>org.apache.dubbo.extensions</groupId>
             <artifactId>dubbo-registry-consul</artifactId>
             <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-all</artifactId>
+            <version>${resilience4j.version}</version>
         </dependency>
     </dependencies>
 
