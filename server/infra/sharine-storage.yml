@@ -1,0 +1,28 @@
+name: "sharine-storage"
+networks:
+  sharine:
+    external: true
+services:
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sharine
+  mysql:
+    container_name: mysqlc
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - sharine
+  mongo:
+    container_name: "mongo"
+    image: "mongo:${MONGODB_VERSION:-6.0.8}"
+    ports:
+      - "27017:27017"
+    networks:
+      - sharine

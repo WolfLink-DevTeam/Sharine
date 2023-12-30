@@ -1,60 +1,45 @@
-name: "wolflink-containergroup"
+name: "sharine-microservice"
 services:
-  redis:
-    container_name: redis
-    image: redis
-    ports:
-      - "6379:6379"
-  mysql:
-    container_name: mysql
-    image: mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-  sonarqube:
-    container_name: sonarqube
-    image: sonarqube
-    ports:
-      - "9000:9000"
-  consul:
-    container_name: consul
-    image: "hashicorp/consul"
-    command: ["agent", "-server","-client", "0.0.0.0","-bootstrap","-ui"]
-    ports:
-      - "8500:8500"
-      - "8502:8502"
-      - "8503:8503"
-      - "8600:8600"
-      - "8301:8301"
-      - "8302:8302"
   user-service:
     container_name: "user-service"
     build:
       context: ./user-service
     ports:
       - "23301-23399:23301-23399"
+    networks:
+      - sharine
   interact-service:
     container_name: "interact-service"
     build:
       context: ./interact-service
     ports:
       - "23401-23499:23401-23499"
+    networks:
+      - sharine
   video-service:
     container_name: "video-service"
     build:
       context: ./video-service
     ports:
       - "23501-23599:23501-23599"
+    networks:
+      - sharine
   content-service:
     container_name: "content-service"
     build:
       context: ./content-service
     ports:
       - "23601-23699:23601-23699"
+    networks:
+      - sharine
   aggregated-service:
     container_name: "aggregated-service"
     build:
       context: ./aggregated-service
     ports:
       - "23701-23799:23701-23799"
+    networks:
+      - sharine
+networks:
+  sharine:
+    external: true
