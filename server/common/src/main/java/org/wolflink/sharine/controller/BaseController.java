@@ -17,11 +17,12 @@ public abstract class BaseController {
         ex.printStackTrace();
         return error("程序内部错误: " + ex.getMessage());
     }
-
+    protected final ResultPack error(StatusCodeEnum statusCodeEnum) {
+        return createResult(statusCodeEnum.getCode(),statusCodeEnum.getDesc(),null);
+    }
     protected final ResultPack error(String msg) {
         return createResult(StatusCodeEnum.SYSTEM_ERROR.getCode(), msg, null);
     }
-
     protected final ResultPack error(Integer code, String msg) {
         return createResult(code, msg, null);
     }

@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @CacheConfig(cacheNames = DatabaseConst.USER)
 public interface UserRepository extends JpaRepository<User, Long> {
-
     @NotNull
     <S extends User> S save(@NotNull S entity);
 
@@ -20,8 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(@NotNull Long userId);
 
     @Cacheable(unless = "#result==null")
-    Optional<User> findByAccount(String account);
+    Optional<User> findByEmail(String account);
 
     @Cacheable(unless = "#result==null")
-    Boolean existsByAccount(String account);
+    Boolean existsByEmail(String account);
 }

@@ -28,13 +28,26 @@ public class UserService {
     private final EncryptAction encryptAction;
     private final StringAction stringAction;
 
+    public User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+    }
+    public User findUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+    }
+    public void updateUser(Long id,String nickname,String avatar,String content) {
+        User user = userRepository.findById(id).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        if(nickname != null) user.setNickname(nickname);
+        if(avatar != null) user.setAvatar(avatar);
+        if(content != null) user.setContent(content);
+        userRepository.save(user);
+    }
     /**
      * 尝试登录
      * @param account   用户账号
      * @param password  用户密码
      */
     public void login(String account,String password) {
-        User user = userRepository.findByAccount(account).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
+        User user = userRepository.findByEmail(account).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
         if (!encryptAction.match(password, user.getPassword())) {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
@@ -43,14 +56,14 @@ public class UserService {
     }
 
 
-    public void register(String ipAddress,String account,String password,String verificationCode) {
-        emailAction.mailVerify(ipAddress,account, verificationCode);
+    public void register(String ipAddress,String email,String password,String verificationCode) {
+        emailAction.mailVerify(ipAddress,email, verificationCode);
         // 用户已存在
-        if (userRepository.existsByAccount(account).equals(true)) {
+        if (userRepository.existsByEmail(email).equals(true)) {
             throw new ErrorException(StatusCodeEnum.DATA_EXIST);
         }
         User user = User.builder()
-                .account(account)
+                .email(email)
                 .password(encryptAction.encode(password))
                 .nickname("用户"+UUID.randomUUID().toString().substring(0,8))
                 .avatar(UserConst.DEFAULT_AVATAR)
@@ -73,7 +86,7 @@ public class UserService {
         }
 
         // 用户不存在
-        Optional<User> byUsername = userRepository.findByAccount(account);
+        Optional<User> byUsername = userRepository.findByEmail(account);
         if (byUsername.isEmpty()) {
             throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
         }

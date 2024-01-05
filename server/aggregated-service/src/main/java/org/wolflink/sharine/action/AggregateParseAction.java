@@ -2,40 +2,25 @@ package org.wolflink.sharine.action;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.wolflink.sharine.dto.CommentDTO;
-import org.wolflink.sharine.dto.UploadVideoDTO;
-import org.wolflink.sharine.entity.*;
+import org.wolflink.sharine.entity.Category;
+import org.wolflink.sharine.entity.Video;
+import org.wolflink.sharine.entity.VideoMetadata;
 import org.wolflink.sharine.repository.CategoryRepository;
 import org.wolflink.sharine.repository.VideoMetadataRepository;
-import org.wolflink.sharine.vo.*;
+import org.wolflink.sharine.vo.VideoVO;
 
 /**
- * 对象类型转换操作
- * 负责转换 Entity -> VO 并组装缺失参数
- * 负责转换 DTO -> Entity
+ * 对象属性聚合转换操作
+ * Entity -> VO 并补全缺失的复杂参数
  */
 @Component
 @AllArgsConstructor
-public class ObjectParseAction {
+public class AggregateParseAction {
 
     private final BeanCopyAction beanCopyAction;
     private final VideoMetadataRepository videoMetadataRepository;
     private final CategoryRepository categoryRepository;
-    public Comment parse(CommentDTO commentDTO) {
-        return beanCopyAction.copyObject(commentDTO, Comment.class);
-    }
-    public Video parse(UploadVideoDTO uploadVideoDTO) {
-        return beanCopyAction.copyObject(uploadVideoDTO,Video.class);
-    }
-    public CommentVO parse(Comment comment) {
-        return beanCopyAction.copyObject(comment, CommentVO.class);
-    }
-    public UserDetailVO parse(UserSimpleVO userSimpleVO) {
-        return beanCopyAction.copyObject(userSimpleVO, UserDetailVO.class);
-    }
-    public UserSimpleVO parse(User user) {
-        return beanCopyAction.copyObject(user, UserSimpleVO.class);
-    }
+
     public VideoVO parse(Video video) {
         VideoVO videoVO = beanCopyAction.copyObject(video,VideoVO.class);
         VideoMetadata metadata = videoMetadataRepository.findByVideoId(video.getId());

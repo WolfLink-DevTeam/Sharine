@@ -18,6 +18,8 @@ import org.wolflink.sharine.action.BeanCopyAction;
 public class UserSimpleVO {
     Long id;
 
+    String email;
+
     String nickname;
 
     String avatar;

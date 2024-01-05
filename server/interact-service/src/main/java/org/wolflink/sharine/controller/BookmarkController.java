@@ -4,20 +4,15 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.action.SessionAction;
 import org.wolflink.sharine.dto.ResultPack;
-import org.wolflink.sharine.entity.Bookmark;
-import org.wolflink.sharine.repository.BookmarkRepository;
 import org.wolflink.sharine.service.BookmarkService;
 
 @RestController
 @RequestMapping("/bookmarks")
-public class BookmarkController extends RestfulController<Bookmark,Long> {
+public class BookmarkController extends BaseController {
     @Resource
     private BookmarkService bookmarkService;
     @Resource
     private SessionAction sessionAction;
-    public BookmarkController(BookmarkRepository repository) {
-        super(repository);
-    }
 
     /**
      * 收藏视频

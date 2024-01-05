@@ -24,7 +24,7 @@ public class User {
     Long id;
 
     @Column(nullable = false,unique = true)
-    String account;
+    String email;
 
     /**
      * bcrypt加密
