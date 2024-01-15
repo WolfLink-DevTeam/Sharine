@@ -1,9 +1,12 @@
 package org.wolflink.sharine.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.wolflink.sharine.dto.ResultPack;
+import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.WarnException;
+import org.wolflink.sharine.lib.TryOptional;
 import org.wolflink.sharine.service.UserService;
 import org.wolflink.sharine.action.IpAction;
 
@@ -24,18 +27,18 @@ public class ActionController extends BaseController {
      * 用户登录接口
      */
     @PostMapping("/login")
-    public ResultPack login(@RequestParam String account, @RequestParam String password) {
-        userService.login(account,password);
-//        return ok(new UserLoginVO(userSimpleVO,StpUtil.getTokenValue()));
-        return ok();
+    public Object login(@RequestParam String email, @RequestParam String password) {
+        // 已经登录了，不处理
+        if(StpUtil.isLogin()) return ok();
+        return ok(userService.login(email,password));
     }
 
     /**
      * 用户注册接口
      */
     @PostMapping("/register")
-    public ResultPack register(HttpServletRequest request, @RequestParam String account,@RequestParam String password,@RequestParam String verificationCode) {
-        userService.register(ipAction.getIpAddress(request),account,password,verificationCode);
+    public Object register(HttpServletRequest request, @RequestParam String email, @RequestParam String encryptPassword, @RequestParam String emailCode) {
+        userService.register(ipAction.getIpAddress(request), email,encryptPassword, emailCode);
         return ok();
     }
 
@@ -43,8 +46,11 @@ public class ActionController extends BaseController {
      * 用户修改密码接口
      */
     @PostMapping("/changePassword")
-    public ResultPack changePassword(@RequestBody String account,@RequestBody String password,@RequestBody String verificationCode) {
-        userService.changePassword(account,password,verificationCode);
+    public Object changePassword(@RequestParam String encryptPassword, @RequestParam String verificationCode) {
+        // 连接是否已登录
+        Long userId = TryOptional.tryWith(StpUtil::getLoginIdAsLong)
+                .orElseThrow(()->new WarnException(StatusCodeEnum.NOT_LOGIN));
+        userService.changePassword(userId,encryptPassword,verificationCode);
         return ok();
     }
 
@@ -54,7 +60,7 @@ public class ActionController extends BaseController {
      * @return 请求结果
      */
     @PostMapping("/sendCode")
-    public ResultPack requestForCode(HttpServletRequest request, @RequestParam String account) {
+    public Object requestForCode(HttpServletRequest request, @RequestParam String account) {
         userService.requestForCode(ipAction.getIpAddress(request),account);
         return ok();
     }

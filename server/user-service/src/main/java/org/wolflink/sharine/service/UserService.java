@@ -34,29 +34,37 @@ public class UserService {
     public User findUser(String email) {
         return userRepository.findByEmail(email).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
     }
-    public void updateUser(Long id,String nickname,String avatar,String content) {
-        User user = userRepository.findById(id).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+    public void updateUser(Long userId,String nickname,String avatar,String content,String encryptPassword) {
+        User user = userRepository.findById(userId).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        updateUser(user,nickname,avatar,content,encryptPassword);
+    }
+    public void updateUser(User user,String nickname,String avatar,String content,String encryptPassword) {
         if(nickname != null) user.setNickname(nickname);
         if(avatar != null) user.setAvatar(avatar);
         if(content != null) user.setContent(content);
+        if(encryptPassword != null) user.setPassword(encryptPassword);
         userRepository.save(user);
     }
     /**
      * 尝试登录
-     * @param account   用户账号
+     * @param email     用户邮箱
      * @param password  用户密码
+     * @return          登录令牌
      */
-    public void login(String account,String password) {
-        User user = userRepository.findByEmail(account).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
+    public String login(String email,String password) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
         if (!encryptAction.match(password, user.getPassword())) {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
         StpUtil.login(user.getId());
+        // TODO 改为 AOP 的方式进行日志记录
         System.out.println("用户"+user.getId()+"登录成功");
+        return StpUtil.getTokenValue();
     }
 
 
-    public void register(String ipAddress,String email,String password,String verificationCode) {
+    public void register(String ipAddress,String email,String encryptPassword,String verificationCode) {
+        // 邮箱验证(邮箱格式检查、验证码校验)
         emailAction.mailVerify(ipAddress,email, verificationCode);
         // 用户已存在
         if (userRepository.existsByEmail(email).equals(true)) {
@@ -64,41 +72,26 @@ public class UserService {
         }
         User user = User.builder()
                 .email(email)
-                .password(encryptAction.encode(password))
-                .nickname("用户"+UUID.randomUUID().toString().substring(0,8))
+                .password(encryptPassword)
+                .nickname("用户"+encryptAction.encode(UUID.randomUUID().toString()).substring(0,8))
                 .avatar(UserConst.DEFAULT_AVATAR)
                 .content(UserConst.DEFAULT_CONTENT)
                 .build();
         userRepository.save(user);
     }
 
-    public void changePassword(String account,String newPassword,String verificationCode) {
-        boolean checked = stringAction.checkEmail(account);
-        // 非邮箱
-        if (!checked) {
-            throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
-        }
-
-        String code = (String) redisAction.get(RedisPrefixConst.TOKEN + account);
+    public void changePassword(Long userId,String newPassword,String verificationCode) {
+        User user = userRepository.findById(userId).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        String code = (String) redisAction.get(RedisPrefixConst.TOKEN + user.getEmail());
         // 验证码错误
         if (code == null || !code.equals(verificationCode)) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
         }
-
-        // 用户不存在
-        Optional<User> byUsername = userRepository.findByEmail(account);
-        if (byUsername.isEmpty()) {
-            throw new ErrorException(StatusCodeEnum.DATA_NOT_EXIST);
-        }
-
-        // 修改数据
-        User user = byUsername.get();
-        user.setPassword(encryptAction.encode(newPassword));
-        userRepository.save(user);
+        updateUser(user,null,null,null,newPassword);
     }
 
-    public void requestForCode(String ipAddress,String account) {
-        boolean checked = stringAction.checkEmail(account);
+    public void requestForCode(String ipAddress,String email) {
+        boolean checked = stringAction.checkEmail(email);
         // 非邮箱
         if (!checked) {
             throw new ErrorException(StatusCodeEnum.FAILED_PRECONDITION);
@@ -113,7 +106,7 @@ public class UserService {
         redisAction.set(cacheKey, code, 5 * 60);
 
         try {
-            emailAction.sendCode(account, code, 5L);
+            emailAction.sendCode(email, code, 5L);
         } catch (MessagingException e) {
             throw new ErrorException("邮件发送失败");
         }

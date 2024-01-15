@@ -27,6 +27,9 @@ public abstract class BaseController {
         return createResult(code, msg, null);
     }
 
+    protected final ResultPack warn(StatusCodeEnum statusCodeEnum) {
+        return createResult(statusCodeEnum.getCode(), statusCodeEnum.getDesc(),null);
+    }
     protected final ResultPack warn(String msg) {
         return createResult(StatusCodeEnum.FAIL.getCode(), msg, null);
     }
