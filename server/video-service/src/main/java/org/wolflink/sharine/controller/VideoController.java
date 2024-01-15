@@ -1,5 +1,6 @@
 package org.wolflink.sharine.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.dto.ResultPack;
@@ -15,19 +16,20 @@ import java.util.List;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/videos")
+@RequestMapping("/video-actions")
 public class VideoController extends BaseController {
 
     private final IVideoService videoService;
 
-    @PostMapping("/verify")
-    public ResultPack verifyVideo(
-            @RequestBody Video video,
+    @PostMapping("/signature")
+    public ResultPack signature(
             @RequestParam String fileKey,
             @RequestParam String hash,
-            @RequestParam Long categoryId
+            @RequestParam Long categoryId,
+            @RequestBody Video video
     ) {
-        videoService.verifyAndSaveVideo(video, fileKey, hash, categoryId);
+        StpUtil.checkLogin();
+        videoService.signature(video, fileKey, hash, categoryId);
         return ok();
     }
 

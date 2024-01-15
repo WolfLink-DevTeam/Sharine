@@ -17,7 +17,7 @@ import org.wolflink.sharine.action.IpAction;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/user/actions")
+@RequestMapping("/user-actions")
 public class ActionController extends BaseController {
 
     private final UserService userService;

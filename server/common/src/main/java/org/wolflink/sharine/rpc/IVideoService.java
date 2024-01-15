@@ -5,7 +5,7 @@ import org.wolflink.sharine.entity.Video;
 import java.util.List;
 
 public interface IVideoService {
-    void verifyAndSaveVideo(Video video, String fileKey, String hash, Long categoryId);
+    void signature(Video video, String fileKey, String hash, Long categoryId);
 
     List<Video> findVideosByUserId(Long userId);
 

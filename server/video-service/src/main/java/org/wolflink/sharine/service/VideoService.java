@@ -42,7 +42,7 @@ public class VideoService implements IVideoService {
      * @param categoryId    分类Id
      */
     @Override
-    public void verifyAndSaveVideo(Video video, String fileKey, String hash, Long categoryId) {
+    public void signature(Video video, String fileKey, String hash, Long categoryId) {
         // 七牛云数据库查询
         FileInfo fileInfo = qiniuAction.getFileInfo(video.getUserId(), fileKey)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
@@ -50,9 +50,9 @@ public class VideoService implements IVideoService {
         // 文本内容审核
         if(!qiniuAction.textSensor(video.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
         videoRepository.save(video);
-        // 广播事件
-        eventPublisher.publishEvent(new VideoSaveEvent(this, MicroServiceEnum.VIDEO_SERVICE,
-                MicroServiceEnum.CONTENT_SERVICE, video,categoryId));
+        // TODO 广播事件
+//        eventPublisher.publishEvent(new VideoSaveEvent(this, MicroServiceEnum.VIDEO_SERVICE,
+//                MicroServiceEnum.CONTENT_SERVICE, video,categoryId));
         // 异步更新视频队列
         subscribeChannelAction.notifyFans(video.getUserId(), video.getId());
     }
