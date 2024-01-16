@@ -101,6 +101,20 @@ public class VideoService implements IVideoService {
         return videoRepository.findAllById(videoIds);
     }
 
+    @Override
+    public void deleteVideo(Long videoId) {
+        videoRepository.deleteById(videoId);
+    }
+
+    @Override
+    public void updateVideo(Long videoId, String title, String content, String coverUrl) {
+        Video video = videoRepository.findById(videoId).orElseThrow();
+        if(title != null) video.setTitle(title);
+        if(content != null) video.setContent(content);
+        if(coverUrl != null) video.setCoverUrl(coverUrl);
+        videoRepository.save(video);
+    }
+
     /**
      * 构造视频展示数据对象
      * @param videos    视频数据列表

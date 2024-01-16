@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.entity.Video;
+import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.WarnException;
+import org.wolflink.sharine.lib.TryOptional;
 import org.wolflink.sharine.rpc.IVideoService;
 
 import java.util.List;
@@ -16,38 +19,55 @@ import java.util.List;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/video-actions")
+@RequestMapping("/videos")
 public class VideoController extends BaseController {
 
     private final IVideoService videoService;
 
-    @PostMapping("/signature")
-    public ResultPack signature(
-            @RequestParam String fileKey,
-            @RequestParam String hash,
-            @RequestParam Long categoryId,
-            @RequestBody Video video
-    ) {
+    @GetMapping
+    public ResultPack getVideo(
+            @RequestParam(required = false) Long videoId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
+            ) {
+        if(videoId != null) {
+            return ok(videoService.findVideo(videoId));
+        }
+        if(userId != null) {
+            return ok(videoService.findVideosByUserId(userId));
+        }
+        if(page != null && size != null) {
+            return ok(videoService.findVideos(page, size));
+        }
+        return warn(StatusCodeEnum.FAILED_PRECONDITION);
+    }
+    @DeleteMapping
+    public Object delVideo(@RequestParam Long videoId) {
         StpUtil.checkLogin();
-        videoService.signature(video, fileKey, hash, categoryId);
+        Long loginId = TryOptional.tryWith(StpUtil::getLoginIdAsLong).orElseThrow();
+        Video video = videoService.findVideo(videoId);
+        // 试图删除别人的视频
+        if(!video.getUserId().equals(loginId)) throw new WarnException(StatusCodeEnum.UNAUTHORIZED);
+        // 删除视频
+        videoService.deleteVideo(videoId);
         return ok();
     }
-
-    @GetMapping("/{videoId}")
-    public ResultPack getVideo(@PathVariable Long videoId) {
-        return ok(videoService.findVideo(videoId));
+    @PutMapping
+    public Object putVideo(
+            @RequestParam Long videoId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) String coverUrl
+    ) {
+        StpUtil.checkLogin();
+        Long loginId = TryOptional.tryWith(StpUtil::getLoginIdAsLong).orElseThrow();
+        Video video = videoService.findVideo(videoId);
+        // 试图修改别人的视频
+        if(!video.getUserId().equals(loginId)) throw new WarnException(StatusCodeEnum.UNAUTHORIZED);
+        videoService.updateVideo(videoId,title,content,coverUrl);
+        return ok();
     }
-    @GetMapping
-    public ResultPack getVideos(@ModelAttribute List<Long> videoIds) {
-        return ok(videoService.findVideos(videoIds));
-    }
-
-    @GetMapping("/page/{current}/{size}")
-    public ResultPack findVideos(@PathVariable Integer current, @PathVariable Integer size) {
-        return ok(videoService.findVideos(current, size));
-    }
-
-
 
     /**
      * TODO 获取用户订阅视频列表(不可查看他人订阅频道)
@@ -58,15 +78,4 @@ public class VideoController extends BaseController {
 //        // 用户自己的订阅频道列表
 //        return ok(videoService.getSubscribeVideos(userService.getSessionUserId()));
 //    }
-
-    /**
-     * 获取用户投稿视频ID列表
-     *
-     * @param userId 用户ID
-     * @return 投稿视频信息列表
-     */
-    @GetMapping("/upload/{userId}")
-    public ResultPack getUserUploadVideos(@PathVariable Long userId) {
-        return ok(videoService.findVideosByUserId(userId));
-    }
 }

@@ -16,7 +16,6 @@ import org.wolflink.sharine.exception.ErrorException;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.UserRepository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -90,7 +89,7 @@ public class UserService {
         updateUser(user,null,null,null,newPassword);
     }
 
-    public void requestForCode(String ipAddress,String email) {
+    public void requestEmailCode(String ipAddress, String email) {
         boolean checked = stringAction.checkEmail(email);
         // 非邮箱
         if (!checked) {

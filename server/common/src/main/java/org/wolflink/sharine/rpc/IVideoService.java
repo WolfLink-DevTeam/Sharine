@@ -14,4 +14,7 @@ public interface IVideoService {
     List<Video> findVideos(Integer current, Integer size);
 
     List<Video> findVideos(List<Long> videoIds);
+
+    void deleteVideo(Long videoId);
+    void updateVideo(Long videoId,String title,String content,String coverUrl);
 }

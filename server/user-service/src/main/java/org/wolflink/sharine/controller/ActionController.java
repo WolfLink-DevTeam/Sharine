@@ -10,11 +10,6 @@ import org.wolflink.sharine.lib.TryOptional;
 import org.wolflink.sharine.service.UserService;
 import org.wolflink.sharine.action.IpAction;
 
-/**
- * 用户信息控制器
- * 包含以下接口：
- * 登录相关接口 用户信息查询接口 用户动作接口 用户作品列表查询 用户喜欢视频列表查询 用户收藏视频列表查询
- */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/user-actions")
@@ -59,9 +54,9 @@ public class ActionController extends BaseController {
      *
      * @return 请求结果
      */
-    @PostMapping("/sendCode")
-    public Object requestForCode(HttpServletRequest request, @RequestParam String account) {
-        userService.requestForCode(ipAction.getIpAddress(request),account);
+    @PostMapping("/requestEmailCode")
+    public Object requestEmailCode(HttpServletRequest request, @RequestParam String email) {
+        userService.requestEmailCode(ipAction.getIpAddress(request),email);
         return ok();
     }
 
