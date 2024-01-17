@@ -1,9 +1,12 @@
 package org.wolflink.sharine.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.action.SessionAction;
 import org.wolflink.sharine.dto.ResultPack;
+import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.service.BookmarkService;
 
 @RestController
@@ -18,15 +21,17 @@ public class BookmarkController extends BaseController {
      * 收藏视频
      * @param videoId   视频ID
      */
-    @PostMapping("/byVideoId/{videoId}")
-    public ResultPack postBookmark(@PathVariable Long videoId) {
+    @PostMapping
+    public ResultPack postBookmark(@RequestParam Long videoId) {
         bookmarkService.bookmarkVideo(sessionAction.getSessionUserId(), videoId);
         return ok();
     }
 
-    @GetMapping("/byVideoId/{videoId}")
-    public Object getBookmark(@PathVariable Long videoId) {
-        return bookmarkService.getBookmark(sessionAction.getSessionUserId(), videoId);
+    @GetMapping
+    public Object getBookmark(@RequestParam Long videoId) {
+        return ok(bookmarkService.getBookmark(sessionAction.getSessionUserId(), videoId));
+        // TODO 放到 bookmark-action 里面，查询用户自己订阅的所有视频ID，或者不设计该接口，功能委托给聚合模块
+//        else return ok(bookmarkService.findUserBookmarkVideoIds(sessionAction.getSessionUserId()));
     }
 
 //    /**
@@ -42,17 +47,9 @@ public class BookmarkController extends BaseController {
      * 取消收藏视频
      * @param videoId   视频ID
      */
-    @DeleteMapping("/byVideoId/{videoId}")
-    public ResultPack delBookmark(@PathVariable Long videoId) {
+    @DeleteMapping
+    public ResultPack delBookmark(@RequestParam Long videoId) {
         bookmarkService.undoBookmarkVideo(sessionAction.getSessionUserId(), videoId);
         return ok();
-    }
-    /**
-     * 只允许查询用户自己的收藏视频列表Id数据
-     */
-    @GetMapping("/byUserId")
-    public Object getUserBookmarkVideoIds() {
-        // 获取用户喜欢的视频ID列表
-        return bookmarkService.findUserBookmarkVideoIds(sessionAction.getSessionUserId());
     }
 }
