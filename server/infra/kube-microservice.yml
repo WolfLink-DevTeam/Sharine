@@ -1,0 +1,168 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sharine-microservice
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: user-service:latest
+          ports:
+            - containerPort: 23300
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - port: 23300
+      targetPort: 23300
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: interact-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: interact-service
+  template:
+    metadata:
+      labels:
+        app: interact-service
+    spec:
+      containers:
+        - name: interact-service
+          image: interact-service:latest
+          ports:
+            - containerPort: 23400
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: interact-service
+spec:
+  selector:
+    app: interact-service
+  ports:
+    - port: 23400
+      targetPort: 23400
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-service
+  template:
+    metadata:
+      labels:
+        app: video-service
+    spec:
+      containers:
+        - name: video-service
+          image: video-service:latest
+          ports:
+            - containerPort: 23500
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-service
+spec:
+  selector:
+    app: video-service
+  ports:
+    - port: 23500
+      targetPort: 23500
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: content-service
+  template:
+    metadata:
+      labels:
+        app: content-service
+    spec:
+      containers:
+        - name: content-service
+          image: content-service:latest
+          ports:
+            - containerPort: 23600
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: content-service
+spec:
+  selector:
+    app: content-service
+  ports:
+    - port: 23600
+      targetPort: 23600
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregated-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregated-service
+  template:
+    metadata:
+      labels:
+        app: aggregated-service
+    spec:
+      containers:
+        - name: aggregated-service
+          image: aggregated-service:latest
+          ports:
+            - containerPort: 23700
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aggregated-service
+spec:
+  selector:
+    app: aggregated-service
+  ports:
+    - port: 23700
+      targetPort: 23700
