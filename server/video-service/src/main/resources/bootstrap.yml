@@ -1,5 +1,5 @@
 server:
-  port: 23501
+  port: 23500
 spring:
   application:
     name: video-service

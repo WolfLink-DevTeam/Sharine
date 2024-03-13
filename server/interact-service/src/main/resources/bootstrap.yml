@@ -1,5 +1,5 @@
 server:
-  port: 23401
+  port: 23400
 spring:
   application:
     name: interact-service

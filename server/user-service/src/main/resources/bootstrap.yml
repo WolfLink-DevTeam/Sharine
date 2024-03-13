@@ -1,5 +1,5 @@
 server:
-  port: 23301
+  port: 23300
 spring:
   application:
     name: user-service

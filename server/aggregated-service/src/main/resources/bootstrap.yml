@@ -1,5 +1,5 @@
 server:
-  port: 23701
+  port: 23700
 spring:
   application:
     name: aggregated-service

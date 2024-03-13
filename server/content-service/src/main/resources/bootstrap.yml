@@ -1,5 +1,5 @@
 server:
-  port: 23601
+  port: 23600
 spring:
   application:
     name: content-service
