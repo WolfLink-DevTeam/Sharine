@@ -1,14 +1,30 @@
 import {Category} from "@/models/Category";
-import {httpClient, pack} from "@/utilities/HttpUtility";
-import {ResponsePack} from "@/models/ResponsePack";
-import {Ref, ref} from "vue";
-import {Video} from "@/models/Video";
+import {remoteCategoryService} from "@/services/remote/RemoteCategoryService";
+import {ref, Ref} from "vue/dist/vue";
 import {CategoryFrequency} from "@/models/CategoryFrequency";
-import {sum} from "qiniu-js/esm/utils";
+import {Video} from "@/models/Video";
 
-export class CategoryService {
-
-
+class NativeCategoryService {
+    list: Ref<Array<Category>> = ref(new Array<Category>())
+    constructor() {
+        this.updateCategories().then(_ => setTimeout(this.updateCategories,3000))
+    }
+    private async updateCategories() {
+        this.list.value = await remoteCategoryService.findAll()
+    }
+    findCategoryByIndex(index: number): Category {
+        return this.list.value[index]
+    }
+    findCategoryById(id: number): Category|null {
+        let category: Category|null = null
+        this.list.value.forEach(tempC => {
+            if(tempC.id === id) {
+                category = tempC
+            }
+            if(category !== null) return
+        })
+        return category;
+    }
     viewCountMap: Ref<Map<number,number>> = this.loadViewCountMap()
 
     saveViewCountMap() {
@@ -33,21 +49,6 @@ export class CategoryService {
         this.viewCountMap.value.set(video.category.id,v+1)
     }
 
-    list: Ref<Array<Category>> = ref(new Array<Category>())
-
-    constructor() {
-        this.getAllCategories().then(result => {
-                this.list.value = result.data.map((it: any) => {
-                    const category = new Category()
-                    category.id = it.id
-                    category.title = it.title
-                    category.url = it.url
-
-                    return category
-                })
-            })
-    }
-
     topFiveHotCategories(videos: Array<Video>): Array<CategoryFrequency> {
         const categoryCount: Map<number, number> = new Map();
         videos.forEach(video => {
@@ -61,8 +62,8 @@ export class CategoryService {
         const total = videos.length;
         const topFive: Array<CategoryFrequency> = sortedCategories.slice(0, 5)
             .map(({ categoryId, count }) => {
-            return new CategoryFrequency(categoryId,count/total)
-        });
+                return new CategoryFrequency(categoryId,count/total)
+            });
         const sumOfTopFive = topFive.reduce((sum, { frequency }) => sum + frequency, 0);
         topFive.forEach(cf => cf.frequency /= sumOfTopFive);
         return topFive;
@@ -77,26 +78,5 @@ export class CategoryService {
         temp.forEach(cf => cf.frequency /= total)
         return temp;
     }
-
-
-    getCategory(index: number): Category {
-        return this.list.value[index]
-    }
-    getCategoryById(id: number): Category|null {
-        let category: Category|null = null
-        this.list.value.forEach(tempC => {
-            if(tempC.id === id) {
-                category = tempC
-            }
-            if(category !== null) return
-        })
-        return category;
-    }
-    /**
-     * 获取全部分类数据
-     */
-    async getAllCategories(): Promise<ResponsePack> {
-        return pack(httpClient.get("/categories/all"))
-    }
 }
-export const categoryService = new CategoryService()
+export const nativeCategoryService = new NativeCategoryService()

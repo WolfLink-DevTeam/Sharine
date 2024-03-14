@@ -8,7 +8,6 @@ import {VideoComment} from "@/models/VideoComment";
 import {userService} from "@/services/UserService";
 import {VideoType, VideoTypeChineseName} from "@/models/VideoType";
 import {ref} from "vue";
-import {categoryService} from "@/services/CategoryService";
 
 export class VideoService {
 

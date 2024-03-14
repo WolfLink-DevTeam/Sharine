@@ -1,5 +1,11 @@
+import Bcrypt from "bcrypt";
+
 export function getImageUrl(imgName: string|null) {
     return imgName?.replace("@", "src") || ""
+}
+export function passwordEncryption(password: String): String {
+    var salt = Bcrypt.genSaltSync(10);
+    return Bcrypt.hashSync(password.toString(), salt)
 }
 export function timeStrParse(time: number): Date {
     const timeStr = String(time)
