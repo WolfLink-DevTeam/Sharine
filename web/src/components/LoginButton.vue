@@ -3,7 +3,7 @@
 import {ref} from "vue";
 import {userService} from "@/services/UserService.js";
 import {useSystemStore} from "@/store/system";
-import {accountService} from "@/services/AccountService";
+import {accountService} from "@/services/native/AccountService";
 
 const modalVisible = ref(false)
 const isRegister = ref(false)

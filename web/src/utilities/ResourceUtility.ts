@@ -3,6 +3,10 @@ import Bcrypt from "bcrypt";
 export function getImageUrl(imgName: string|null) {
     return imgName?.replace("@", "src") || ""
 }
+export function parseVideoFrameUrl(videoUrl: string,frameId: number) {
+    const name = videoUrl.substring(0,videoUrl.lastIndexOf('.'))
+    return name+"frame00000"+frameId+".jpg"
+}
 export function passwordEncryption(password: String): String {
     var salt = Bcrypt.genSaltSync(10);
     return Bcrypt.hashSync(password.toString(), salt)

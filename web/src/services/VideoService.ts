@@ -5,8 +5,6 @@ import {timeStrParse} from "@/utilities/ResourceUtility";
 import {User} from "@/models/User";
 import {Category} from "@/models/Category";
 import {VideoComment} from "@/models/VideoComment";
-import {userService} from "@/services/UserService";
-import {VideoType, VideoTypeChineseName} from "@/models/VideoType";
 import {ref} from "vue";
 
 export class VideoService {
@@ -15,18 +13,6 @@ export class VideoService {
 
     async viewVideo(videoId: number) {
         httpClient.post("/videos/"+videoId+"/addViewCount")
-    }
-    async uploadVideo(fileKey: string,hash: string,categoryId: number,title: string,content: string,url: string,coverUrl: string,videoType: VideoType) {
-        return pack(httpClient.post("/videos/verify",{
-            fileKey: fileKey,
-            hash: hash,
-            categoryId: categoryId,
-            title: title,
-            content: content,
-            url: url,
-            coverUrl: coverUrl,
-            videoType: videoType
-        }))
     }
     async getVideos(current: number,size: number): Promise<ResponsePack> {
         return pack(httpClient.get("/videos", {

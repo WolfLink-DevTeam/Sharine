@@ -22,13 +22,10 @@ class RemoteVideoService extends RemoteService {
             }
         }))
     }
-    async putVideo(videoId: Number,title?: String,content?: String,coverUrl?: String) {
+    async putVideo(video: Video) {
         return pack(httpClient.put("",{
             params: {
-                videoId: videoId,
-                title: title,
-                content: content,
-                coverUrl: coverUrl
+                video: video
             }
         }))
     }
