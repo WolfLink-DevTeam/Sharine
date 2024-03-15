@@ -9,83 +9,57 @@ import {ref} from "vue";
 
 export class VideoService {
 
-    videos = ref(new Array<Video>())
-
-    async viewVideo(videoId: number) {
-        httpClient.post("/videos/"+videoId+"/addViewCount")
-    }
-    async getVideos(current: number,size: number): Promise<ResponsePack> {
-        return pack(httpClient.get("/videos", {
-            params: {
-                current: current,
-                size: size
-            }
-        }))
-    }
-    async addComment(comment: VideoComment) {
-        return pack(httpClient.post("/videos/"+comment.videoId+"/comments",{
-            replyId: comment.replyId,
-            videoId: comment.videoId,
-            content: comment.content
-        }))
-    }
-    async getVideo(videoId: number): Promise<ResponsePack> {
-        return pack(httpClient.get("/videos/"+videoId))
-    }
-    async getVideoComments(videoId: number): Promise<ResponsePack> {
-        return pack(httpClient.get("videos/"+videoId+"/comments"))
-    }
-    parseCommentVO(commentVO: any):VideoComment {
-
-        const comment = new VideoComment()
-
-        comment.createTime = timeStrParse(commentVO.createTime)
-        comment.updateTime = timeStrParse(commentVO.updateTime)
-        comment.id = commentVO.id
-        comment.replyId = commentVO.replyId
-        comment.content = commentVO.content
-        comment.videoId = commentVO.videoId
-        const author = new User()
-        author.id = commentVO.author.id
-        author.nickname = commentVO.author.nickname
-        author.avatar = commentVO.author.avatar
-        author.content = commentVO.author.content
-        comment.author = author
-        return comment
-    }
-    parseVideoVO(videoVO: any):Video {
-
-        const video = new Video()
-
-        video.createTime = timeStrParse(videoVO.createTime)
-        video.updateTime = timeStrParse(videoVO.updateTime)
-        video.url = videoVO.url
-        video.title = videoVO.title
-        video.content = videoVO.content
-        video.coverUrl = videoVO.coverUrl
-        video.id = videoVO.id
-        video.favoriteCount = videoVO.favoriteCount
-        video.bookmarkCount = videoVO.bookmarkCount
-        video.viewCount = videoVO.viewCount
-
-        const author = new User()
-        author.nickname = videoVO.author.nickname
-        author.bookmarkCount = videoVO.author.bookmarkCount
-        author.avatar = videoVO.author.avatar
-        author.favoriteCount = videoVO.author.favoriteCount
-        author.followingCount = videoVO.author.followingCount
-        author.followedCount = videoVO.author.followedCount
-        author.content = videoVO.author.content
-        author.id = videoVO.author.id
-        video.author = author
-
-        const category = new Category()
-        category.url = videoVO.category.url
-        category.id = videoVO.category.id
-        category.title = videoVO.category.title
-
-        video.category = category
-        return video
-    }
+    // videos = ref(new Array<Video>())
+    // parseCommentVO(commentVO: any):VideoComment {
+    //
+    //     const comment = new VideoComment()
+    //
+    //     comment.createTime = timeStrParse(commentVO.createTime)
+    //     comment.updateTime = timeStrParse(commentVO.updateTime)
+    //     comment.id = commentVO.id
+    //     comment.replyId = commentVO.replyId
+    //     comment.content = commentVO.content
+    //     comment.videoId = commentVO.videoId
+    //     const author = new User()
+    //     author.id = commentVO.author.id
+    //     author.nickname = commentVO.author.nickname
+    //     author.avatar = commentVO.author.avatar
+    //     author.content = commentVO.author.content
+    //     comment.author = author
+    //     return comment
+    // }
+    // parseVideoVO(videoVO: any):Video {
+    //
+    //     const video = new Video()
+    //
+    //     video.createTime = timeStrParse(videoVO.createTime)
+    //     video.updateTime = timeStrParse(videoVO.updateTime)
+    //     video.url = videoVO.url
+    //     video.title = videoVO.title
+    //     video.content = videoVO.content
+    //     video.coverUrl = videoVO.coverUrl
+    //     video.id = videoVO.id
+    //     video.favoriteCount = videoVO.favoriteCount
+    //     video.bookmarkCount = videoVO.bookmarkCount
+    //     video.viewCount = videoVO.viewCount
+    //
+    //     const author = new User()
+    //     author.nickname = videoVO.author.nickname
+    //     author.bookmarkCount = videoVO.author.bookmarkCount
+    //     author.avatar = videoVO.author.avatar
+    //     author.favoriteCount = videoVO.author.favoriteCount
+    //     author.followingCount = videoVO.author.followingCount
+    //     author.followedCount = videoVO.author.followedCount
+    //     author.content = videoVO.author.content
+    //     author.id = videoVO.author.id
+    //     video.author = author
+    //
+    //     const category = new Category()
+    //     category.url = videoVO.category.url
+    //     category.id = videoVO.category.id
+    //     category.title = videoVO.category.title
+    //
+    //     video.category = category
+    //     return video
+    // }
 }
-export const videoService = new VideoService()
