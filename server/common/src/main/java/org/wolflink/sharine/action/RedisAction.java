@@ -44,6 +44,7 @@ public class RedisAction {
         redisTemplate.opsForValue().set(key, value);
     }
 
+    @Nullable
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
@@ -84,7 +85,9 @@ public class RedisAction {
         redisTemplate.opsForHash().put(key, hashKey, value);
         return expire(key, time);
     }
-
+    public void hInc(String key, String hashKey, long delta) {
+        redisTemplate.opsForHash().increment(key,hashKey,delta);
+    }
     public void hSet(String key, String hashKey, Object value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
