@@ -88,7 +88,7 @@ public class QiniuAction {
     /**
      * 七牛云文件 Key 拼接
      * @param userId    用户ID
-     * @param fileName  文件名称
+     * @param fileName  文件名称(包含后缀)
      * @return          Key
      */
     public String concatKey(long userId, String fileName) {

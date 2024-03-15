@@ -42,7 +42,7 @@ public class VideoService implements IVideoService {
      * @param categoryId    分类Id
      */
     @Override
-    public void signature(Video video, String fileKey, String hash, Long categoryId) {
+    public void signature(Video video, String fileKey, String hash) {
         // 七牛云数据库查询
         FileInfo fileInfo = qiniuAction.getFileInfo(video.getUserId(), fileKey)
                 .orElseThrow(() -> new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
@@ -107,11 +107,12 @@ public class VideoService implements IVideoService {
     }
 
     @Override
-    public void updateVideo(Long videoId, String title, String content, String coverUrl) {
-        Video video = videoRepository.findById(videoId).orElseThrow();
-        if(title != null) video.setTitle(title);
-        if(content != null) video.setContent(content);
-        if(coverUrl != null) video.setCoverUrl(coverUrl);
+    public void updateVideo(Video video) {
+        Video oldVideo = videoRepository.findById(video.getId()).orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
+        if(video.getCoverUrl() != null) oldVideo.setCoverUrl(video.getCoverUrl());
+        if(video.getTitle() != null) oldVideo.setTitle(video.getTitle());
+        if(video.getContent() != null) oldVideo.setContent(video.getContent());
+        if(video.getCategoryId() != null) oldVideo.setCategoryId(video.getCategoryId());
         videoRepository.save(video);
     }
 

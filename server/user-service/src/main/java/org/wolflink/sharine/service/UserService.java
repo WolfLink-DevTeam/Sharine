@@ -47,12 +47,12 @@ public class UserService {
     /**
      * 尝试登录
      * @param email     用户邮箱
-     * @param password  用户密码
+     * @param encryptPassword  用户密码（已加密)
      * @return          登录令牌
      */
-    public String login(String email,String password) {
+    public String login(String email,String encryptPassword) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new ErrorException(StatusCodeEnum.DATA_NOT_EXIST));
-        if (!encryptAction.match(password, user.getPassword())) {
+        if (encryptPassword != user.getPassword()) {
             throw new ErrorException(StatusCodeEnum.PASSWORD_NOT_MATCHED);
         }
         StpUtil.login(user.getId());

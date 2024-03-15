@@ -16,11 +16,10 @@ public class ActionController extends BaseController {
     public ResultPack signature(
             @RequestParam String fileKey,
             @RequestParam String hash,
-            @RequestParam Long categoryId,
             @RequestBody Video video
     ) {
         StpUtil.checkLogin();
-        videoService.signature(video, fileKey, hash, categoryId);
+        videoService.signature(video, fileKey, hash);
         return ok();
     }
 }

@@ -18,7 +18,7 @@ import org.wolflink.sharine.service.CategoryService;
 @RequestMapping("/categories")
 public class CategoryController extends BaseController {
 
-    final CategoryService categoryService;
+    private final CategoryService categoryService;
 
     /**
      * 获取全部分类信息

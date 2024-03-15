@@ -5,7 +5,7 @@ import org.wolflink.sharine.entity.Video;
 import java.util.List;
 
 public interface IVideoService {
-    void signature(Video video, String fileKey, String hash, Long categoryId);
+    void signature(Video video, String fileKey, String hash);
 
     List<Video> findVideosByUserId(Long userId);
 
@@ -16,5 +16,5 @@ public interface IVideoService {
     List<Video> findVideos(List<Long> videoIds);
 
     void deleteVideo(Long videoId);
-    void updateVideo(Long videoId,String title,String content,String coverUrl);
+    void updateVideo(Video video);
 }

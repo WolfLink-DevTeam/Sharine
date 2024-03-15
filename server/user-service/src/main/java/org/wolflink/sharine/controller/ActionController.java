@@ -22,10 +22,10 @@ public class ActionController extends BaseController {
      * 用户登录接口
      */
     @PostMapping("/login")
-    public Object login(@RequestParam String email, @RequestParam String password) {
+    public Object login(@RequestParam String email, @RequestParam String encryptPassword) {
         // 已经登录了，不处理
         if(StpUtil.isLogin()) return ok();
-        return ok(userService.login(email,password));
+        return ok(userService.login(email,encryptPassword));
     }
 
     /**

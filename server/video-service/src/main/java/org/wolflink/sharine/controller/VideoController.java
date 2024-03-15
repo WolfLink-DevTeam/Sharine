@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.entity.Video;
 import org.wolflink.sharine.enums.StatusCodeEnum;
+import org.wolflink.sharine.enums.VideoTypeEnum;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.lib.TryOptional;
 import org.wolflink.sharine.rpc.IVideoService;
@@ -54,18 +55,12 @@ public class VideoController extends BaseController {
         return ok();
     }
     @PutMapping
-    public Object putVideo(
-            @RequestParam Long videoId,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String content,
-            @RequestParam(required = false) String coverUrl
-    ) {
+    public Object putVideo(@RequestBody Video video) {
         StpUtil.checkLogin();
         Long loginId = TryOptional.tryWith(StpUtil::getLoginIdAsLong).orElseThrow();
-        Video video = videoService.findVideo(videoId);
         // 试图修改别人的视频
         if(!video.getUserId().equals(loginId)) throw new WarnException(StatusCodeEnum.UNAUTHORIZED);
-        videoService.updateVideo(videoId,title,content,coverUrl);
+        videoService.updateVideo(video);
         return ok();
     }
 
