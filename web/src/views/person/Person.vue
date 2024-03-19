@@ -4,43 +4,33 @@ import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
 import PersonCard from "@/components/PersonCard.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import {ref, watch} from "vue";
-import {Video} from "@/models/Video";
-import {videoService} from "@/services/VideoService";
-import {userService} from "@/services/UserService";
+import {VideoVO} from "@/models/VideoVO";
 import {useSystemStore} from "@/store/system";
 import {storeToRefs} from "pinia";
 import {useRoute} from "vue-router";
+import {cookieService} from "@/services/native/CookieService";
+import {remoteVideoService} from "@/services/remote/RemoteVideoService";
+import {remoteFavoriteService} from "@/services/remote/RemoteFavoriteService";
+import {remoteAggregatedService} from "@/services/remote/RemoteAggregatedService";
 
-const userId:number = Number(useRoute().query['userId']) || userService.getLocalUser()?.id || -1
+const userId:number = Number(useRoute().query['userId']) || cookieService.getLocalUser()?.id || -1
 const {isLogin} = storeToRefs(useSystemStore())
 
-let favoriteVideos = ref(new Array<Video>())
-let bookmarkVideos = ref(new Array<Video>())
-let uploadVideos = ref(new Array<Video>())
-const videos = ref(new Array<Video>())
+let favoriteVideos = ref(new Array<VideoVO>())
+let bookmarkVideos = ref(new Array<VideoVO>())
+let uploadVideos = ref(new Array<VideoVO>())
+const videos = ref(new Array<VideoVO>())
 
 if(userId > 0) {
-    userService.getUserUploadVideos(userId).then(pack => {
-        const array = new Array<Video>()
-        pack.data.forEach((videoVO: any) => {
-            array.push(videoService.parseVideoVO(videoVO))
-        })
-        uploadVideos.value = array
+    remoteVideoService.getVideo(undefined,userId).then((tempVideos: VideoVO[]) => {
+        uploadVideos.value = tempVideos
         videos.value = uploadVideos.value
     })
-    userService.getUserFavoriteVideos().then(pack => {
-        const array = new Array<Video>()
-        pack.data?.forEach((videoVO: any) => {
-            array.push(videoService.parseVideoVO(videoVO))
-        })
-        favoriteVideos.value = array
+    remoteAggregatedService.getFavoriteVideos(userId).then(tempVideos => {
+        favoriteVideos.value = tempVideos
     })
-    userService.getUserBookmarkVideos().then(pack => {
-        const array = new Array<Video>()
-        pack.data?.forEach((videoVO: any) => {
-            array.push(videoService.parseVideoVO(videoVO))
-        })
-        bookmarkVideos.value = array
+    remoteAggregatedService.getBookmarkVideos(userId).then(tempVideos => {
+        bookmarkVideos.value = tempVideos
     })
 }
 
@@ -52,7 +42,7 @@ if(userId > 0) {
 <!--            <SearchBar/>-->
 <!--        </div>-->
         <div style="width: 70%;">
-            <PersonVideoBar class="video-bar" v-if="userId === userService.getLocalUser()?.id"
+            <PersonVideoBar class="video-bar" v-if="userId === cookieService.getLocalUser()?.id"
                             :btn1-value="uploadVideos.length"
                             :btn2-value="favoriteVideos.length"
                             :btn3-value="bookmarkVideos.length" @btn1clicked="videos = uploadVideos" @btn2clicked="videos = favoriteVideos" @btn3clicked="videos = bookmarkVideos"/>

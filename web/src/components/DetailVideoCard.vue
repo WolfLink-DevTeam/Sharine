@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {Video} from "@/models/Video.js";
+import {VideoVO} from "@/models/VideoVO";
 
 const props = defineProps({
     video: {
-        type: Video,
+        type: VideoVO,
         required: true
     },
     direction: {

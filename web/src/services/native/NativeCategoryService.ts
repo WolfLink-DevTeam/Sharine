@@ -2,7 +2,7 @@ import {Category} from "@/models/Category";
 import {remoteCategoryService} from "@/services/remote/RemoteCategoryService";
 import {ref, Ref} from "vue/dist/vue";
 import {CategoryFrequency} from "@/models/CategoryFrequency";
-import {Video} from "@/models/Video";
+import {VideoVO} from "@/models/VideoVO";
 
 class NativeCategoryService {
     list: Ref<Array<Category>> = ref(new Array<Category>())
@@ -44,12 +44,12 @@ class NativeCategoryService {
         }
     }
 
-    hasViewed(video: Video) {
+    hasViewed(video: VideoVO) {
         const v = this.viewCountMap.value.get(video.category.id) || 0;
         this.viewCountMap.value.set(video.category.id,v+1)
     }
 
-    topFiveHotCategories(videos: Array<Video>): Array<CategoryFrequency> {
+    topFiveHotCategories(videos: Array<VideoVO>): Array<CategoryFrequency> {
         const categoryCount: Map<number, number> = new Map();
         videos.forEach(video => {
             if(video.category.id === 1) return

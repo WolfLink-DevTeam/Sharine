@@ -13,11 +13,11 @@ class CookieService {
     saveAccount(account: string) {
         localStorage.setItem("sharine-account",account)
     }
-    savePassword(password: string) {
-        localStorage.setItem("sharine-password",password)
+    saveEncrypPassword(password: string) {
+        localStorage.setItem("sharine-encryp-pwd",password)
     }
-    getPassword() {
-        return localStorage.getItem("sharine-password") || ""
+    getEncrypPassword() {
+        return localStorage.getItem("sharine-encryp-pwd") || ""
     }
     saveLocalUser(user: User | null) {
         if(user !== null) {

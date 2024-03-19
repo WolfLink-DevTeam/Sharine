@@ -69,27 +69,30 @@ import BasicCard from "@/components/BasicCard.vue";
 import CommentItem from "@/components/CommentItem.vue";
 import Divider from "@/components/Divider.vue";
 import {useRoute, useRouter} from "vue-router";
-import {Video} from "@/models/Video.js";
-import {videoService} from "@/services/VideoService.js";
+import {VideoVO} from "@/models/VideoVO";
 import {ref} from "vue";
 import {dateFormat} from "../../utilities/ResourceUtility";
 import {VideoComment} from "@/models/VideoComment";
-import {userService} from "@/services/UserService";
 import {useSystemStore} from "@/store/system";
-import {categoryService} from "@/services/CategoryService";
+import {remoteVideoService} from "@/services/remote/RemoteVideoService";
+import {nativeVideoService} from "@/services/native/NativeVideoService";
+import {remoteViewVideoService} from "@/services/remote/RemoteViewVideoService";
+import {nativeCategoryService} from "@/services/native/NativeCategoryService";
+import {remoteCommentService} from "@/services/remote/RemoteCommentService";
+import {cookieService} from "@/services/native/CookieService";
+import {remoteFavoriteService} from "@/services/remote/RemoteFavoriteService";
+import {remoteBookmarkService} from "@/services/remote/RemoteBookmarkService";
 const route = useRoute()
 const router = useRouter()
 // TODO 捕获到视频ID
 // console.log('videoId = '+route.query['videoId'])
 const videoId = ref(Number(route.query['videoId']))
-const video = ref<Video>(new Video())
+const video = ref<VideoVO>(new VideoVO())
 
 function initVideo() {
-    videoService.getVideo(videoId.value).then(it => {
-        video.value = videoService.parseVideoVO(it.data)
-        videoService.viewVideo(video.value.id)
-        categoryService.hasViewed(video.value)
-    })
+    video.value = nativeVideoService.findById(videoId.value) ?? new VideoVO()
+    remoteViewVideoService.viewVideo(videoId.value)
+    nativeCategoryService.hasViewed(video.value)
 }
 initVideo()
 
@@ -97,13 +100,9 @@ initVideo()
 const comments = ref(new Array<VideoComment>)
 
 function updateVideoComments() {
-    videoService.getVideoComments(videoId.value).then(pack => {
+    remoteCommentService.getVideoComments(videoId.value).then(pack => {
         const array: Array<any> = pack.data
-        let tempComments = new Array<VideoComment>()
-        for (let index in array) {
-            const commentVO = array[index]
-            tempComments.push(videoService.parseCommentVO(commentVO))
-        }
+        let tempComments = array.map(it => it as VideoComment)
         tempComments.reverse()
         comments.value = tempComments
     })
@@ -123,10 +122,10 @@ function addComment() {
     }
     const comment = new VideoComment()
     comment.content = userCommentText.value
-    comment.author = userService.getLocalUser()!
+    comment.author = cookieService.getLocalUser()!
     comment.videoId = videoId.value
     comment.replyId = -1
-    videoService.addComment(comment).then(pack => {
+    remoteCommentService.comment(comment).then(pack => {
         if(pack.code === 0) {
             userCommentText.value = ""
             updateVideoComments()
@@ -177,13 +176,13 @@ function onKeydown(event: any) {
 }
 const hasFavorite = ref(false)
 const hasBookmark = ref(false)
-userService.hasFavorite(videoId.value).then(pack => hasFavorite.value = pack.data)
-userService.hasBookmark(videoId.value).then(pack => hasBookmark.value = pack.data)
+remoteFavoriteService.get(videoId.value).then(pack => hasFavorite.value = pack.data)
+remoteBookmarkService.get(videoId.value).then(pack => hasBookmark.value = pack.data)
 function btnFavorite() {
     let promise = null
     if(hasFavorite.value) {
-        promise = userService.undoFavorite(videoId.value)
-    } else promise = userService.favorite(videoId.value)
+        promise = remoteFavoriteService.del(videoId.value)
+    } else promise = remoteFavoriteService.post(videoId.value)
     promise.then(pack => {
         if(pack.code === 0) {
             hasFavorite.value = !hasFavorite.value
@@ -195,8 +194,8 @@ function btnFavorite() {
 function btnBookmark() {
     let promise = null
     if(hasBookmark.value) {
-        promise = userService.undoBookmark(videoId.value)
-    } else promise = userService.bookmark(videoId.value)
+        promise = remoteBookmarkService.del(videoId.value)
+    } else promise = remoteBookmarkService.post(videoId.value)
     promise.then(pack => {
         if(pack.code === 0) {
             hasBookmark.value = !hasBookmark.value

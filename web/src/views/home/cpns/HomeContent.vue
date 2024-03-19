@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import SimpleVideoCard from "@/components/SimpleVideoCard.vue";
-import {Video} from "@/models/Video.js";
+import {VideoVO} from "@/models/VideoVO";
 import {ref} from "vue";
 
 const props = defineProps({
     videos: {
-        type: Array<Video>,
+        type: Array<VideoVO>,
         required: true
     }
 })

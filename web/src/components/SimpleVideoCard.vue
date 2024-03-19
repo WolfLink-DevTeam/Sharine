@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {useRouter} from "vue-router";
-import {Video} from "@/models/Video";
+import {VideoVO} from "@/models/VideoVO";
 import {dateFormat, getImageUrl, simpleDateFormat} from "@/utilities/ResourceUtility";
 
 const router = useRouter()
@@ -9,7 +9,7 @@ const router = useRouter()
 
 const props = defineProps({
     data: {
-        type: Video,
+        type: VideoVO,
         required: true
     }
 })

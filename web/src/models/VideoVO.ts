@@ -3,7 +3,7 @@ import {VideoComment} from "./VideoComment";
 import {User} from "@/models/User";
 import {Category} from "@/models/Category";
 
-export class Video {
+export class VideoVO {
     id: number = 0
     author: User = new User()
     category: Category = new Category()

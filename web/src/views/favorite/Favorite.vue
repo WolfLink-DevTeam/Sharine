@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import SearchBar from "@/components/SearchBar.vue";
 import DetailVideoCard from "@/components/DetailVideoCard.vue";
-import {Video} from "@/models/Video";
-import {videoService} from "@/services/VideoService";
-import {userService} from "@/services/UserService";
+import {VideoVO} from "@/models/VideoVO";
 import {useSystemStore} from "@/store/system";
 import {ref} from "vue";
-const videos = ref(new Array<Video>())
+import {remoteAggregatedService} from "@/services/remote/RemoteAggregatedService";
+import {cookieService} from "@/services/native/CookieService";
+const videos = ref(new Array<VideoVO>())
 
 if(useSystemStore().isLogin) {
-    userService.getSubscribeVideos().then(pack => {
-        pack.data?.forEach((it:any)=>{
-            videos.value.push(videoService.parseVideoVO(it))
+    const id = cookieService.getLocalUser()?.id
+    if(id !== undefined) {
+        remoteAggregatedService.getFavoriteVideos(id).then(tempVideos => {
+            videos.value = tempVideos
         })
-    })
+    }
 }
 </script>
 

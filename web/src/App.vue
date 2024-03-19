@@ -2,7 +2,6 @@
 import { useRouter } from 'vue-router'
 import {h, ref} from "vue";
 import { LoadingOutlined } from '@ant-design/icons-vue';
-import {categoryService} from "./services/CategoryService";
 
 const router = useRouter()
 let lastLoading = 0

@@ -1,6 +1,6 @@
 import axios, {AxiosPromise} from "axios";
 import {ResponsePack} from "@/models/ResponsePack";
-import {userService} from "@/services/UserService";
+import {cookieService} from "@/services/native/CookieService";
 
 export const httpClient = axios.create({
     baseURL: import.meta.env.VITE_SHARINE_SERVER_URL,
@@ -10,7 +10,7 @@ export const httpClient = axios.create({
 httpClient.interceptors.request.use(
     (config: any) => {
         // 在发送请求之前做些什么
-        config.headers['satoken'] = userService.getToken();
+        config.headers['satoken'] = cookieService.getToken();
         return config;
     }
 );

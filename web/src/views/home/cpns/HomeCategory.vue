@@ -3,16 +3,16 @@
 import CategorysContainer from "@/components/CategorysContainer.vue";
 import TopChart from "@/components/TopChart.vue";
 import {Category} from "@/models/Category";
-import {categoryService} from "@/services/CategoryService";
-import {videoService} from "@/services/VideoService";
 import {simpleDateFormat} from "@/utilities/ResourceUtility";
+import {nativeCategoryService} from "@/services/native/NativeCategoryService";
+import {nativeVideoService} from "@/services/native/NativeVideoService";
 
 defineEmits(['selectCategory'])
 
 const categoryFrequencies1 =
-categoryService.topFiveHotCategories(videoService.videos.value)
+nativeCategoryService.topFiveHotCategories(nativeVideoService.loadedVideos.value)
 
-const categoryFrequencies2 = categoryService.topFiveDailyCategories()
+const categoryFrequencies2 = nativeCategoryService.topFiveDailyCategories()
 </script>
 
 <template>

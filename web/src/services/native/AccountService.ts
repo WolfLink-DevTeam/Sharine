@@ -1,8 +1,9 @@
-import {userService} from "@/services/UserService";
 import {useSystemStore} from "@/store/system";
 import {User} from "@/models/User";
 import {ref, Ref} from "vue";
 import {cookieService} from "@/services/native/CookieService";
+import {remoteUserActionService} from "@/services/remote/RemoteUserActionService";
+import {passwordEncryption} from "@/utilities/ResourceUtility";
 
 export class AccountService {
 
@@ -10,15 +11,15 @@ export class AccountService {
 
     logout() {
         cookieService.saveLocalUser(null)
-        cookieService.savePassword("")
+        cookieService.saveEncrypPassword("")
         useSystemStore().logout()
     }
     saveInfo(account: string,password: string) {
         cookieService.saveAccount(account)
-        cookieService.savePassword(password)
+        cookieService.saveEncrypPassword(passwordEncryption(password))
     }
     login(): Promise<boolean> {
-        return userService.login().then(pack => {
+        return remoteUserActionService.login(cookieService.getAccount(),cookieService.getEncrypPassword()).then(pack => {
             if(pack.code === 0) {
                 const userSimpleVO = pack.data.userSimpleVO
                 const user = userSimpleVO as User

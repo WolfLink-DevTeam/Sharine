@@ -2,7 +2,7 @@ import {httpClient, pack} from "@/utilities/HttpUtility";
 import {Category} from "@/models/Category";
 import {RemoteService} from "@/services/remote/RemoteService";
 
-export class RemoteCategoryService extends RemoteService {
+class RemoteCategoryService extends RemoteService {
     /**
      * 获取全部分类数据
      */

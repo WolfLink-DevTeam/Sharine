@@ -6,11 +6,15 @@ import BasicButton from "@/components/BasicButton.vue";
 import "@/commons/global.css";
 import {useSystemStore} from "@/store/system";
 import {Ref, ref, watch} from "vue";
-import {qiniuService} from "@/services/QiniuService";
 import * as qiniu from 'qiniu-js'
-import {videoService} from "@/services/VideoService";
-import {categoryService} from "@/services/CategoryService";
 import {VideoType} from "@/models/VideoType";
+import {parseVideoFrameUrl} from "@/utilities/ResourceUtility";
+import {remoteVideoActionService} from "@/services/remote/RemoteVideoActionService";
+import {VideoDTO} from "@/models/VideoDTO";
+import {VideoVO} from "@/models/VideoVO";
+import {cookieService} from "@/services/native/CookieService";
+import {nativeCategoryService} from "@/services/native/NativeCategoryService";
+import {remoteContentService} from "@/services/remote/RemoteContentService";
 
 const progress = ref("0")
 const uploadStatus = ref(false)
@@ -70,10 +74,10 @@ async function getVideoCovers(videoUrl: string) {
     video.onloadedmetadata = function() {
         const duration = video.duration
         // 封面
-        coverUrl.value = qiniuService.getVideoFrameUrl(videoUrl,1)
-        videoFrames.value[0] = qiniuService.getVideoFrameUrl(videoUrl,2)
-        videoFrames.value[1] = qiniuService.getVideoFrameUrl(videoUrl,3)
-        videoFrames.value[2] = qiniuService.getVideoFrameUrl(videoUrl,4)
+        coverUrl.value = parseVideoFrameUrl(videoUrl,1)
+        videoFrames.value[0] = parseVideoFrameUrl(videoUrl,2)
+        videoFrames.value[1] = parseVideoFrameUrl(videoUrl,3)
+        videoFrames.value[2] = parseVideoFrameUrl(videoUrl,4)
     };
     video.onerror = function() {
         console.error("Can't get duration, video can't be loaded.");
@@ -103,17 +107,14 @@ async function notifyServer() {
         alert("视频URL获取失败，请重新尝试")
         return
     }
-    // 通知后端校验
-    videoService.uploadVideo(
-        key.value,
-        hash.value,
-        categoryService.list.value[categoryIndex.value].id,
-        title.value,
-        content.value,
-        videoUrl.value,
-        coverUrl.value,
-        videoType.value
-    ).then(pack => {
+    const videoDTO = new VideoDTO()
+    videoDTO.userId = cookieService.getLocalUser()?.id!!
+    videoDTO.categoryId = nativeCategoryService.findCategoryByIndex(categoryIndex.value).id
+    videoDTO.title = title.value
+    videoDTO.content = content.value
+    videoDTO.url = videoUrl.value
+    videoDTO.coverUrl = coverUrl.value
+    remoteVideoActionService.signature(key.value,hash.value,videoDTO).then(pack => {
         if(pack.code === 0) {
             alert("投稿成功")
             uploadStatus.value = false
@@ -123,11 +124,10 @@ async function notifyServer() {
         }
         else alert("投稿失败！请重新尝试")
     })
-
 }
 async function uploadCover(file: File) {
 
-    qiniuService.getQiniuUploadInfo(file.name).then(pack => {
+    remoteContentService.getUploadInfo(file.name).then(pack => {
         qiniu.upload(file,pack.data.key,pack.data.token,{},{
             region: qiniu.region.z2
         }).subscribe({
@@ -135,7 +135,7 @@ async function uploadCover(file: File) {
             error(err: any){},
             complete(res: any){
                 const imgKey = res.key
-                qiniuService.getDownloadUrl(imgKey).then(pack => {
+                remoteContentService.getDownloadInfo(imgKey).then(pack => {
                     coverUrl.value = pack.data
                     console.log(coverUrl.value)
                 })
@@ -146,7 +146,7 @@ async function uploadCover(file: File) {
 }
 async function upload(file:File) {
 
-    qiniuService.getQiniuUploadInfo(file.name).then(pack => {
+    remoteContentService.getUploadInfo(file.name).then(pack => {
         key.value = pack.data.key
         const token = pack.data.token
         const observable = qiniu.upload(file,key.value,token,{},{
@@ -161,7 +161,7 @@ async function upload(file:File) {
             complete(res: any){
                 hash.value = res.hash
                 uploadStatus.value = true
-                qiniuService.getDownloadUrl(key.value).then(pack => {
+                remoteContentService.getDownloadInfo(key.value).then(pack => {
                     videoUrl.value = pack.data
                     // 获取视频封面
                     getVideoCovers(pack.data)

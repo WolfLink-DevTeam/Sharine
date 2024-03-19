@@ -7,7 +7,7 @@ export function parseVideoFrameUrl(videoUrl: string,frameId: number) {
     const name = videoUrl.substring(0,videoUrl.lastIndexOf('.'))
     return name+"frame00000"+frameId+".jpg"
 }
-export function passwordEncryption(password: String): String {
+export function passwordEncryption(password: string): string {
     var salt = Bcrypt.genSaltSync(10);
     return Bcrypt.hashSync(password.toString(), salt)
 }
