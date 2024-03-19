@@ -7,12 +7,13 @@ import org.wolflink.sharine.entity.Upvote;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.UpvoteRepository;
+import org.wolflink.sharine.rpc.IFavoriteService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FavoriteService {
+public class FavoriteService implements IFavoriteService {
 
     final UpvoteRepository upvoteRepository;
 
@@ -26,6 +27,7 @@ public class FavoriteService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
+    @Override
     public void favoriteVideo(Long userId, Long videoId) {
         // 已经点赞了
         if (hasFavoriteVideo(userId, videoId)) {
@@ -34,7 +36,8 @@ public class FavoriteService {
         Upvote upvote = Upvote.builder().videoId(videoId).userId(userId).build();
         upvoteRepository.save(upvote);
     }
-    public boolean hasFavoriteVideo(Long userId,Long videoId) {
+    @Override
+    public boolean hasFavoriteVideo(Long userId, Long videoId) {
         return upvoteRepository.existsByUserIdAndVideoId(userId,videoId);
     }
     /**
@@ -43,6 +46,7 @@ public class FavoriteService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
+    @Override
     public void undoFavoriteVideo(Long userId, Long videoId) {
         // 数据不存在
         if (!upvoteRepository.existsByUserIdAndVideoId(userId, videoId)) {
@@ -56,12 +60,14 @@ public class FavoriteService {
      * @param userId    用户ID
      * @return          用户关注视频ID列表
      */
+    @Override
     public List<Long> findUserFavoriteVideoIds(Long userId) {
         List<Upvote> byUserId = upvoteRepository.findAllByUserId(userId);
         System.out.println(byUserId);
         return byUserId.stream().map(Upvote::getVideoId).collect(Collectors.toList());
     }
-    public List<Long> findUserFavoriteVideoIds(Long userId, Integer current,Integer size) {
+    @Override
+    public List<Long> findUserFavoriteVideoIds(Long userId, Integer current, Integer size) {
         Pageable pageable = PageRequest.of(current, size);
 
         List<Upvote> byUserId = upvoteRepository.findAllByUserId(userId, pageable);

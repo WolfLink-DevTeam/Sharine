@@ -39,7 +39,6 @@ public class VideoService implements IVideoService {
      * @param video         视频对象
      * @param fileKey       文件名
      * @param hash          文件哈希
-     * @param categoryId    分类Id
      */
     @Override
     public void signature(Video video, String fileKey, String hash) {

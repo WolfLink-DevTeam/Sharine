@@ -7,12 +7,13 @@ import org.wolflink.sharine.entity.Bookmark;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.repository.BookmarkRepository;
+import org.wolflink.sharine.rpc.IBookmarkService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class BookmarkService {
+public class BookmarkService implements IBookmarkService {
 
     final BookmarkRepository bookmarkRepository;
 
@@ -26,6 +27,7 @@ public class BookmarkService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
+    @Override
     public void bookmarkVideo(Long userId, Long videoId) {
         // 已经收藏
         if (hasBookmarkVideo(userId, videoId)) {
@@ -34,10 +36,12 @@ public class BookmarkService {
         Bookmark bookmark = Bookmark.builder().userId(userId).videoId(videoId).build();
         bookmarkRepository.save(bookmark);
     }
-    public boolean hasBookmarkVideo(Long userId,Long videoId) {
+    @Override
+    public boolean hasBookmarkVideo(Long userId, Long videoId) {
         return bookmarkRepository.existsByUserIdAndVideoId(userId,videoId);
     }
-    public Bookmark getBookmark(Long userId,Long videoId) {
+    @Override
+    public Bookmark getBookmark(Long userId, Long videoId) {
         return bookmarkRepository.findByUserIdAndVideoId(userId,videoId)
                 .orElseThrow(()->new WarnException(StatusCodeEnum.DATA_NOT_EXIST));
     }
@@ -48,6 +52,7 @@ public class BookmarkService {
      * @param userId  用户ID
      * @param videoId 视频ID
      */
+    @Override
     public void undoBookmarkVideo(Long userId, Long videoId) {
         // 数据不存在
         if (!bookmarkRepository.existsByUserIdAndVideoId(userId, videoId)) {
@@ -56,10 +61,12 @@ public class BookmarkService {
         bookmarkRepository.deleteByUserIdAndVideoId(userId, videoId);
     }
 
+    @Override
     public List<Long> findUserBookmarkVideoIds(Long userId) {
         List<Bookmark> byUserId = bookmarkRepository.findByUserId(userId);
         return byUserId.stream().map(Bookmark::getVideoId).collect(Collectors.toList());
     }
+    @Override
     public List<Long> findUserBookmarkVideoIds(Long userId, Integer current, Integer size) {
         Pageable pageable = PageRequest.of(current, size);
 
