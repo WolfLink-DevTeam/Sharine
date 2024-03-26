@@ -1,4 +1,4 @@
-import Bcrypt from "bcrypt";
+import Bcrypt from "bcryptjs";
 
 export function getImageUrl(imgName: string|null) {
     return imgName?.replace("@", "src") || ""

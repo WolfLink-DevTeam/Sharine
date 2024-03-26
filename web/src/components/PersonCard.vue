@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {userService} from "@/services/UserService";
 import {Ref, ref} from "vue";
 import {User} from "@/models/User";
+import {remoteUserService} from "@/services/remote/RemoteUserService";
 
 const props = defineProps({
     userId: {
@@ -10,8 +10,9 @@ const props = defineProps({
     }
 })
 const user: Ref<User|null> = ref(null)
-userService.findUserDetailInfo(props.userId).then(pack => {
-    user.value = userService.parseUserVO(pack.data)
+remoteUserService.get(props.userId).then(pack => {
+    // TODO 视图对象转换
+    user.value = pack.data
 })
 </script>
 

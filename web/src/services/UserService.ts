@@ -1,6 +1,3 @@
-import {ResponsePack} from "@/models/ResponsePack";
-import {httpClient, pack} from "@/utilities/HttpUtility";
-
 export class UserService {
 
     // TODO 重构中

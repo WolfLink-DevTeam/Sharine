@@ -1,6 +1,6 @@
 import {Category} from "@/models/Category";
 import {remoteCategoryService} from "@/services/remote/RemoteCategoryService";
-import {ref, Ref} from "vue/dist/vue";
+import {ref, Ref} from "vue";
 import {CategoryFrequency} from "@/models/CategoryFrequency";
 import {VideoVO} from "@/models/VideoVO";
 

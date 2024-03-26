@@ -1,5 +1,4 @@
-import {AxiosInstance} from "axios";
-import axios from "axios/index";
+import axios,{AxiosInstance} from "axios";
 
 export class RemoteService {
     serviceClient: AxiosInstance

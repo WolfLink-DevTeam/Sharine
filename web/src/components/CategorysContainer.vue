@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import CategoryCard from "@/components/CategoryItem.vue";
-import {categoryService} from "@/services/CategoryService";
+import {nativeCategoryService} from "@/services/native/NativeCategoryService";
 
 defineEmits(['selectCategory'])
 
@@ -15,7 +15,7 @@ defineEmits(['selectCategory'])
             <a-col :flex="20"/>
         </a-row>
         <a-row class="categoryRow" :gutter="[40,30]">
-            <template v-for="category in categoryService.list.value">
+            <template v-for="category in nativeCategoryService.list.value">
                 <a-col :span="6" style="height: 2.5rem">
                     <CategoryCard :img="category.url" :text="category.title" @click="$emit('selectCategory',category)"/>
                 </a-col>

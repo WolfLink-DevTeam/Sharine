@@ -1,21 +1,24 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
-import {userService} from "@/services/UserService.js";
 import {useSystemStore} from "@/store/system";
+import {cookieService} from "@/services/native/CookieService";
 import {accountService} from "@/services/native/AccountService";
+import {remoteUserActionService} from "@/services/remote/RemoteUserActionService";
+import {remoteUserService} from "@/services/remote/RemoteUserService";
 
 const modalVisible = ref(false)
 const isRegister = ref(false)
-const tempAccount = ref(userService.getAccount())
-const tempPassword = ref(userService.getPassword())
+const tempAccount = ref(cookieService.getAccount())
+const tempPassword = ref('')
 const verificationCode = ref(0)
 
 const store = useSystemStore()
 function autoLogin() {
-    if(!store.isLogin && userService.getPassword().length != 0) {
-        btnLogin()
-    }
+    // TODO 需要重写
+    // if(!store.isLogin && userService.getPassword().length != 0) {
+    //     btnLogin()
+    // }
 }
 autoLogin()
 
@@ -26,7 +29,7 @@ function setModalVisible(value: boolean) {
 function setRegister(value: boolean) {
     accountService.saveInfo(tempAccount.value,tempPassword.value)
     if(!isRegister.value && value) {
-        userService.askForEmailVerification().then(pack => {
+        remoteUserActionService.requestEmailCode(tempAccount.value).then(pack => {
             if(pack.code === 0) alert("验证码已发放至邮箱！")
             else if(pack.code === -1){
                 alert("网络异常，请稍后再尝试")
@@ -41,7 +44,7 @@ function setRegister(value: boolean) {
             alert("请正确填写验证码")
             return
         }
-        userService.register(verificationCode.value).then(pack => {
+        remoteUserActionService.register(cookieService.getAccount(),cookieService.getEncrypPassword(),verificationCode.value+"").then(pack => {
             if(pack.code === 0) {
                 alert("注册成功！现在可以登录了。")
                 setModalVisible(false)
@@ -68,8 +71,8 @@ function btnLogin() {
        <span class="login-text">未登录</span>
     </a-button>
     <a-button v-else class="user-button" @click="accountService.logout()">
-        <img class="user-avatar" :src="userService.getLocalUser()?.avatar" alt="">
-        <span class="user-info">{{ userService.getLocalUser().nickname }}</span>
+        <img class="user-avatar" :src="cookieService.getLocalUser()?.avatar" alt="">
+        <span class="user-info">{{ cookieService.getLocalUser().nickname }}</span>
     </a-button>
     <div style="z-index: 100;width: 200%;height: 100%;opacity: 0.4;background: black;position: fixed;" v-show="modalVisible" @click="setModalVisible(false)"/>
     <div id="modal" v-show="modalVisible" style="z-index: 101">
