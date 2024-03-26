@@ -8,7 +8,7 @@ import org.wolflink.sharine.service.UserRelationService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/user-relation")
+@RequestMapping("/user-relations")
 public class UserRelationController extends BaseController {
 
     private final SessionAction sessionAction;

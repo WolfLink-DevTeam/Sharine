@@ -1,5 +1,6 @@
 package org.wolflink.sharine.service;
 
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.wolflink.sharine.rpc.IBookmarkService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@DubboService
 @Service
 public class BookmarkService implements IBookmarkService {
 

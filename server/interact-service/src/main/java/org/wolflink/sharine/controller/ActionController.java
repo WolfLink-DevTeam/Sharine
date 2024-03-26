@@ -8,11 +8,11 @@ import org.wolflink.sharine.service.ViewVideoService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/view-video")
-public class ViewVideoController extends BaseController {
+@RequestMapping("/interact-actions")
+public class ActionController extends BaseController {
     private final SessionAction sessionAction;
     private final ViewVideoService videoService;
-    @PostMapping
+    @PostMapping("/view-video")
     public ResultPack viewVideo(@RequestParam Long videoId) {
         videoService.viewVideo(sessionAction.getSessionUserId(),videoId);
         return ok();

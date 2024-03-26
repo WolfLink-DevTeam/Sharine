@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/favorite")
+@RequestMapping("/favorites")
 public class FavoriteController extends BaseController {
 
     final FavoriteService favoriteService;
