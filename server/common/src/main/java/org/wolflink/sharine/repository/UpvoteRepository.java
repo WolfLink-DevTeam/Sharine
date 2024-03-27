@@ -16,8 +16,6 @@ public interface UpvoteRepository extends JpaRepository<Upvote, Long> {
     Integer countByUserId(Long userId);
 //    @Cacheable(unless = "#result==null")
     Integer countByVideoId(Long videoId);
-    @Modifying
-    @Transactional
     void deleteByUserIdAndVideoId(Long userId, Long videoId);
 
     boolean existsByUserIdAndVideoId(Long userId, Long videoId);
