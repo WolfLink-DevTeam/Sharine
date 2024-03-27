@@ -1,4 +1,4 @@
-import {httpClient, pack} from "@/utilities/HttpUtility";
+import {pack} from "@/utilities/HttpUtility";
 import {Category} from "@/models/Category";
 import {RemoteService} from "@/services/remote/RemoteService";
 

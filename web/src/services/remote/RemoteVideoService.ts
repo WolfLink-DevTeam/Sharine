@@ -1,12 +1,12 @@
 import {VideoVO} from "@/models/VideoVO";
-import {httpClient, pack} from "@/utilities/HttpUtility";
+import {pack} from "@/utilities/HttpUtility";
 import {Category} from "@/models/Category";
 import {RemoteService} from "@/services/remote/RemoteService";
 
 class RemoteVideoService extends RemoteService {
 
     async getVideo(videoId?: Number,userId?: Number,page?: Number,size?: Number): Promise<VideoVO[]> {
-        return pack(httpClient.get("",{
+        return pack(this.serviceClient.get("",{
             params: {
                 videoId: videoId,
                 userId: userId,
@@ -16,14 +16,14 @@ class RemoteVideoService extends RemoteService {
         })).then(resultPack => resultPack.data.map((it: any) => it as VideoVO))
     }
     async delVideo(videoId: Number) {
-        return pack(httpClient.delete("",{
+        return pack(this.serviceClient.delete("",{
             params: {
                 videoId: videoId
             }
         }))
     }
     async putVideo(video: VideoVO) {
-        return pack(httpClient.put("",{
+        return pack(this.serviceClient.put("",{
             params: {
                 video: video
             }

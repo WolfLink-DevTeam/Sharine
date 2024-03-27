@@ -1,5 +1,4 @@
 import {ResponsePack} from "@/models/ResponsePack";
-import {httpClient, pack} from "@/utilities/HttpUtility";
 import {VideoVO} from "@/models/VideoVO";
 import {timeStrParse} from "@/utilities/ResourceUtility";
 import {User} from "@/models/User";

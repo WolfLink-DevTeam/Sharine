@@ -1,30 +1,5 @@
 import axios, {AxiosPromise} from "axios";
 import {ResponsePack} from "@/models/ResponsePack";
-import {cookieService} from "@/services/native/CookieService";
-
-export const httpClient = axios.create({
-    baseURL: import.meta.env.VITE_SHARINE_SERVER_URL,
-    timeout: 10000
-});
-
-httpClient.interceptors.request.use(
-    (config: any) => {
-        // 在发送请求之前做些什么
-        config.headers['satoken'] = cookieService.getToken();
-        return config;
-    }
-);
-httpClient.interceptors.response.use(
-    (response: any) => {
-        if(response?.data?.msg?.startsWith("程序内部错误: token 无效：")) {
-            alert("Token 已过期，请重新登录！")
-        }
-        return response;
-    },
-    (error: any) => {
-        return Promise.reject(error);
-    }
-);
 
 export function pack(axiosPromise: AxiosPromise<any>): Promise<ResponsePack> {
     return axiosPromise.then(function (response : any) {
