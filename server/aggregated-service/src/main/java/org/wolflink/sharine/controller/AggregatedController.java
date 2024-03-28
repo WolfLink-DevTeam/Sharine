@@ -8,6 +8,7 @@ import org.wolflink.sharine.dto.ResultPack;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.WarnException;
 import org.wolflink.sharine.service.AggregatedService;
+import org.wolflink.sharine.service.TestService;
 import org.wolflink.sharine.vo.VideoVO;
 
 import java.util.List;
@@ -19,6 +20,12 @@ public class AggregatedController extends BaseController {
 
     private final SessionAction sessionAction;
     private final AggregatedService aggregatedService;
+    private final TestService testService;
+    @PutMapping("/reset-database")
+    public ResultPack resetDatabase() {
+        testService.resetDatabase();
+        return ok();
+    }
 
     @GetMapping("/detail-video/{videoId}")
     public ResultPack getDetailVideo(@PathVariable Long videoId) {
@@ -29,8 +36,7 @@ public class AggregatedController extends BaseController {
 
     @GetMapping("/subscribe-videos/{userId}")
     public ResultPack getSubscribeVideos(@PathVariable Long userId) {
-        if(!userId.equals(sessionAction.getSessionUserId())) throw new WarnException(StatusCodeEnum.UNAUTHORIZED);
-        return ok(aggregatedService.getSubscribeVideos(userId));
+        return ok(aggregatedService.getSubscribeVideos(sessionAction.getSessionUserId()));
     }
 
     @GetMapping("/favorite-videos/{userId}")

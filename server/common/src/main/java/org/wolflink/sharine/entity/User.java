@@ -5,9 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
+import org.wolflink.sharine.constant.UserConst;
+
+import java.util.Date;
 
 /**
  * 用户信息
@@ -33,17 +37,26 @@ public class User {
     String password;
 
     @Column(nullable = false)
+    @ColumnDefault(UserConst.DEFAULT_NICKNAME)
     String nickname;
 
-    @Column
+    @Column(nullable = false)
+    @ColumnDefault(UserConst.DEFAULT_AVATAR)
     String avatar;
 
-    @Column
+    @Column(nullable = false)
+    @ColumnDefault(UserConst.DEFAULT_CONTENT)
     String content;
 
-    @CreationTimestamp
-    Long createTime;
+    @OneToOne(fetch = FetchType.LAZY,optional = false,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_metadata_id")
+    UserMetadata userMetadata;
 
+    @Column(nullable = false)
     @UpdateTimestamp
-    Long updateTime;
+    Date updateTime;
+
+    @Column(nullable = false,updatable = false)
+    @CreationTimestamp
+    Date createTime;
 }

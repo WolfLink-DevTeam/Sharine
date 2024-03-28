@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 
+import java.util.Date;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,15 +18,23 @@ import org.wolflink.sharine.constant.DatabaseConst;
 @AllArgsConstructor
 @Table(name = DatabaseConst.SUBSCRIBE_VIDEO_RECORD)
 public class SubscribeVideoRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     @Column(nullable = false)
     Long userId;
+
     @Column(nullable = false)
     Long videoId;
+
+    @Column(nullable = false)
     @UpdateTimestamp
-    Long updateTime;
+    Date updateTime;
+
+    @Column(nullable = false,updatable = false)
     @CreationTimestamp
-    Long createTime;
+    Date createTime;
+
 }

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.wolflink.sharine.action.SubscribeChannelAction;
 import org.wolflink.sharine.entity.Video;
+import org.wolflink.sharine.entity.VideoMetadata;
 import org.wolflink.sharine.enums.MicroServiceEnum;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.event.VideoSaveEvent;
@@ -28,11 +29,9 @@ import java.util.List;
 public class VideoService implements IVideoService {
 
     private final VideoRepository videoRepository;
-    private final BookmarkRepository bookmarkRepository;
-    private final UpvoteRepository upvoteRepository;
     private final QiniuAction qiniuAction;
     private final SubscribeChannelAction subscribeChannelAction;
-    private final ApplicationEventPublisher eventPublisher;
+//    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * 验证用户投稿信息并保存视频数据
@@ -48,8 +47,9 @@ public class VideoService implements IVideoService {
         if (!fileInfo.hash.equals(hash)) throw new WarnException(StatusCodeEnum.VERIFY_FAILED);
         // 文本内容审核
         if(!qiniuAction.textSensor(video.getContent())) throw new WarnException(StatusCodeEnum.JUDGE_FAILED);
+        video.setVideoMetadata(new VideoMetadata());
         videoRepository.save(video);
-        // TODO 广播事件
+        // TODO 广播事件(分布式架构的事件会被多个消费者处理)
 //        eventPublisher.publishEvent(new VideoSaveEvent(this, MicroServiceEnum.VIDEO_SERVICE,
 //                MicroServiceEnum.CONTENT_SERVICE, video,categoryId));
         // 异步更新视频队列

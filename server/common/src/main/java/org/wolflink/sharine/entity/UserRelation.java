@@ -7,6 +7,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 import org.wolflink.sharine.enums.UserRelationEnum;
 
+import java.util.Date;
+
 /**
  * 用户关注关系
  */
@@ -28,9 +30,11 @@ public class UserRelation {
     @Column(nullable = false)
     UserRelationEnum status;
 
-    @CreationTimestamp
-    Long createTime;
-
+    @Column(nullable = false)
     @UpdateTimestamp
-    Long updateTime;
+    Date updateTime;
+
+    @Column(nullable = false,updatable = false)
+    @CreationTimestamp
+    Date createTime;
 }

@@ -11,6 +11,7 @@ import org.wolflink.sharine.action.StringAction;
 import org.wolflink.sharine.constant.RedisPrefixConst;
 import org.wolflink.sharine.constant.UserConst;
 import org.wolflink.sharine.entity.User;
+import org.wolflink.sharine.entity.UserMetadata;
 import org.wolflink.sharine.enums.StatusCodeEnum;
 import org.wolflink.sharine.exception.ErrorException;
 import org.wolflink.sharine.exception.WarnException;
@@ -73,8 +74,7 @@ public class UserService {
                 .email(email)
                 .password(encryptPassword)
                 .nickname("用户"+encryptAction.encode(UUID.randomUUID().toString()).substring(0,8))
-                .avatar(UserConst.DEFAULT_AVATAR)
-                .content(UserConst.DEFAULT_CONTENT)
+                .userMetadata(new UserMetadata())
                 .build();
         userRepository.save(user);
     }

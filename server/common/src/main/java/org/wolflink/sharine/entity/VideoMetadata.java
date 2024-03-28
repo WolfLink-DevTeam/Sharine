@@ -10,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 
+import java.util.Date;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -22,8 +24,9 @@ public class VideoMetadata {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false)
-    Long videoId;
+    @OneToOne(fetch = FetchType.LAZY,optional = false,cascade = CascadeType.ALL)
+    @JoinColumn
+    Video video;
 
     @Column(nullable = false)
     @ColumnDefault("0")
@@ -45,10 +48,12 @@ public class VideoMetadata {
     @ColumnDefault("0")
     Long comments;
 
+    @Column(nullable = false)
     @UpdateTimestamp
-    Long updateTime;
+    Date updateTime;
 
+    @Column(nullable = false,updatable = false)
     @CreationTimestamp
-    Long createTime;
+    Date createTime;
 
 }

@@ -10,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 
+import java.util.Date;
+
 /**
  * 分类
  */
@@ -30,9 +32,11 @@ public class Category {
     @Column(nullable = false)
     String url;
 
-    @CreationTimestamp
-    Long createTime;
-
+    @Column(nullable = false)
     @UpdateTimestamp
-    Long updateTime;
+    Date updateTime;
+
+    @Column(nullable = false,updatable = false)
+    @CreationTimestamp
+    Date createTime;
 }

@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 
+import java.util.Date;
+
 @Entity
 @Data
 @Table(name = DatabaseConst.SHARE)
@@ -26,9 +28,11 @@ public class Share {
     @Column(nullable = false)
     Long userId;
 
-    @CreationTimestamp
-    Long createTime;
-
+    @Column(nullable = false)
     @UpdateTimestamp
-    Long updateTime;
+    Date updateTime;
+
+    @Column(nullable = false,updatable = false)
+    @CreationTimestamp
+    Date createTime;
 }

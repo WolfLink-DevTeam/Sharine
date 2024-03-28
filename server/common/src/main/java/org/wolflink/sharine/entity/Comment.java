@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.wolflink.sharine.constant.DatabaseConst;
 
+import java.util.Date;
+
 /**
  * 评论
  */
@@ -29,9 +31,11 @@ public class Comment {
     @Column(nullable = false)
     String content;
 
-    @CreationTimestamp
-    Long createTime;
-
+    @Column(nullable = false)
     @UpdateTimestamp
-    Long updateTime;
+    Date updateTime;
+
+    @Column(nullable = false,updatable = false)
+    @CreationTimestamp
+    Date createTime;
 }
